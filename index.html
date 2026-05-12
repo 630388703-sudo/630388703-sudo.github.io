@@ -8,16 +8,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cyan: #00F5D4;
-    --cyan-dim: rgba(0,245,212,0.15);
-    --cyan-glow: rgba(0,245,212,0.06);
-    --bg: #080c14;
-    --bg2: #0d1220;
-    --bg3: #111827;
-    --text: #e8eaf0;
-    --text-dim: #8892a4;
-    --border: rgba(0,245,212,0.18);
-    --border-dim: rgba(255,255,255,0.06);
+    --cyan: #7C6F5B;
+    --cyan-dim: rgba(124,111,91,0.12);
+    --cyan-glow: rgba(124,111,91,0.05);
+    --bg: #F5F0E8;
+    --bg2: #EDE7DC;
+    --bg3: #E4DDD1;
+    --text: #2C2416;
+    --text-dim: #7A6E62;
+    --border: rgba(124,111,91,0.25);
+    --border-dim: rgba(44,36,22,0.08);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,8 +42,8 @@
       0deg,
       transparent,
       transparent 2px,
-      rgba(0,0,0,0.03) 2px,
-      rgba(0,0,0,0.03) 4px
+      rgba(44,36,22,0.02) 2px,
+      rgba(44,36,22,0.02) 4px
     );
     pointer-events: none;
     z-index: 9999;
@@ -58,7 +58,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 18px 48px;
-    background: rgba(8,12,20,0.85);
+    background: rgba(245,240,232,0.90);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-dim);
   }
@@ -112,7 +112,7 @@
     position: absolute;
     width: 600px; height: 600px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,245,212,0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(124,111,91,0.06) 0%, transparent 70%);
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
@@ -195,7 +195,7 @@
 
   .hero-cta:hover {
     background: var(--cyan);
-    color: var(--bg);
+    color: #2C2416;
   }
 
   /* ── Section shared ── */
@@ -376,13 +376,13 @@
   }
 
   .featured-visual .glitch-text::before {
-    color: rgba(255,0,100,0.7);
+    color: rgba(180,60,40,0.6);
     animation: glitch1 3s infinite;
     clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
   }
 
   .featured-visual .glitch-text::after {
-    color: rgba(0,200,255,0.7);
+    color: rgba(80,120,160,0.6);
     animation: glitch2 3s infinite;
     clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
   }
@@ -486,6 +486,7 @@
   <ul class="nav-links">
     <li><a href="#about">关于</a></li>
     <li><a href="#projects">项目</a></li>
+    <li><a href="#coursework">课程作业</a></li>
     <li><a href="#contact">联系</a></li>
   </ul>
 </nav>
@@ -629,16 +630,85 @@
       </div>
     </div>
 
+    <!-- Project 4 PDF -->
+    <div class="project-card featured reveal">
+      <iframe src="./马家大院.pdf" width="100%" height="680px" style="border:1px solid var(--border);border-radius:8px;background:var(--bg2);"></iframe>
+      <div>
+        <div class="project-num">004 / ARCHIVE</div>
+        <h3 class="project-title">《一颗印·马家大院》</h3>
+        <div class="project-en">YUNNAN COURTYARD ARCHIVE · 2025</div>
+        <p class="project-desc">云南传统"一颗印"建筑信息可视化研究，共三页信息图。围绕马家大院的整体布局、"四水归堂"天井系统、房檐与斗拱结构、榫卯工艺及窗门楣纹样展开数字化档案设计。</p>
+        <p class="project-desc">以红、黄、青三色为主调，结合穿斗式木构爆炸图与圆形信息图布局，兼顾学术性与视觉美感。</p>
+        <div class="project-tags">
+          <span class="project-tag">信息设计</span>
+          <span class="project-tag">建筑可视化</span>
+          <span class="project-tag">云南民居</span>
+          <span class="project-tag">PDF档案</span>
+          <span class="project-tag">Figma</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Coursework -->
+<section id="coursework">
+  <div class="section-label">// 03. COURSEWORK</div>
+  <h2 class="section-title reveal">课程作业</h2>
+  <div class="projects-grid">
+
+    <div class="project-card featured reveal">
+      <div>
+        <div class="project-num">AI与艺术 / 期末作业</div>
+        <h3 class="project-title">15秒 AI 短片</h3>
+        <div class="project-en">AI SHORT FILM · 2025</div>
+        <p class="project-desc">
+          《人工智能与艺术》课程期末作品，时长15秒的 AI 生成短片。
+          综合使用 Kling、Runway、Pika、Luma 等多款 AI 视频工具生成素材，
+          经 Premiere Pro 剪辑合成，探索 AI 辅助影像创作的完整工作流。
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Kling</span>
+          <span class="project-tag">Runway</span>
+          <span class="project-tag">Pika</span>
+          <span class="project-tag">Luma</span>
+          <span class="project-tag">Premiere Pro</span>
+          <span class="project-tag">AIGC 视频</span>
+        </div>
+      </div>
+      <video controls style="width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--border);">
+        <source src="ai视频.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">AI与艺术 / 期末作业</div>
+      <h3 class="project-title">公益海报《护老人》</h3>
+      <div class="project-en">WELFARE POSTER · 2025</div>
+      <p class="project-desc">
+        以云南省"护老人"行动为主题的 AI 生成公益海报。使用 Gemini 生成扁平插画底图，
+        结合 HTML/CSS 排版布局，经 WeasyPrint 导出 A1 精度 PDF，
+        探索 AI 辅助平面设计的创作工作流。
+      </p>
+      <div class="project-tags">
+        <span class="project-tag">Gemini</span>
+        <span class="project-tag">HTML/CSS</span>
+        <span class="project-tag">公益设计</span>
+        <span class="project-tag">AI 生图</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- Contact -->
 <section id="contact">
-  <div class="section-label">// 03. CONTACT</div>
+  <div class="section-label">// 04. CONTACT</div>
   <h2 class="section-title reveal">联系我</h2>
   <p class="contact-sub reveal">正在寻找游戏设计 / 视觉创作 / AIGC 方向的实习机会</p>
   <div class="contact-links reveal">
-    <a class="contact-link" href="mailto:your@email.com">✉ 发送邮件</a>
+    <a class="contact-link" href="mailto:632088703@qq.com">✉ 发送邮件</a>
     <a class="contact-link" href="#">⇱ 下载简历</a>
   </div>
 </section>
