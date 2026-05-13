@@ -3,749 +3,689 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>刁思予 · 作品集</title>
+<title>刁思予 · DSY Creative Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cyan: #7C6F5B;
-    --cyan-dim: rgba(124,111,91,0.12);
-    --cyan-glow: rgba(124,111,91,0.05);
-    --bg: #F5F0E8;
-    --bg2: #EDE7DC;
-    --bg3: #E4DDD1;
-    --text: #2C2416;
-    --text-dim: #7A6E62;
-    --border: rgba(124,111,91,0.25);
-    --border-dim: rgba(44,36,22,0.08);
-  }
+:root{
+  --bg:#F5F1EB; --bg2:#E7DED4; --bg3:#DDD3C8;
+  --blue:#8C98A8; --green:#AAB5A0; --pink:#CDA6A6; --amber:#C4A882;
+  --text:#3D3D3D; --dim:#8A7E74;
+  --bd:rgba(61,61,61,0.10); --bd2:rgba(61,61,61,0.06);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Noto Serif SC',serif;
+  cursor:none; user-select:none;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* paper noise */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
 
-  html { scroll-behavior: smooth; }
+/* ── Cursor ── */
+#cursor{
+  position:fixed;width:26px;height:26px;border-radius:50%;
+  background:rgba(196,168,130,0.18);
+  border:1.5px solid rgba(196,168,130,0.45);
+  pointer-events:none;z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,background .2s;
+  backdrop-filter:blur(2px);
+}
+#cursor.h{width:46px;height:46px;background:rgba(205,166,166,0.15);border-color:rgba(205,166,166,0.5);}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans SC', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
+/* ── Loading ── */
+#loading{
+  position:fixed;inset:0;z-index:9998;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
+  transition:opacity .9s ease;
+}
+#loading.out{opacity:0;pointer-events:none;}
+.ld-icon{
+  font-size:64px;animation:float 2s ease-in-out infinite;
+  filter:drop-shadow(0 8px 24px rgba(196,168,130,0.3));
+}
+.ld-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-style:italic;color:var(--amber);letter-spacing:3px;
+}
+.ld-msg{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--dim);min-height:18px;
+}
+.ld-track{width:180px;height:2px;background:var(--bd);border-radius:2px;overflow:hidden;}
+.ld-bar{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--pink));transition:width .5s ease;}
 
-  /* ── Scanline overlay ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(44,36,22,0.02) 2px,
-      rgba(44,36,22,0.02) 4px
-    );
-    pointer-events: none;
-    z-index: 9999;
-  }
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-  /* ── Nav ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 48px;
-    background: rgba(245,240,232,0.90);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-dim);
-  }
+/* ── Desktop ── */
+#desktop{
+  position:fixed;inset:0;overflow:hidden;
+  background:radial-gradient(ellipse at 30% 40%, #F0EAE0 0%, #E8DFD3 40%, #DDD3C6 100%);
+}
 
-  .nav-logo {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--cyan);
-    letter-spacing: 3px;
-    text-decoration: none;
-  }
+/* desk surface lines */
+#desktop::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(61,61,61,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,61,61,0.03) 1px, transparent 1px);
+  background-size:80px 80px;
+}
 
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
-  }
+/* ambient light */
+#desktop::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 25% 20%, rgba(255,240,200,0.18) 0%, transparent 60%),
+             radial-gradient(ellipse 50% 50% at 80% 80%, rgba(200,180,220,0.08) 0%, transparent 60%);
+}
 
-  .nav-links a {
-    text-decoration: none;
-    color: var(--text-dim);
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
+/* ── Objects on desk ── */
+.obj{
+  position:absolute;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:none;
+  transition:transform .3s cubic-bezier(.25,.46,.45,.94), filter .3s;
+  animation:objfloat var(--fd,4s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+.obj:hover{transform:scale(1.08) rotate(var(--hr,1deg));filter:drop-shadow(0 12px 32px rgba(61,61,61,0.18));}
+.obj:active{transform:scale(0.95);}
 
-  .nav-links a:hover { color: var(--cyan); }
+@keyframes objfloat{0%,100%{transform:translateY(0) rotate(var(--rot,0deg))}50%{transform:translateY(-5px) rotate(var(--rot,0deg))}}
 
-  /* ── Hero ── */
-  #hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 0 48px;
-    position: relative;
-    overflow: hidden;
-  }
+.obj-icon{
+  font-size:var(--fs,56px);
+  filter:drop-shadow(0 4px 12px rgba(61,61,61,0.12));
+  line-height:1;
+}
+.obj-label{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);white-space:nowrap;
+  background:rgba(245,241,235,0.8);
+  padding:3px 10px;border-radius:20px;
+  border:1px solid var(--bd);
+  backdrop-filter:blur(4px);
+}
 
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border-dim) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
-  }
+/* decorative non-clickable items */
+.deco{
+  position:absolute;pointer-events:none;
+  font-size:var(--fs,40px);opacity:0.45;
+  animation:objfloat var(--fd,5s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+  transform:rotate(var(--rot,0deg));
+}
 
-  .hero-glow {
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(124,111,91,0.06) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
+/* ── Window ── */
+#windowOverlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(61,61,61,0.35);
+  backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;
+  animation:fadeIn .3s ease;
+}
+#windowOverlay.open{display:flex;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  .hero-content {
-    position: relative;
-    max-width: 800px;
-  }
+#windowBox{
+  background:var(--bg);
+  border:1px solid var(--bd);
+  border-radius:12px;
+  width:min(900px,90vw);
+  max-height:85vh;
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 32px 80px rgba(61,61,61,0.22);
+  animation:slideUp .4s cubic-bezier(.25,.46,.45,.94);
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
 
-  .hero-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--cyan);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
+.win-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--bd);
+  flex-shrink:0;
+}
+.win-dots{display:flex;gap:7px;}
+.win-dot{width:12px;height:12px;border-radius:50%;}
+.win-dot.r{background:#CDA6A6;} .win-dot.y{background:#C4A882;} .win-dot.g{background:#AAB5A0;}
+.win-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-style:italic;color:var(--dim);letter-spacing:1px;
+}
+.win-close{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;color:var(--dim);background:none;border:none;
+  cursor:none;padding:4px 8px;border-radius:4px;transition:color .2s;
+}
+.win-close:hover{color:var(--pink);}
+.win-body{
+  overflow-y:auto;padding:36px 40px;
+  flex:1;
+}
+.win-body::-webkit-scrollbar{width:4px;}
+.win-body::-webkit-scrollbar-track{background:transparent;}
+.win-body::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px;}
 
-  .hero-name {
-    font-size: clamp(52px, 8vw, 96px);
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -2px;
-    margin-bottom: 12px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
+/* ── Window content ── */
+.win-eyebrow{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:10px;
+}
+.win-h1{
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:36px;letter-spacing:4px;
+  color:var(--text);margin-bottom:6px;
+}
+.win-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;font-style:italic;
+  color:var(--dim);letter-spacing:1px;margin-bottom:28px;
+}
+.win-desc{
+  font-size:14px;color:var(--dim);
+  line-height:1.95;margin-bottom:24px;
+}
+.win-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px;}
+.wtag{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:0.8px;
+  padding:4px 12px;
+  background:rgba(140,152,168,0.10);
+  color:var(--blue);border-radius:20px;
+  border:1px solid rgba(140,152,168,0.2);
+}
+.win-media{
+  width:100%;aspect-ratio:16/9;
+  border:1px solid var(--bd);border-radius:8px;
+  background:var(--bg2);margin-bottom:20px;
+}
+.win-pdf{
+  width:100%;height:520px;
+  border:1px solid var(--bd);border-radius:8px;
+  background:var(--bg2);
+}
+.win-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;}
+.win-info-box{
+  padding:18px 20px;
+  background:rgba(255,255,255,0.5);
+  border:1px solid var(--bd2);border-radius:8px;
+}
+.win-info-box h4{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:8px;
+}
+.win-info-box p{font-size:13px;color:var(--dim);line-height:1.8;}
+.win-divider{border:none;border-top:1px solid var(--bd2);margin:24px 0;}
+.contact-item{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 0;border-bottom:1px solid var(--bd2);
+  font-size:14px;color:var(--text);
+}
+.contact-item a{color:var(--amber);text-decoration:none;}
+.contact-label{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);width:80px;flex-shrink:0;
+}
 
-  .hero-name span { color: var(--cyan); }
+/* ── Corner UI ── */
+#cornerUI{
+  position:fixed;bottom:28px;right:28px;z-index:200;
+  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+}
+.corner-btn{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  padding:8px 18px;
+  background:rgba(245,241,235,0.85);
+  border:1px solid var(--bd);
+  color:var(--dim);border-radius:20px;
+  cursor:none;
+  transition:all .25s;
+  backdrop-filter:blur(8px);
+}
+.corner-btn:hover{border-color:var(--amber);color:var(--amber);}
 
-  .hero-sub {
-    font-size: 18px;
-    font-weight: 300;
-    color: var(--text-dim);
-    margin-bottom: 40px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
-  }
-
-  .hero-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.8s forwards;
-  }
-
-  .chip {
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    color: var(--cyan);
-    background: var(--cyan-glow);
-    letter-spacing: 0.5px;
-  }
-
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 32px;
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    background: transparent;
-    font-size: 13px;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    opacity: 0;
-    animation: fadeUp 0.8s 1.0s forwards;
-  }
-
-  .hero-cta:hover {
-    background: var(--cyan);
-    color: #2C2416;
-  }
-
-  /* ── Section shared ── */
-  section {
-    padding: 100px 48px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--cyan);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .section-title {
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 56px;
-    letter-spacing: -0.5px;
-  }
-
-  /* ── About ── */
-  #about { border-top: 1px solid var(--border-dim); }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
-  }
-
-  .about-text p {
-    color: var(--text-dim);
-    margin-bottom: 16px;
-    font-size: 15px;
-  }
-
-  .about-text p strong { color: var(--text); font-weight: 500; }
-
-  .skills-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-  }
-
-  .skill-item {
-    padding: 14px 16px;
-    background: var(--bg2);
-    border-left: 2px solid transparent;
-    font-size: 13px;
-    color: var(--text-dim);
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-  }
-
-  .skill-item:hover {
-    border-left-color: var(--cyan);
-    color: var(--text);
-    background: var(--bg3);
-  }
-
-  .skill-item .s-name { display: block; color: var(--text); font-size: 13px; font-weight: 500; margin-bottom: 2px; }
-  .skill-item .s-detail { font-size: 11px; color: var(--text-dim); }
-
-  /* ── Projects ── */
-  #projects { border-top: 1px solid var(--border-dim); }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 2px;
-  }
-
-  .project-card {
-    background: var(--bg2);
-    padding: 36px;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-    cursor: default;
-  }
-
-  .project-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 2px; height: 0;
-    background: var(--cyan);
-    transition: height 0.4s ease;
-  }
-
-  .project-card:hover { background: var(--bg3); }
-  .project-card:hover::before { height: 100%; }
-
-  .project-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--cyan);
-    opacity: 0.5;
-    margin-bottom: 20px;
-  }
-
-  .project-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    letter-spacing: -0.3px;
-  }
-
-  .project-en {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 2px;
-    margin-bottom: 18px;
-  }
-
-  .project-desc {
-    font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.8;
-    margin-bottom: 24px;
-  }
-
-  .project-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .project-tag {
-    font-size: 11px;
-    padding: 3px 10px;
-    background: var(--cyan-dim);
-    color: var(--cyan);
-    border-radius: 2px;
-    letter-spacing: 0.5px;
-  }
-
-  /* ── Featured / big card ── */
-  .project-card.featured {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: center;
-  }
-
-  .featured-visual {
-    aspect-ratio: 16/9;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .featured-visual .glitch-text {
-    font-family: 'Space Mono', monospace;
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--cyan);
-    letter-spacing: 8px;
-    position: relative;
-  }
-
-  .featured-visual .glitch-text::before,
-  .featured-visual .glitch-text::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-  }
-
-  .featured-visual .glitch-text::before {
-    color: rgba(180,60,40,0.6);
-    animation: glitch1 3s infinite;
-    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-  }
-
-  .featured-visual .glitch-text::after {
-    color: rgba(80,120,160,0.6);
-    animation: glitch2 3s infinite;
-    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
-  }
-
-  @keyframes glitch1 {
-    0%, 90%, 100% { transform: translate(0); }
-    92% { transform: translate(-3px, 1px); }
-    94% { transform: translate(3px, -1px); }
-    96% { transform: translate(-2px, 0); }
-  }
-
-  @keyframes glitch2 {
-    0%, 88%, 100% { transform: translate(0); }
-    90% { transform: translate(3px, 2px); }
-    93% { transform: translate(-3px, -1px); }
-    96% { transform: translate(2px, 0); }
-  }
-
-  /* ── Contact ── */
-  #contact {
-    border-top: 1px solid var(--border-dim);
-    text-align: center;
-  }
-
-  #contact .section-title { margin-bottom: 16px; }
-
-  .contact-sub {
-    color: var(--text-dim);
-    margin-bottom: 48px;
-    font-size: 16px;
-  }
-
-  .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .contact-link {
-    padding: 12px 28px;
-    border: 1px solid var(--border-dim);
-    color: var(--text-dim);
-    text-decoration: none;
-    font-size: 13px;
-    font-family: 'Space Mono', monospace;
-    letter-spacing: 1.5px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .contact-link:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-  }
-
-  /* ── Footer ── */
-  footer {
-    padding: 32px 48px;
-    border-top: 1px solid var(--border-dim);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: var(--text-dim);
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* ── Animations ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ── Mobile ── */
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    #hero { padding: 0 24px; }
-    section { padding: 72px 24px; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .project-card.featured { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 8px; text-align: center; }
-    .nav-links { display: none; }
-  }
+/* ── Top bar ── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 32px;
+  background:rgba(245,241,235,0.75);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bd2);
+}
+.tb-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-style:italic;
+  color:var(--amber);letter-spacing:1px;
+}
+.tb-hint{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);
+}
 </style>
 </head>
 <body>
 
-<!-- Nav -->
-<nav>
-  <a class="nav-logo" href="#hero">DSY.DEV</a>
-  <ul class="nav-links">
-    <li><a href="#about">关于</a></li>
-    <li><a href="#projects">项目</a></li>
-    <li><a href="#coursework">课程作业</a></li>
-    <li><a href="#contact">联系</a></li>
-  </ul>
-</nav>
+<div id="cursor"></div>
 
-<!-- Hero -->
-<section id="hero" style="max-width:100%; padding-top:0; padding-bottom:0;">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-tag">// Digital Media Art · KMUST 2024</div>
-    <h1 class="hero-name">刁<span>思予</span></h1>
-    <p class="hero-sub">游戏开发 · AIGC 创作 · 影像制作</p>
-    <div class="hero-chips">
-      <span class="chip">Unity 2D/3D</span>
-      <span class="chip">Stable Diffusion</span>
-      <span class="chip">After Effects</span>
-      <span class="chip">Blender</span>
-      <span class="chip">Figma</span>
-      <span class="chip">手绘插画</span>
-    </div>
-    <a class="hero-cta" href="#projects">查看作品 →</a>
+<!-- Loading -->
+<div id="loading">
+  <div class="ld-icon">📓</div>
+  <div class="ld-title">DSY Creative Room</div>
+  <div class="ld-msg" id="ldMsg">Opening sketchbook...</div>
+  <div class="ld-track"><div class="ld-bar" id="ldBar"></div></div>
+</div>
+
+<!-- Top bar -->
+<div id="topbar">
+  <div class="tb-logo">刁思予 · DSY</div>
+  <div class="tb-hint" id="tbHint">点击桌面上的物件来探索 · Click objects to explore</div>
+</div>
+
+<!-- Desktop -->
+<div id="desktop">
+
+  <!-- ── 可点击物件 ── -->
+
+  <!-- 游戏 / 残像 -->
+  <div class="obj" style="--rot:-3deg;--hr:2deg;--fd:4.2s;--delay:0s;--fs:62px;left:12%;top:22%"
+    onclick="openWin('afterimage')" title="《残像》">
+    <div class="obj-icon">🖥️</div>
+    <div class="obj-label">残像 · AFTERIMAGE</div>
   </div>
-</section>
 
-<!-- About -->
-<section id="about">
-  <div class="section-label">// 01. ABOUT</div>
-  <h2 class="section-title reveal">关于我</h2>
-  <div class="about-grid">
-    <div class="about-text reveal">
-      <p>就读于<strong>昆明理工大学数字媒体艺术专业</strong>，专注于游戏叙事设计、AIGC 内容创作与影像制作的交叉领域。</p>
-      <p>我相信<strong>技术与美学可以共生</strong>——从 Unity C# 脚本到 Stable Diffusion 的 ControlNet 工作流，我习惯打通创作的每一个环节，从概念到落地独立完成。</p>
-      <p>有较强的<strong>手绘基础</strong>，角色设计与概念草图是我进入数字创作的起点。喜欢赛博朋克美学，着迷于叙事游戏对玩家心理的影响。</p>
-      <p>ENTJ · 团支书 · 正在寻找<strong>游戏设计 / 视觉创作 / AIGC 方向的实习机会</strong>。</p>
-    </div>
-    <div class="skills-list reveal">
-      <div class="skill-item">
-        <span class="s-name">游戏开发</span>
-        <span class="s-detail">Unity · C# · UE5</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">AIGC 图像</span>
-        <span class="s-detail">SD · ControlNet · Gemini</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">AIGC 视频</span>
-        <span class="s-detail">Kling · Runway · Pika · Luma</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">视频制作</span>
-        <span class="s-detail">After Effects · Premiere Pro</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">3D 建模</span>
-        <span class="s-detail">Blender · 3ds Max</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">UI / 平面</span>
-        <span class="s-detail">Figma · PS · AI</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">手绘</span>
-        <span class="s-detail">角色设计 · 概念插画</span>
-      </div>
-      <div class="skill-item">
-        <span class="s-name">编程</span>
-        <span class="s-detail">C# · Python · HTML/CSS</span>
-      </div>
-    </div>
+  <!-- 视觉小说 / 生长痛 -->
+  <div class="obj" style="--rot:2deg;--hr:-2deg;--fd:5s;--delay:.4s;--fs:58px;left:26%;top:18%"
+    onclick="openWin('growingpains')" title="《生长痛》">
+    <div class="obj-icon">📖</div>
+    <div class="obj-label">生长痛 · GROWING PAINS</div>
   </div>
-</section>
 
-<!-- Projects -->
-<section id="projects">
-  <div class="section-label">// 02. PROJECTS</div>
-  <h2 class="section-title reveal">作品项目</h2>
-
-  <div class="projects-grid">
-
-    <!-- Featured -->
-    <div class="project-card featured reveal">
-      <iframe src="//player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0" scrolling="no" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;border:1px solid var(--border);background:var(--bg);"></iframe>
-      <div>
-        <div class="project-num">001 / FEATURED</div>
-        <h3 class="project-title">《残像》</h3>
-        <div class="project-en">AFTERIMAGE · 2024–2025</div>
-        <p class="project-desc">
-          Unity 2D 赛博朋克叙事解谜游戏，参加 Lilith 游戏创意大赛"我的 AI 队友"主题赛道。
-          玩家扮演 ECHO，AI 伴侣"影"的行为由玩家自身的数据镜像驱动——你塑造了它，它也在重构你。
-        </p>
-        <p class="project-desc">
-          独立完成 10+ 场景的全栈开发：NPC 对话系统、档案室存档、行为追踪、双层 Tab 切换机制，
-          自研 Editor 工具 AfterimageSetupTool.cs 提升场景搭建效率。
-          视觉使用深色背景配合青色 #00F5D4 强调色。
-        </p>
-        <div class="project-tags">
-          <span class="project-tag">Unity 2D</span>
-          <span class="project-tag">C#</span>
-          <span class="project-tag">叙事设计</span>
-          <span class="project-tag">Kling</span>
-          <span class="project-tag">Runway</span>
-          <span class="project-tag">Gemini</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Project 2 -->
-    <div class="project-card reveal">
-      <div class="project-num">002</div>
-      <h3 class="project-title">《生长痛》</h3>
-      <div class="project-en">GROWING PAINS · 2024–2025</div>
-      <p class="project-desc">
-        高中题材视觉小说，围绕学业压力与成长焦虑展开。六幕分支剧本，
-        隐性四维价值系统，六种结局。融入"内卷""时间不可逆"等社会议题。
-        作为留学申请作品集主要作品。
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">视觉小说</span>
-        <span class="project-tag">剧本设计</span>
-        <span class="project-tag">Stable Diffusion</span>
-        <span class="project-tag">Figma</span>
-        <span class="project-tag">Premiere Pro</span>
-      </div>
-    </div>
-
-
-    <!-- Project 3 GameJam -->
-    <div class="project-card featured reveal">
-      <video controls style="width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--border);border-radius:8px;">
-        <source src="迷.mp4" type="video/mp4">
-      </video>
-      <div>
-        <div class="project-num">003 / GAME JAM</div>
-        <h3 class="project-title">《迷》</h3>
-        <div class="project-en">MAZE · GAME JAM · 2024</div>
-        <p class="project-desc">完美世界训练营 Game Jam 参赛作品，主题为"迷"。因当时开发能力有限，以 AI 视频生成工具制作了 2分30秒完整成片作为最终提交，探索 AI 影像叙事与游戏概念表达的可能性。</p>
-        <div class="project-tags">
-          <span class="project-tag">Game Jam</span>
-          <span class="project-tag">完美世界训练营</span>
-          <span class="project-tag">AIGC 视频</span>
-          <span class="project-tag">影像叙事</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Project 4 角色设计手册 -->
-    <div class="project-card featured reveal">
-      <iframe src="./设计手册.pdf" width="100%" height="680px" style="border:1px solid var(--border);border-radius:8px;background:var(--bg2);"></iframe>
-      <div>
-        <div class="project-num">004 / CHARACTER DESIGN</div>
-        <h3 class="project-title">游戏角色设计手册</h3>
-        <div class="project-en">CHARACTER DESIGN HANDBOOK · 2024</div>
-        <p class="project-desc">游戏角色设计课程作品，内容涵盖服装设计、色彩指定、五视图、表情设计、动作设计与交通工具设计，完整呈现角色从概念到规范的设计流程。</p>
-        <div class="project-tags">
-          <span class="project-tag">角色设计</span>
-          <span class="project-tag">服装设计</span>
-          <span class="project-tag">五视图</span>
-          <span class="project-tag">表情动作</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Project 4 PDF -->
-    <div class="project-card featured reveal">
-      <iframe src="./马家大院.pdf" width="100%" height="680px" style="border:1px solid var(--border);border-radius:8px;background:var(--bg2);"></iframe>
-      <div>
-        <div class="project-num">005 / ARCHIVE</div>
-        <h3 class="project-title">《一颗印·马家大院》</h3>
-        <div class="project-en">YUNNAN COURTYARD ARCHIVE · 2025</div>
-        <p class="project-desc">云南传统"一颗印"建筑信息可视化研究，共三页信息图。围绕马家大院的整体布局、"四水归堂"天井系统、房檐与斗拱结构、榫卯工艺及窗门楣纹样展开数字化档案设计。</p>
-        <p class="project-desc">以红、黄、青三色为主调，结合穿斗式木构爆炸图与圆形信息图布局，兼顾学术性与视觉美感。</p>
-        <div class="project-tags">
-          <span class="project-tag">信息设计</span>
-          <span class="project-tag">建筑可视化</span>
-          <span class="project-tag">云南民居</span>
-          <span class="project-tag">PDF档案</span>
-          <span class="project-tag">Figma</span>
-        </div>
-      </div>
-    </div>
-
+  <!-- 游戏JAM -->
+  <div class="obj" style="--rot:1deg;--hr:3deg;--fd:3.8s;--delay:.8s;--fs:56px;left:44%;top:14%"
+    onclick="openWin('maze')" title="《迷》">
+    <div class="obj-icon">🎮</div>
+    <div class="obj-label">迷 · MAZE JAM</div>
   </div>
-</section>
 
-<!-- Coursework -->
-<section id="coursework">
-  <div class="section-label">// 03. COURSEWORK</div>
-  <h2 class="section-title reveal">课程作业</h2>
-  <div class="projects-grid">
-
-    <div class="project-card featured reveal">
-      <div>
-        <div class="project-num">AI与艺术 / 期末作业</div>
-        <h3 class="project-title">15秒 AI 短片</h3>
-        <div class="project-en">AI SHORT FILM · 2025</div>
-        <p class="project-desc">
-          《人工智能与艺术》课程期末作品，时长15秒的 AI 生成短片。
-          综合使用 Kling、Runway、Pika、Luma 等多款 AI 视频工具生成素材，
-          经 Premiere Pro 剪辑合成，探索 AI 辅助影像创作的完整工作流。
-        </p>
-        <div class="project-tags">
-          <span class="project-tag">Kling</span>
-          <span class="project-tag">Runway</span>
-          <span class="project-tag">Pika</span>
-          <span class="project-tag">Luma</span>
-          <span class="project-tag">Premiere Pro</span>
-          <span class="project-tag">AIGC 视频</span>
-        </div>
-      </div>
-      <video controls style="width:100%;aspect-ratio:16/9;background:#000;border:1px solid var(--border);">
-        <source src="ai视频.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="project-card reveal">
-      <div class="project-num">AI与艺术 / 期末作业</div>
-      <h3 class="project-title">公益海报《护老人》</h3>
-      <div class="project-en">WELFARE POSTER · 2025</div>
-      <p class="project-desc">
-        以云南省"护老人"行动为主题的 AI 生成公益海报。使用 Gemini 生成扁平插画底图，
-        结合 HTML/CSS 排版布局，经 WeasyPrint 导出 A1 精度 PDF，
-        探索 AI 辅助平面设计的创作工作流。
-      </p>
-      <div class="project-tags">
-        <span class="project-tag">Gemini</span>
-        <span class="project-tag">HTML/CSS</span>
-        <span class="project-tag">公益设计</span>
-        <span class="project-tag">AI 生图</span>
-      </div>
-    </div>
-
+  <!-- 建筑档案 -->
+  <div class="obj" style="--rot:-2deg;--hr:-3deg;--fd:4.5s;--delay:.2s;--fs:60px;left:60%;top:20%"
+    onclick="openWin('archive')" title="马家大院档案">
+    <div class="obj-icon">🗂️</div>
+    <div class="obj-label">马家大院 · ARCHIVE</div>
   </div>
-</section>
 
-<!-- Contact -->
-<section id="contact">
-  <div class="section-label">// 04. CONTACT</div>
-  <h2 class="section-title reveal">联系我</h2>
-  <p class="contact-sub reveal">正在寻找游戏设计 / 视觉创作 / AIGC 方向的实习机会</p>
-  <div class="contact-links reveal">
-    <a class="contact-link" href="mailto:632088703@qq.com">✉ 发送邮件</a>
-    <a class="contact-link" href="#">⇱ 下载简历</a>
+  <!-- 课程作业 -->
+  <div class="obj" style="--rot:3deg;--hr:-2deg;--fd:4.8s;--delay:.6s;--fs:56px;left:76%;top:16%"
+    onclick="openWin('coursework')" title="课程作业">
+    <div class="obj-icon">✏️</div>
+    <div class="obj-label">课程作业 · COURSEWORK</div>
   </div>
-</section>
 
-<!-- Footer -->
-<footer>
-  <span>© 2025 刁思予</span>
-  <span>昆明理工大学 · 数字媒体艺术</span>
-</footer>
+  <!-- AI工作流 -->
+  <div class="obj" style="--rot:-1deg;--hr:2deg;--fd:5.2s;--delay:1s;--fs:58px;left:20%;top:52%"
+    onclick="openWin('ai')" title="AI工作流">
+    <div class="obj-icon">🤖</div>
+    <div class="obj-label">AI工作流 · WORKFLOW</div>
+  </div>
+
+  <!-- 关于我 -->
+  <div class="obj" style="--rot:2deg;--hr:-1deg;--fd:4.2s;--delay:.3s;--fs:58px;left:50%;top:55%"
+    onclick="openWin('about')" title="关于我">
+    <div class="obj-icon">💌</div>
+    <div class="obj-label">关于我 · ABOUT</div>
+  </div>
+
+  <!-- 联系 -->
+  <div class="obj" style="--rot:-2deg;--hr:3deg;--fd:3.6s;--delay:.7s;--fs:56px;left:72%;top:52%"
+    onclick="openWin('contact')" title="联系我">
+    <div class="obj-icon">📬</div>
+    <div class="obj-label">联系 · CONTACT</div>
+  </div>
+
+  <!-- ── 装饰物（不可点击）── -->
+  <div class="deco" style="--rot:12deg;--fd:6s;--delay:0s;--fs:36px;left:6%;top:55%">☕</div>
+  <div class="deco" style="--rot:-8deg;--fd:7s;--delay:1s;--fs:32px;left:36%;top:40%">🎧</div>
+  <div class="deco" style="--rot:5deg;--fd:5s;--delay:.5s;--fs:30px;left:86%;top:38%">📷</div>
+  <div class="deco" style="--rot:-14deg;--fd:8s;--delay:2s;--fs:28px;left:8%;top:78%">🖊️</div>
+  <div class="deco" style="--rot:9deg;--fd:6s;--delay:1.5s;--fs:34px;left:88%;top:68%">💿</div>
+  <div class="deco" style="--rot:-6deg;--fd:4.5s;--delay:.8s;--fs:28px;left:42%;top:72%">🌿</div>
+  <div class="deco" style="--rot:18deg;--fd:7s;--delay:2.2s;--fs:30px;left:64%;top:74%">📌</div>
+  <div class="deco" style="--rot:-10deg;--fd:5.5s;--delay:.4s;--fs:26px;left:30%;top:78%">🎞️</div>
+  <div class="deco" style="--rot:7deg;--fd:6.5s;--delay:1.2s;--fs:32px;left:56%;top:38%">🖋️</div>
+  <div class="deco" style="--rot:-4deg;--fd:5s;--delay:1.8s;--fs:28px;left:16%;top:38%">📐</div>
+
+</div>
+
+<!-- Corner UI -->
+<div id="cornerUI">
+  <button class="corner-btn" id="langBtn" onclick="toggleLang()">EN</button>
+</div>
+
+<!-- Window -->
+<div id="windowOverlay" onclick="closeWinOut(event)">
+  <div id="windowBox">
+    <div class="win-bar">
+      <div class="win-dots">
+        <div class="win-dot r"></div>
+        <div class="win-dot y"></div>
+        <div class="win-dot g"></div>
+      </div>
+      <div class="win-title" id="winTitle">—</div>
+      <button class="win-close" onclick="closeWin()">✕</button>
+    </div>
+    <div class="win-body" id="winBody"></div>
+  </div>
+</div>
 
 <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) e.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
+// ── Loading ──
+const ldMsgs = ['Opening sketchbook...','Arranging projects...','Loading memories...','Preparing creative space...','Welcome to DSY\'s room ✦'];
+let ldi = 0;
+const ldMsg = document.getElementById('ldMsg');
+const ldBar = document.getElementById('ldBar');
+const ldEl  = document.getElementById('loading');
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+function ldNext() {
+  if (ldi < ldMsgs.length) {
+    ldMsg.textContent = ldMsgs[ldi];
+    ldBar.style.width = ((ldi+1)/ldMsgs.length*100)+'%';
+    ldi++;
+    if (ldi < ldMsgs.length) setTimeout(ldNext, 800);
+    else setTimeout(()=>{ ldEl.classList.add('out'); setTimeout(()=>ldEl.remove(),900); }, 600);
+  }
+}
+setTimeout(ldNext, 400);
+
+// ── Cursor ──
+const cur = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX+'px';
+  cur.style.top  = e.clientY+'px';
+});
+document.querySelectorAll('.obj,.corner-btn,.win-close,a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('h'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('h'));
+});
+
+// ── Lang ──
+let lang = 'zh';
+const translations = {
+  tbHint: { zh:'点击桌面上的物件来探索', en:'Click objects to explore' }
+};
+function toggleLang() {
+  lang = lang==='zh'?'en':'zh';
+  document.getElementById('langBtn').textContent = lang==='zh'?'EN':'中文';
+  document.getElementById('tbHint').textContent = translations.tbHint[lang];
+  document.querySelectorAll('[data-zh][data-en]').forEach(el=>{
+    el.innerHTML = el.getAttribute('data-'+lang);
+  });
+}
+
+// ── Window content ──
+const contents = {
+
+  afterimage: {
+    title: '《残像》· AFTERIMAGE',
+    html: `
+      <div class="win-eyebrow">001 / Featured Game · Unity 2D · 2024–2025</div>
+      <div class="win-h1">《残像》</div>
+      <div class="win-sub">AFTERIMAGE — Cyberpunk Narrative Puzzle Game</div>
+      <iframe src="//player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0"
+        scrolling="no" frameborder="0" allowfullscreen class="win-media"></iframe>
+      <p class="win-desc"
+        data-zh="Unity 2D 赛博朋克叙事解谜游戏，参加 Lilith 游戏创意大赛「我的 AI 队友」主题赛道。玩家扮演 ECHO，AI 伴侣「影」的行为由玩家自身的数据镜像驱动——你塑造了它，它也在重构你。"
+        data-en="A Unity 2D cyberpunk narrative puzzle game for Lilith Game Jam 'My AI Teammate'. The player is ECHO; AI companion 'Shadow' mirrors the player's behavioral data — you shape it, and it reshapes you.">
+        Unity 2D 赛博朋克叙事解谜游戏，参加 Lilith 游戏创意大赛「我的 AI 队友」主题赛道。玩家扮演 ECHO，AI 伴侣「影」的行为由玩家自身的数据镜像驱动——你塑造了它，它也在重构你。
+      </p>
+      <div class="win-tags">
+        <span class="wtag">Unity 2D</span><span class="wtag">C#</span>
+        <span class="wtag">叙事设计</span><span class="wtag">NPC对话系统</span>
+        <span class="wtag">Kling</span><span class="wtag">Runway</span><span class="wtag">Gemini</span>
+      </div>
+      <hr class="win-divider">
+      <div class="win-grid">
+        <div class="win-info-box">
+          <h4>开发亮点</h4>
+          <p>独立完成 10+ 场景全栈开发，自研 Editor 工具 AfterimageSetupTool.cs，NPC 对话系统、行为追踪、档案室存档机制。</p>
+        </div>
+        <div class="win-info-box">
+          <h4>主题核心</h4>
+          <p>玩家行为数据驱动 AI 伴侣，形成「镜像自我」的叙事设计。双层 Tab 切换机制实现现实与虚拟空间的跨越。</p>
+        </div>
+      </div>
+    `
+  },
+
+  growingpains: {
+    title: '《生长痛》· GROWING PAINS',
+    html: `
+      <div class="win-eyebrow">002 / Visual Novel · 2024–2025</div>
+      <div class="win-h1">《生长痛》</div>
+      <div class="win-sub">GROWING PAINS — High School Visual Novel</div>
+      <p class="win-desc"
+        data-zh="高中题材视觉小说，六幕分支剧本，隐性四维价值系统，六种结局。融入「内卷」「时间不可逆」等社会议题，作为留学申请作品集主要作品。"
+        data-en="A high school visual novel with 6-act branching script, hidden 4-axis value system, and 6 endings. Explores academic pressure and temporal irreversibility.">
+        高中题材视觉小说，六幕分支剧本，隐性四维价值系统，六种结局。融入「内卷」「时间不可逆」等社会议题，作为留学申请作品集主要作品。
+      </p>
+      <div class="win-tags">
+        <span class="wtag">视觉小说</span><span class="wtag">剧本设计</span>
+        <span class="wtag">Stable Diffusion</span><span class="wtag">ControlNet</span>
+        <span class="wtag">Figma</span><span class="wtag">Premiere Pro</span>
+      </div>
+      <hr class="win-divider">
+      <div class="win-grid">
+        <div class="win-info-box">
+          <h4>叙事设计</h4>
+          <p>六幕完整剧本，分支选择驱动四个隐性价值维度（认同感、时间感、压力值、自我感），决定六种结局。</p>
+        </div>
+        <div class="win-info-box">
+          <h4>视觉生产</h4>
+          <p>使用 Stable Diffusion + IP-Adapter + Lineart ControlNet 生成统一风格角色立绘与场景背景，Premiere Pro 制作 Demo 视频。</p>
+        </div>
+      </div>
+    `
+  },
+
+  maze: {
+    title: '《迷》· MAZE GAME JAM',
+    html: `
+      <div class="win-eyebrow">003 / Game Jam · Perfect World Camp · 2024</div>
+      <div class="win-h1">《迷》</div>
+      <div class="win-sub">MAZE — AI Film Game Concept</div>
+      <video controls class="win-media">
+        <source src="迷.mp4" type="video/mp4">
+      </video>
+      <p class="win-desc"
+        data-zh="完美世界训练营 Game Jam 参赛作品，主题为「迷」。以 AI 视频生成工具制作 2分30秒完整成片，探索 AI 影像叙事与游戏概念表达的可能性。"
+        data-en="A Game Jam entry for Perfect World Training Camp. A 2m30s AI-generated film exploring AI visual storytelling as a game concept vehicle.">
+        完美世界训练营 Game Jam 参赛作品，主题为「迷」。以 AI 视频生成工具制作 2分30秒完整成片，探索 AI 影像叙事与游戏概念表达的可能性。
+      </p>
+      <div class="win-tags">
+        <span class="wtag">Game Jam</span><span class="wtag">完美世界训练营</span>
+        <span class="wtag">AIGC 视频</span><span class="wtag">影像叙事</span>
+      </div>
+    `
+  },
+
+  archive: {
+    title: '《一颗印·马家大院》',
+    html: `
+      <div class="win-eyebrow">Archive / 信息设计 · 2025</div>
+      <div class="win-h1" style="font-size:28px">《一颗印·马家大院》</div>
+      <div class="win-sub">YUNNAN COURTYARD ARCHIVE — Information Design</div>
+      <iframe src="./马家大院.pdf" class="win-pdf"></iframe>
+      <p class="win-desc" style="margin-top:16px"
+        data-zh="云南传统「一颗印」建筑信息可视化研究，共三页信息图。围绕马家大院的整体布局、「四水归堂」天井系统、房檐与斗拱结构、榫卯工艺及窗门楣纹样展开数字化档案设计。"
+        data-en="A 3-page infographic study on Yunnan's traditional Yikeyin courtyard architecture, covering layout, courtyard system, bracket structures, and decorative patterns.">
+        云南传统「一颗印」建筑信息可视化研究，共三页信息图。围绕马家大院的整体布局、「四水归堂」天井系统、房檐与斗拱结构、榫卯工艺及窗门楣纹样展开数字化档案设计。
+      </p>
+      <div class="win-tags">
+        <span class="wtag">信息设计</span><span class="wtag">建筑可视化</span>
+        <span class="wtag">云南民居</span><span class="wtag">Figma</span>
+      </div>
+    `
+  },
+
+  coursework: {
+    title: '课程作业 · Coursework',
+    html: `
+      <div class="win-eyebrow">Coursework · 2024–2025</div>
+      <div class="win-h1" style="font-size:28px">课程作业</div>
+      <div class="win-sub">Selected Coursework — KMUST Digital Media Art</div>
+      <hr class="win-divider">
+      <p class="win-desc" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;">
+        AI 短片 · 角色设计手册 · 公益海报
+      </p>
+      <video controls class="win-media" style="margin-bottom:16px">
+        <source src="ai视频.mp4" type="video/mp4">
+      </video>
+      <div class="win-eyebrow" style="margin-bottom:8px">AI与艺术 期末 / 15秒 AI 短片</div>
+      <p class="win-desc"
+        data-zh="综合使用 Kling、Runway、Pika、Luma 等多款 AI 视频工具生成素材，经 Premiere Pro 剪辑合成，探索 AI 辅助影像创作的完整工作流。"
+        data-en="Used Kling, Runway, Pika, and Luma to generate footage, edited in Premiere Pro — exploring the full AI-assisted film production workflow.">
+        综合使用 Kling、Runway、Pika、Luma 等多款 AI 视频工具生成素材，经 Premiere Pro 剪辑合成，探索 AI 辅助影像创作的完整工作流。
+      </p>
+      <div class="win-tags" style="margin-bottom:28px">
+        <span class="wtag">Kling</span><span class="wtag">Runway</span><span class="wtag">Pika</span><span class="wtag">Premiere Pro</span>
+      </div>
+      <div class="win-eyebrow" style="margin-bottom:8px">游戏角色设计 / 设计手册</div>
+      <iframe src="./设计手册.pdf" class="win-pdf" style="height:400px"></iframe>
+      <div class="win-tags" style="margin-top:12px">
+        <span class="wtag">角色设计</span><span class="wtag">五视图</span><span class="wtag">表情动作</span>
+      </div>
+    `
+  },
+
+  ai: {
+    title: 'AI 工作流 · Workflow',
+    html: `
+      <div class="win-eyebrow">AI Workflow · AIGC Creation</div>
+      <div class="win-h1" style="font-size:28px">AI 创作工作流</div>
+      <div class="win-sub">Stable Diffusion · ControlNet · Kling · Gemini · Runway</div>
+      <hr class="win-divider">
+      <div class="win-grid">
+        <div class="win-info-box">
+          <h4>图像生成</h4>
+          <p>Stable Diffusion + ControlNet（Lineart / Depth / IP-Adapter）生成角色立绘与场景背景，AnimateDiff 制作动画 GIF。</p>
+        </div>
+        <div class="win-info-box">
+          <h4>视频生成</h4>
+          <p>Kling · Runway · Pika · Luma 多平台协作，生成 AI 视频素材，配合 Premiere Pro 后期剪辑合成。</p>
+        </div>
+        <div class="win-info-box">
+          <h4>设计辅助</h4>
+          <p>Gemini 生成扁平插画底图，配合 HTML/CSS 排版工作流，输出 A1 精度 PDF 海报。</p>
+        </div>
+        <div class="win-info-box">
+          <h4>工作流特点</h4>
+          <p>从 Prompt 设计到最终落地独立完成，习惯将多个 AI 工具串联成完整创作管线。</p>
+        </div>
+      </div>
+      <div class="win-tags" style="margin-top:20px">
+        <span class="wtag">Stable Diffusion</span><span class="wtag">ControlNet</span>
+        <span class="wtag">AnimateDiff</span><span class="wtag">Gemini</span>
+        <span class="wtag">Kling</span><span class="wtag">Runway</span><span class="wtag">Pika</span><span class="wtag">Luma</span>
+      </div>
+    `
+  },
+
+  about: {
+    title: '关于我 · About',
+    html: `
+      <div class="win-eyebrow">About · 刁思予 · DSY</div>
+      <div class="win-h1">刁思予</div>
+      <div class="win-sub">Digital Media Artist · Narrative Game Designer · AIGC Creator</div>
+      <p class="win-desc"
+        data-zh="就读于昆明理工大学数字媒体艺术专业，专注于游戏叙事设计、AIGC 内容创作与影像制作的交叉领域。从 Unity C# 脚本到 Stable Diffusion 的 ControlNet 工作流，习惯打通创作的每一个环节，从概念到落地独立完成。"
+        data-en="Studying Digital Media Art at Kunming University of Science and Technology, focused on the intersection of narrative game design, AIGC creation, and visual production. From Unity C# to ControlNet workflows, I complete projects independently from concept to execution.">
+        就读于昆明理工大学数字媒体艺术专业，专注于游戏叙事设计、AIGC 内容创作与影像制作的交叉领域。从 Unity C# 脚本到 Stable Diffusion 的 ControlNet 工作流，习惯打通创作的每一个环节，从概念到落地独立完成。
+      </p>
+      <p class="win-desc" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;border-left:3px solid var(--pink);padding-left:16px;">
+        我关注技术如何影响情绪与人的关系——每一个交互、每一帧画面，都是一种对话。
+      </p>
+      <hr class="win-divider">
+      <div class="win-grid">
+        <div class="win-info-box"><h4>游戏开发</h4><p>Unity · C# · UE5 · 叙事系统 · NPC AI</p></div>
+        <div class="win-info-box"><h4>AIGC 图像</h4><p>Stable Diffusion · ControlNet · Gemini</p></div>
+        <div class="win-info-box"><h4>影像制作</h4><p>After Effects · Premiere Pro · AIGC 视频</p></div>
+        <div class="win-info-box"><h4>3D / 设计</h4><p>Blender · 3ds Max · Figma · 手绘插画</p></div>
+      </div>
+      <div class="win-tags" style="margin-top:20px">
+        <span class="wtag">ENTJ</span><span class="wtag">团支书</span>
+        <span class="wtag">昆明理工大学</span><span class="wtag">数字媒体艺术 2024</span>
+      </div>
+    `
+  },
+
+  contact: {
+    title: '联系我 · Contact',
+    html: `
+      <div class="win-eyebrow">Contact · 刁思予</div>
+      <div class="win-h1">联系我</div>
+      <div class="win-sub">正在寻找游戏设计 / 视觉创作 / AIGC 方向的实习机会</div>
+      <hr class="win-divider">
+      <div class="contact-item">
+        <span class="contact-label">Email</span>
+        <a href="mailto:630388703@qq.com">630388703@qq.com</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">电话</span>
+        <span>138-8889-9756</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Bilibili</span>
+        <a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">刁思予 · B站主页</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Resume</span>
+        <a href="刁思予_简历.pdf">下载简历 / Download CV</a>
+      </div>
+    `
+  }
+
+};
+
+// ── Window logic ──
+function openWin(key) {
+  const c = contents[key];
+  if (!c) return;
+  document.getElementById('winTitle').textContent = c.title;
+  document.getElementById('winBody').innerHTML = c.html;
+  document.getElementById('windowOverlay').classList.add('open');
+  // re-apply lang
+  if (lang === 'en') {
+    document.querySelectorAll('#winBody [data-en]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-en');
+    });
+  }
+}
+
+function closeWin() {
+  document.getElementById('windowOverlay').classList.remove('open');
+}
+
+function closeWinOut(e) {
+  if (e.target === document.getElementById('windowOverlay')) closeWin();
+}
+
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeWin(); });
 </script>
 </body>
 </html>
