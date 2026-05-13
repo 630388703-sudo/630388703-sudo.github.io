@@ -278,6 +278,8 @@ body::after{
   font-size:10px;letter-spacing:2px;text-transform:uppercase;
   color:var(--dim);
 }
+
+#bgCanvas { mix-blend-mode: multiply; }
 </style>
 </head>
 <body>
@@ -299,6 +301,12 @@ body::after{
 </div>
 
 <!-- Desktop -->
+
+
+<canvas id="waterCanvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0;transition:opacity 2s ease;"></canvas>
+
+<canvas id="bgCanvas" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
+
 <div id="desktop">
 
   <!-- ── 可点击物件 ── -->
@@ -449,6 +457,10 @@ const contents = {
       <div class="win-sub">AFTERIMAGE — Cyberpunk Narrative Puzzle Game</div>
       <iframe src="//player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0"
         scrolling="no" frameborder="0" allowfullscreen class="win-media"></iframe>
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin:12px 0 6px;">游戏录屏 / Gameplay Recording</p>
+      <video controls class="win-media" style="margin-bottom:20px;">
+        <source src="残像录屏" type="video/mp4">
+      </video>
       <p class="win-desc"
         data-zh="Unity 2D 赛博朋克叙事解谜游戏，参加 Lilith 游戏创意大赛「我的 AI 队友」主题赛道。玩家扮演 ECHO，AI 伴侣「影」的行为由玩家自身的数据镜像驱动——你塑造了它，它也在重构你。"
         data-en="A Unity 2D cyberpunk narrative puzzle game for Lilith Game Jam 'My AI Teammate'. The player is ECHO; AI companion 'Shadow' mirrors the player's behavioral data — you shape it, and it reshapes you.">
@@ -490,6 +502,11 @@ const contents = {
         <span class="wtag">Figma</span><span class="wtag">Premiere Pro</span>
       </div>
       <hr class="win-divider">
+      <p style="font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:12px;">场景渲染图 / Scene Renders</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;">
+        <img src="有色场景.png" style="width:100%;border-radius:6px;border:1px solid var(--bd);object-fit:cover;aspect-ratio:16/9;" alt="有色场景">
+        <img src="奶茶店png.png" style="width:100%;border-radius:6px;border:1px solid var(--bd);object-fit:cover;aspect-ratio:16/9;" alt="奶茶店场景">
+      </div>
       <div class="win-grid">
         <div class="win-info-box">
           <h4>叙事设计</h4>
@@ -570,6 +587,15 @@ const contents = {
       <div class="win-tags" style="margin-top:12px">
         <span class="wtag">角色设计</span><span class="wtag">五视图</span><span class="wtag">表情动作</span>
       </div>
+      <hr class="win-divider">
+      <div class="win-eyebrow" style="margin-bottom:8px">AI与艺术 期末 / 公益海报《护老人》</div>
+      <img src="护老人海报.jpg" style="width:100%;border-radius:6px;border:1px solid var(--bd);margin-bottom:12px;" alt="护老人海报">
+      <div class="win-tags" style="margin-bottom:24px">
+        <span class="wtag">Gemini</span><span class="wtag">HTML/CSS</span><span class="wtag">公益设计</span>
+      </div>
+      <hr class="win-divider">
+      <div class="win-eyebrow" style="margin-bottom:8px">课程作业 / 分镜作业</div>
+      <img src="分镜作业.png" style="width:100%;border-radius:6px;border:1px solid var(--bd);" alt="分镜作业">
     `
   },
 
@@ -687,5 +713,187 @@ function closeWinOut(e) {
 
 document.addEventListener('keydown', e => { if (e.key==='Escape') closeWin(); });
 </script>
+
+<script>
+// ── 背景光晕 ──
+const bgc = document.getElementById('bgCanvas');
+const bgx = bgc.getContext('2d');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+let tx = mx, ty = my;
+function resizeBg(){ bgc.width=window.innerWidth; bgc.height=window.innerHeight; }
+resizeBg();
+window.addEventListener('resize', resizeBg);
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+function drawBg(){
+  bgx.clearRect(0,0,bgc.width,bgc.height);
+  tx+=(mx-tx)*0.055; ty+=(my-ty)*0.055;
+  const g1=bgx.createRadialGradient(tx,ty,0,tx,ty,340);
+  g1.addColorStop(0,'rgba(255,235,180,0.14)');
+  g1.addColorStop(0.5,'rgba(220,200,160,0.06)');
+  g1.addColorStop(1,'rgba(0,0,0,0)');
+  bgx.fillStyle=g1; bgx.fillRect(0,0,bgc.width,bgc.height);
+  const g2=bgx.createRadialGradient(tx+90,ty-70,0,tx+90,ty-70,210);
+  g2.addColorStop(0,'rgba(205,166,166,0.09)');
+  g2.addColorStop(1,'rgba(0,0,0,0)');
+  bgx.fillStyle=g2; bgx.fillRect(0,0,bgc.width,bgc.height);
+  const g3=bgx.createRadialGradient(tx-120,ty+80,0,tx-120,ty+80,180);
+  g3.addColorStop(0,'rgba(170,181,160,0.07)');
+  g3.addColorStop(1,'rgba(0,0,0,0)');
+  bgx.fillStyle=g3; bgx.fillRect(0,0,bgc.width,bgc.height);
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── 视差 ──
+const decos = document.querySelectorAll('.deco');
+document.addEventListener('mousemove', e=>{
+  const cx=window.innerWidth/2, cy=window.innerHeight/2;
+  const dx=(e.clientX-cx)/cx, dy=(e.clientY-cy)/cy;
+  decos.forEach((el,i)=>{
+    const d=(i%3+1)*5;
+    const rot = el.style.getPropertyValue('--rot') || '0deg';
+    el.style.transform=`rotate(${rot}) translate(${dx*d}px,${dy*d}px)`;
+  });
+});
+</script>
+
+
+<script>
+// ── 水流背景 ──
+const wc = document.getElementById('waterCanvas');
+const wx = wc.getContext('2d');
+let ww, wh;
+let mouseX = 0, mouseY = 0;
+let blobs = [];
+
+function resizeWater() {
+  ww = wc.width = window.innerWidth;
+  wh = wc.height = window.innerHeight;
+}
+resizeWater();
+window.addEventListener('resize', resizeWater);
+
+// 莫兰迪色系水彩色块
+const waterColors = [
+  [140, 152, 168],  // 灰蓝
+  [170, 181, 160],  // 鼠尾草绿
+  [205, 166, 166],  // 灰粉
+  [196, 185, 168],  // 奶油暖
+  [168, 178, 185],  // 雾蓝
+  [185, 175, 162],  // 纸灰
+];
+
+// 创建水彩色块
+function createBlobs() {
+  blobs = [];
+  for (let i = 0; i < 8; i++) {
+    const c = waterColors[i % waterColors.length];
+    blobs.push({
+      x: Math.random() * ww,
+      y: Math.random() * wh,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      r: Math.random() * 280 + 180,
+      alpha: Math.random() * 0.055 + 0.025,
+      color: c,
+      phase: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.003 + 0.001,
+      pulseR: Math.random() * 40 + 20,
+    });
+  }
+}
+createBlobs();
+
+// 鼠标涟漪
+let ripples = [];
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  if (Math.random() < 0.04) {
+    ripples.push({ x: e.clientX, y: e.clientY, r: 0, alpha: 0.06 });
+  }
+});
+
+// hover物件时扩散
+document.querySelectorAll('.obj').forEach(el => {
+  el.addEventListener('mouseenter', e => {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    for (let i = 0; i < 3; i++) {
+      ripples.push({
+        x: cx + (Math.random()-0.5)*30,
+        y: cy + (Math.random()-0.5)*30,
+        r: 0, alpha: 0.07
+      });
+    }
+  });
+});
+
+let wTime = 0;
+
+function drawWater() {
+  wx.clearRect(0, 0, ww, wh);
+  wTime += 0.008;
+
+  // 绘制水彩色块
+  blobs.forEach(b => {
+    b.phase += b.speed;
+    b.x += b.vx + Math.sin(b.phase) * 0.15;
+    b.y += b.vy + Math.cos(b.phase * 0.7) * 0.12;
+
+    // 边界柔和反弹
+    if (b.x < -b.r) b.x = ww + b.r;
+    if (b.x > ww + b.r) b.x = -b.r;
+    if (b.y < -b.r) b.y = wh + b.r;
+    if (b.y > wh + b.r) b.y = -b.r;
+
+    // 鼠标视差轻微推动
+    const dx = mouseX - b.x, dy = mouseY - b.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 350) {
+      b.x -= dx / dist * 0.08;
+      b.y -= dy / dist * 0.08;
+    }
+
+    const pulse = Math.sin(b.phase) * b.pulseR;
+    const r = b.r + pulse;
+
+    const grad = wx.createRadialGradient(b.x, b.y, 0, b.x, b.y, r);
+    grad.addColorStop(0,   `rgba(${b.color[0]},${b.color[1]},${b.color[2]},${b.alpha * 1.4})`);
+    grad.addColorStop(0.4, `rgba(${b.color[0]},${b.color[1]},${b.color[2]},${b.alpha})`);
+    grad.addColorStop(0.75,`rgba(${b.color[0]},${b.color[1]},${b.color[2]},${b.alpha * 0.3})`);
+    grad.addColorStop(1,   `rgba(${b.color[0]},${b.color[1]},${b.color[2]},0)`);
+
+    wx.beginPath();
+    wx.arc(b.x, b.y, r, 0, Math.PI * 2);
+    wx.fillStyle = grad;
+    wx.fill();
+  });
+
+  // 绘制涟漪
+  ripples = ripples.filter(rip => rip.alpha > 0.002);
+  ripples.forEach(rip => {
+    rip.r += 1.8;
+    rip.alpha *= 0.96;
+    wx.beginPath();
+    wx.arc(rip.x, rip.y, rip.r, 0, Math.PI * 2);
+    wx.strokeStyle = `rgba(180,165,148,${rip.alpha})`;
+    wx.lineWidth = 0.8;
+    wx.stroke();
+  });
+
+  requestAnimationFrame(drawWater);
+}
+drawWater();
+
+// Loading结束后显现水流
+const showWater = () => {
+  setTimeout(() => {
+    wc.style.opacity = '1';
+  }, 3800);
+};
+showWater();
+</script>
+
 </body>
 </html>
