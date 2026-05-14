@@ -3,13 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>刁思予 · DSY · Creative Technologist</title>
+<title>DSY SYSTEM · Project Archive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F7F7F4;--dark:#111;--blue:#4DA3FF;--yellow:#D9FF00;--orange:#FF6B35;
-  --text:#1A1A1A;--gray:#7A7A7A;--line:rgba(26,26,26,0.08);--line-d:rgba(255,255,255,0.08);
+  --bg:#EDEDEA;
+  --dark:#0B0B0B;
+  --panel:#F7F7F4;
+  --panel-dark:#171717;
+  --blue:#2F80ED;
+  --cyan:#00C2FF;
+  --yellow:#D9FF00;
+  --orange:#FF5A1F;
+  --text:#101010;
+  --gray:#666D78;
+  --line:rgba(16,16,16,0.16);
+  --line-d:rgba(255,255,255,0.14);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;overflow:hidden;}
@@ -182,6 +192,312 @@ body.switching .t{opacity:0;transform:translateY(4px);}
 .ci-val a{color:var(--text);text-decoration:none;transition:color .2s;}
 .ci-val a:hover{color:var(--blue);}
 
+
+/* sound control */
+#soundControl{
+  position:fixed;
+  right:40px;
+  bottom:58px;
+  z-index:9995;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:38px;
+  padding:0 14px;
+  border:1px solid var(--line);
+  background:rgba(247,247,244,.82);
+  backdrop-filter:blur(16px);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  cursor:none;
+  transition:transform .22s,border-color .22s,background .22s,color .22s;
+}
+#soundControl:hover{
+  transform:translateY(-2px);
+  border-color:var(--blue);
+  color:var(--blue);
+}
+.sound-bars{
+  display:flex;
+  align-items:flex-end;
+  gap:3px;
+  width:18px;
+  height:14px;
+}
+.sound-bars i{
+  display:block;
+  width:3px;
+  height:4px;
+  background:var(--blue);
+  opacity:.45;
+  transform-origin:bottom;
+}
+#soundControl.on .sound-bars i:nth-child(1){animation:barMove .75s infinite ease-in-out;}
+#soundControl.on .sound-bars i:nth-child(2){animation:barMove .75s .13s infinite ease-in-out;}
+#soundControl.on .sound-bars i:nth-child(3){animation:barMove .75s .26s infinite ease-in-out;}
+@keyframes barMove{
+  0%,100%{height:4px;opacity:.4}
+  50%{height:14px;opacity:1}
+}
+
+/* ── Hypergryph / Arknights inspired system skin ── */
+body{
+  background:
+    radial-gradient(circle at 78% 18%, rgba(47,128,237,.10), transparent 28%),
+    radial-gradient(circle at 12% 72%, rgba(217,255,0,.08), transparent 24%),
+    var(--bg);
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(16,16,16,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,16,16,.045) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:.18;
+  background:repeating-linear-gradient(0deg, transparent 0 4px, rgba(0,0,0,.08) 5px);
+  mix-blend-mode:multiply;
+}
+
+#top{
+  background:rgba(237,237,234,.82);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(16,16,16,.22);
+}
+.top-logo{
+  position:relative;
+  padding-left:18px;
+}
+.top-logo::before{
+  content:'';
+  position:absolute;
+  left:0;top:50%;
+  width:8px;height:8px;
+  background:var(--yellow);
+  transform:translateY(-50%) rotate(45deg);
+}
+.top-nav a{
+  position:relative;
+}
+.top-nav a::after{
+  content:'';
+  position:absolute;
+  left:0;bottom:-8px;
+  width:0;height:2px;
+  background:var(--blue);
+  transition:width .22s ease;
+}
+.top-nav a:hover::after{width:100%;}
+
+#hero::before{
+  content:'SYSTEM://DSY_ARCHIVE';
+  position:absolute;
+  right:40px;
+  top:108px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  color:rgba(16,16,16,.28);
+  writing-mode:vertical-rl;
+}
+.h-tag{
+  color:var(--blue);
+  padding-left:14px;
+  border-left:3px solid var(--yellow);
+}
+.h-name{
+  text-transform:uppercase;
+}
+.h-name::after{
+  content:'CREATIVE TECHNOLOGIST';
+  display:block;
+  margin-top:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:4px;
+  color:var(--gray);
+}
+.h-cta{
+  clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.h-cta:hover{background:var(--orange);}
+
+.chip{
+  background:rgba(255,255,255,.52);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.pc{
+  border:1px solid rgba(255,255,255,.08);
+  clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+.pc:hover{
+  transform:scale(.985);
+}
+.pc::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:var(--blue);
+  opacity:.55;
+  z-index:3;
+  transition:width .25s, background .25s;
+}
+.pc:hover::before{
+  width:9px;
+  background:var(--yellow);
+}
+.pc.lt{
+  background:rgba(247,247,244,.84);
+  backdrop-filter:blur(10px);
+}
+.pc-badge{
+  clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);
+  background:rgba(255,255,255,.04);
+}
+.pc-title{
+  text-transform:uppercase;
+}
+.pc-title::before{
+  content:'FILE / ';
+  color:var(--yellow);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+}
+.pc.lt .pc-title::before{color:var(--orange);}
+.pc-open{
+  display:inline-flex;
+  padding:5px 10px;
+  border:1px solid rgba(77,163,255,.35);
+  background:rgba(47,128,237,.08);
+}
+.pc.lt .pc-open{
+  border-color:rgba(255,90,31,.35);
+  background:rgba(255,90,31,.07);
+}
+
+#sb{
+  background:rgba(237,237,234,.86);
+  backdrop-filter:blur(18px);
+  border-top:1px solid rgba(16,16,16,.22);
+}
+.sb-dot{
+  background:var(--yellow);
+  box-shadow:0 0 18px rgba(217,255,0,.8);
+}
+
+#ld{
+  background:
+    linear-gradient(135deg, #050505, #151515 55%, #0b1018);
+}
+.ld-dsy{
+  text-transform:uppercase;
+  position:relative;
+}
+.ld-dsy::before{
+  content:'RHODES SYSTEM';
+  position:absolute;
+  left:4px;
+  top:-26px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:4px;
+  color:rgba(255,255,255,.25);
+}
+.ld-track{
+  height:2px;
+  width:340px;
+  background:rgba(255,255,255,.12);
+}
+.ld-fill{
+  background:linear-gradient(90deg,var(--blue),var(--cyan),var(--yellow));
+}
+
+#win{
+  border:1px solid rgba(255,255,255,.14);
+  clip-path:polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%);
+}
+.w-bar{
+  background:#070707;
+}
+.w-ttl::before{
+  content:'PROJECT FILE // ';
+  color:var(--yellow);
+}
+.w-tabs{
+  background:#0b0b0b;
+}
+.w-tab.on{
+  color:#fff;
+  background:rgba(47,128,237,.22);
+}
+.w-hd{
+  background:
+    radial-gradient(circle at 78% 18%, rgba(47,128,237,.22), transparent 26%),
+    linear-gradient(135deg,#0A0A0A,#151515);
+}
+.w-hd::after{
+  content:'STATUS: ACTIVE';
+  position:absolute;
+  right:28px;
+  top:24px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--yellow);
+}
+.w-label{
+  color:var(--yellow);
+}
+.w-h1{
+  text-transform:uppercase;
+}
+.w-sl{
+  color:var(--text);
+  border-bottom:2px solid var(--text);
+}
+.w-sl::before{
+  content:'// ';
+  color:var(--blue);
+}
+.w-box{
+  clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.w-btn{
+  clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+}
+.w-btn:hover,.w-btn.pri{
+  background:var(--text);
+  border-color:var(--text);
+  color:#fff;
+}
+.sm{
+  clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+#soundControl{
+  clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+
+@media(max-width:768px){
+  #soundControl{right:18px;bottom:52px;}
+}
+
 /* lightbox */
 #lb{position:fixed;inset:0;z-index:9996;background:rgba(0,0,0,.96);display:none;align-items:center;justify-content:center;cursor:none;}
 #lb.on{display:flex;}
@@ -190,6 +506,258 @@ body.switching .t{opacity:0;transform:translateY(4px);}
 .lb-x:hover{color:#fff;}
 
 @keyframes fU{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+
+/* ── Hypergryph / Arknights inspired system skin ── */
+body{
+  background:
+    radial-gradient(circle at 78% 18%, rgba(47,128,237,.10), transparent 28%),
+    radial-gradient(circle at 12% 72%, rgba(217,255,0,.08), transparent 24%),
+    var(--bg);
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(16,16,16,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16,16,16,.045) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+}
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:.18;
+  background:repeating-linear-gradient(0deg, transparent 0 4px, rgba(0,0,0,.08) 5px);
+  mix-blend-mode:multiply;
+}
+
+#top{
+  background:rgba(237,237,234,.82);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(16,16,16,.22);
+}
+.top-logo{
+  position:relative;
+  padding-left:18px;
+}
+.top-logo::before{
+  content:'';
+  position:absolute;
+  left:0;top:50%;
+  width:8px;height:8px;
+  background:var(--yellow);
+  transform:translateY(-50%) rotate(45deg);
+}
+.top-nav a{
+  position:relative;
+}
+.top-nav a::after{
+  content:'';
+  position:absolute;
+  left:0;bottom:-8px;
+  width:0;height:2px;
+  background:var(--blue);
+  transition:width .22s ease;
+}
+.top-nav a:hover::after{width:100%;}
+
+#hero::before{
+  content:'SYSTEM://DSY_ARCHIVE';
+  position:absolute;
+  right:40px;
+  top:108px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  color:rgba(16,16,16,.28);
+  writing-mode:vertical-rl;
+}
+.h-tag{
+  color:var(--blue);
+  padding-left:14px;
+  border-left:3px solid var(--yellow);
+}
+.h-name{
+  text-transform:uppercase;
+}
+.h-name::after{
+  content:'CREATIVE TECHNOLOGIST';
+  display:block;
+  margin-top:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:4px;
+  color:var(--gray);
+}
+.h-cta{
+  clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.h-cta:hover{background:var(--orange);}
+
+.chip{
+  background:rgba(255,255,255,.52);
+  clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+}
+
+.pc{
+  border:1px solid rgba(255,255,255,.08);
+  clip-path:polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+}
+.pc:hover{
+  transform:scale(.985);
+}
+.pc::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:var(--blue);
+  opacity:.55;
+  z-index:3;
+  transition:width .25s, background .25s;
+}
+.pc:hover::before{
+  width:9px;
+  background:var(--yellow);
+}
+.pc.lt{
+  background:rgba(247,247,244,.84);
+  backdrop-filter:blur(10px);
+}
+.pc-badge{
+  clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);
+  background:rgba(255,255,255,.04);
+}
+.pc-title{
+  text-transform:uppercase;
+}
+.pc-title::before{
+  content:'FILE / ';
+  color:var(--yellow);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+}
+.pc.lt .pc-title::before{color:var(--orange);}
+.pc-open{
+  display:inline-flex;
+  padding:5px 10px;
+  border:1px solid rgba(77,163,255,.35);
+  background:rgba(47,128,237,.08);
+}
+.pc.lt .pc-open{
+  border-color:rgba(255,90,31,.35);
+  background:rgba(255,90,31,.07);
+}
+
+#sb{
+  background:rgba(237,237,234,.86);
+  backdrop-filter:blur(18px);
+  border-top:1px solid rgba(16,16,16,.22);
+}
+.sb-dot{
+  background:var(--yellow);
+  box-shadow:0 0 18px rgba(217,255,0,.8);
+}
+
+#ld{
+  background:
+    linear-gradient(135deg, #050505, #151515 55%, #0b1018);
+}
+.ld-dsy{
+  text-transform:uppercase;
+  position:relative;
+}
+.ld-dsy::before{
+  content:'RHODES SYSTEM';
+  position:absolute;
+  left:4px;
+  top:-26px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:4px;
+  color:rgba(255,255,255,.25);
+}
+.ld-track{
+  height:2px;
+  width:340px;
+  background:rgba(255,255,255,.12);
+}
+.ld-fill{
+  background:linear-gradient(90deg,var(--blue),var(--cyan),var(--yellow));
+}
+
+#win{
+  border:1px solid rgba(255,255,255,.14);
+  clip-path:polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%);
+}
+.w-bar{
+  background:#070707;
+}
+.w-ttl::before{
+  content:'PROJECT FILE // ';
+  color:var(--yellow);
+}
+.w-tabs{
+  background:#0b0b0b;
+}
+.w-tab.on{
+  color:#fff;
+  background:rgba(47,128,237,.22);
+}
+.w-hd{
+  background:
+    radial-gradient(circle at 78% 18%, rgba(47,128,237,.22), transparent 26%),
+    linear-gradient(135deg,#0A0A0A,#151515);
+}
+.w-hd::after{
+  content:'STATUS: ACTIVE';
+  position:absolute;
+  right:28px;
+  top:24px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--yellow);
+}
+.w-label{
+  color:var(--yellow);
+}
+.w-h1{
+  text-transform:uppercase;
+}
+.w-sl{
+  color:var(--text);
+  border-bottom:2px solid var(--text);
+}
+.w-sl::before{
+  content:'// ';
+  color:var(--blue);
+}
+.w-box{
+  clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+}
+.w-btn{
+  clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+}
+.w-btn:hover,.w-btn.pri{
+  background:var(--text);
+  border-color:var(--text);
+  color:#fff;
+}
+.sm{
+  clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+}
+#soundControl{
+  clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
 
 @media(max-width:768px){
   body{cursor:auto;}#cur,#ring{display:none;}
@@ -215,6 +783,18 @@ body.switching .t{opacity:0;transform:translateY(4px);}
 <!-- FLUID BG -->
 <canvas id="fluid"></canvas>
 
+
+<!-- BACKGROUND MUSIC -->
+<audio id="bgMusic" loop preload="auto">
+  <!-- 把你的背景音乐文件改名为 bgm-ambient.mp3，和 index.html 放在同一个文件夹 -->
+  <source src="./bgm-ambient.mp3" type="audio/mpeg">
+</audio>
+
+<button id="soundControl" class="t" type="button" aria-label="Sound control">
+  <span class="sound-bars"><i></i><i></i><i></i></span>
+  <span id="soundText">声音 OFF</span>
+</button>
+
 <!-- LIGHTBOX -->
 <div id="lb" onclick="closeLb()"><button class="lb-x">✕</button><img id="lbImg" src="" alt=""></div>
 
@@ -226,7 +806,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
     <div class="top-logo t" id="logo">D<b>.</b>S<b>.</b>Y</div>
     <ul class="top-nav">
       <li><a href="#" onclick="goHero();return false;" class="t" data-zh="首页" data-en="Home">首页</a></li>
-      <li><a href="#" onclick="goDesk();return false;" class="t" data-zh="作品" data-en="Work">作品</a></li>
+      <li><a href="#" onclick="goDesk();return false;" class="t" data-zh="档案" data-en="Archive">档案</a></li>
       <li><a href="#" onclick="openW('about');return false;" class="t" data-zh="关于" data-en="About">关于</a></li>
       <li><a href="#" onclick="openW('contact');return false;" class="t" data-zh="联系" data-en="Contact">联系</a></li>
     </ul>
@@ -240,7 +820,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
   <!-- HERO -->
   <div id="hero">
     <div class="h-wrap">
-      <div class="h-tag t" data-zh="// 创意技术创作者 · 昆明理工大学 · 2024" data-en="// Creative Technologist · KMUST · 2024">// 创意技术创作者 · 昆明理工大学 · 2024</div>
+      <div class="h-tag t" data-zh="// 创作者系统 · 昆明理工大学 · 2024" data-en="// Creative Technologist · KMUST · 2024">// 创作者系统 · 昆明理工大学 · 2024</div>
       <h1 class="h-name t">刁思予<br><span class="bl">DSY</span></h1>
       <p class="h-sub t" data-zh="叙事游戏设计师 · AIGC 创作者 · 全链路数字媒体创作者。构建情绪、叙事与数字空间。" data-en="An interactive narrative experience designer, AIGC creator, and full-stack digital media artist. Building emotion, narrative, and digital space.">叙事游戏设计师 · AIGC 创作者 · 全链路数字媒体创作者。构建情绪、叙事与数字空间。</p>
       <div class="h-chips t">
@@ -254,7 +834,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <span class="chip">Figma</span>
       </div>
       <a class="h-cta t" href="#" onclick="goDesk();return false;">
-        <span data-zh="探索作品" data-en="Explore Work">探索作品</span> <span class="arr">→</span>
+        <span data-zh="进入档案" data-en="Enter Archive">进入档案</span> <span class="arr">→</span>
       </a>
     </div>
   </div>
@@ -272,7 +852,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <div class="pc-foot">
           <div class="pc-title t" data-zh="《残像》" data-en="AFTERIMAGE">《残像》</div>
           <div class="pc-sub t" data-zh="赛博朋克叙事解谜游戏" data-en="Cyberpunk Narrative Puzzle Game">赛博朋克叙事解谜游戏</div>
-          <div class="pc-open t" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
+          <div class="pc-open t" data-zh="载入档案 →" data-en="Load File →">载入档案 →</div>
         </div>
       </div>
 
@@ -285,7 +865,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <div class="pc-foot">
           <div class="pc-title t" data-zh="《生长痛》" data-en="GROWING PAINS">《生长痛》</div>
           <div class="pc-sub t" data-zh="高中题材叙事游戏" data-en="High School Narrative Experience">高中题材叙事游戏</div>
-          <div class="pc-open t" style="color:var(--yellow);" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
+          <div class="pc-open t" style="color:var(--yellow);" data-zh="载入档案 →" data-en="Load File →">载入档案 →</div>
         </div>
       </div>
 
@@ -295,7 +875,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <div class="pc-foot">
           <div class="pc-title t" data-zh="盲盒广告" data-en="Blind Box Campaign">盲盒广告</div>
           <div class="pc-sub t" data-zh="平面 + 视频广告设计" data-en="Print & Video Ad Design">平面 + 视频广告设计</div>
-          <div class="pc-open t" style="color:var(--orange);" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
+          <div class="pc-open t" style="color:var(--orange);" data-zh="载入档案 →" data-en="Load File →">载入档案 →</div>
         </div>
       </div>
 
@@ -308,7 +888,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <div class="pc-foot">
           <div class="pc-title t" data-zh="《迷》" data-en="MAZE">《迷》</div>
           <div class="pc-sub t" data-zh="AI 影像叙事概念" data-en="AI Film Game Concept">AI 影像叙事概念</div>
-          <div class="pc-open t" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
+          <div class="pc-open t" data-zh="载入档案 →" data-en="Load File →">载入档案 →</div>
         </div>
       </div>
 
@@ -321,7 +901,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <div class="pc-foot">
           <div class="pc-title t" data-zh="马家大院档案" data-en="Courtyard Archive">马家大院档案</div>
           <div class="pc-sub t" data-zh="云南传统建筑信息可视化" data-en="Yunnan Architecture Infographic">云南传统建筑信息可视化</div>
-          <div class="pc-open t" style="color:var(--yellow);" data-zh="打开档案 →" data-en="Open Archive →">打开档案 →</div>
+          <div class="pc-open t" style="color:var(--yellow);" data-zh="访问档案 →" data-en="Access Archive →">访问档案 →</div>
         </div>
       </div>
 
@@ -331,7 +911,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
         <div class="pc-foot">
           <div class="pc-title t" data-zh="课程作业集" data-en="Coursework">课程作业集</div>
           <div class="pc-sub t" data-zh="AI 短片 · 角色设计 · 海报" data-en="AI Film · Character Design · Poster">AI 短片 · 角色设计 · 海报</div>
-          <div class="pc-open t" data-zh="打开文件夹 →" data-en="Open Folder →">打开文件夹 →</div>
+          <div class="pc-open t" data-zh="打开目录 →" data-en="Open Directory →">打开目录 →</div>
         </div>
       </div>
 
@@ -340,8 +920,8 @@ body.switching .t{opacity:0;transform:translateY(4px);}
 
   <!-- STATUS BAR -->
   <div id="sb">
-    <div class="sb-l t"><span class="sb-dot"></span><span id="sbTxt" data-zh="就绪 · 点击作品进入项目" data-en="Ready · Click cards to explore">就绪 · 点击作品进入项目</span></div>
-    <div class="sb-r t" data-zh="刁思予 · 创意技术创作者 · 昆明理工大学 2024" data-en="DSY · Creative Technologist · KMUST 2024">刁思予 · 创意技术创作者 · 昆明理工大学 2024</div>
+    <div class="sb-l t"><span class="sb-dot"></span><span id="sbTxt" data-zh="就绪 · 点击档案进入项目" data-en="SYSTEM READY · Access project files">就绪 · 点击档案进入项目</span></div>
+    <div class="sb-r t" data-zh="刁思予 · 创作者系统 · 昆明理工大学 2024" data-en="DSY SYSTEM · PROJECT DATABASE · KMUST 2024">刁思予 · 创作者系统 · 昆明理工大学 2024</div>
   </div>
 
 </div><!-- /shell -->
@@ -363,7 +943,7 @@ body.switching .t{opacity:0;transform:translateY(4px);}
 // ─────── i18n DATA ───────
 const T={
   zh:{
-    loading:['正在初始化作品集...','加载叙事系统...','加载交互空间...','准备创作环境...','编译项目文件...','就绪。'],
+    loading:['正在初始化档案集...','加载叙事系统...','加载交互空间...','准备创作环境...','编译项目文件...','就绪。'],
     afterimage:{
       title:'001 · 残像',
       tabs:['概述','技术实现','视觉设计'],
@@ -393,7 +973,7 @@ const T={
       h1:'名创优品盲盒广告',en:'MINISO BLIND BOX — AD CAMPAIGN',
       num:'003 / 广告设计 · MINISO · 2025',
       tags:['广告设计','平面设计','视频广告','品牌视觉','MINISO'],
-      desc:'为名创优品盲盒系列自主设计的广告作品，包含三张平面视觉稿与视频广告。围绕盲盒惊喜感与收藏属性展开创意，构建完整品牌视觉语言体系。',
+      desc:'为名创优品盲盒系列自主设计的广告档案，包含三张平面视觉稿与视频广告。围绕盲盒惊喜感与收藏属性展开创意，构建完整品牌视觉语言体系。',
       visuals_label:'平面设计稿',
     },
     maze:{
@@ -402,7 +982,7 @@ const T={
       h1:'《迷》',en:'MAZE — AI FILM GAME CONCEPT',
       num:'004 / 游戏竞赛 · 完美世界训练营 · 2024',
       tags:['Game Jam','完美世界训练营','AIGC 视频','影像叙事'],
-      desc:'完美世界训练营 Game Jam 参赛作品，主题为「迷」。以 AI 视频生成工具制作 2分30秒完整成片，探索 AI 影像叙事与游戏概念表达的可能性。',
+      desc:'完美世界训练营 Game Jam 参赛档案，主题为「迷」。以 AI 视频生成工具制作 2分30秒完整成片，探索 AI 影像叙事与游戏概念表达的可能性。',
     },
     archive:{
       title:'005 · 马家大院档案',
@@ -442,7 +1022,7 @@ const T={
         {mod:'bl',lbl:'叙事系统',name:'Narrative',items:['世界观构建','分支剧本设计','情绪系统设计','角色行为逻辑']},
         {mod:'bl',lbl:'开发系统',name:'Technical',items:['Unity 2D/3D · C#','UE5 场景搭建','HTML/CSS · Python','系统架构设计']},
         {mod:'yl',lbl:'视觉系统',name:'Visual',items:['Figma · PS · AI','手绘插画','UI 原型设计','平面海报']},
-        {mod:'yl',lbl:'AIGC 工作流',name:'AI Workflow',items:['Stable Diffusion','ControlNet · AnimateDiff','Gemini · Kling · Runway','Pika · Luma']},
+        {mod:'yl',lbl:'AIGC 工作流',name:'AI Archiveflow',items:['Stable Diffusion','ControlNet · AnimateDiff','Gemini · Kling · Runway','Pika · Luma']},
         {mod:'or',lbl:'影像系统',name:'Motion',items:['After Effects','Premiere Pro','AIGC 视频合成','动态图形设计']},
         {mod:'gr',lbl:'3D 系统',name:'3D & Spatial',items:['Blender · 3ds Max','场景建模渲染','UE5 大场景','材质与灯光']},
       ],
@@ -457,7 +1037,7 @@ const T={
     },
   },
   en:{
-    loading:['Initializing Portfolio...','Loading Narrative System...','Loading Interactive Space...','Preparing Creative Environment...','Compiling Projects...','Ready.'],
+    loading:['INITIALIZING DSY SYSTEM...','LOADING PROJECT ARCHIVE...','READING WORLD DATA...','BUILDING INTERACTIVE SPACE...','COMPILING CAPABILITY MODULES...','SYSTEM READY.'],
     afterimage:{
       title:'001 · Afterimage',
       tabs:['Overview','Technical','Visual'],
@@ -536,7 +1116,7 @@ const T={
         {mod:'bl',lbl:'Narrative',name:'Narrative',items:['Worldbuilding','Branching Script Design','Emotional System Design','Character Behavior Logic']},
         {mod:'bl',lbl:'Technical',name:'Technical',items:['Unity 2D/3D · C#','UE5 Environment','HTML/CSS · Python','System Architecture']},
         {mod:'yl',lbl:'Visual',name:'Visual',items:['Figma · PS · AI','Hand Drawing','UI Prototyping','Graphic Design']},
-        {mod:'yl',lbl:'AI Workflow',name:'AI Workflow',items:['Stable Diffusion','ControlNet · AnimateDiff','Gemini · Kling · Runway','Pika · Luma']},
+        {mod:'yl',lbl:'AI Archiveflow',name:'AI Archiveflow',items:['Stable Diffusion','ControlNet · AnimateDiff','Gemini · Kling · Runway','Pika · Luma']},
         {mod:'or',lbl:'Motion',name:'Motion',items:['After Effects','Premiere Pro','AIGC Video Compositing','Motion Graphics']},
         {mod:'gr',lbl:'3D & Spatial',name:'3D & Spatial',items:['Blender · 3ds Max','Scene Modeling & Rendering','UE5 Large Scale Scene','Lighting & Materials']},
       ],
@@ -554,6 +1134,107 @@ const T={
 
 // ─────── STATE ───────
 let lang='zh',curKey=null;
+
+
+// ─────── BACKGROUND MUSIC ───────
+// 默认不自动播放，必须由用户点击右下角 SOUND 按钮开启，避免浏览器拦截。
+const bgMusic = document.getElementById('bgMusic');
+const soundControl = document.getElementById('soundControl');
+const soundText = document.getElementById('soundText');
+
+let soundOn = false;
+let currentTrack = './bgm-ambient.mp3';
+
+// 你可以之后准备不同区域音乐，文件名保持一致即可。
+// 没有这些文件也没关系，浏览器会提示找不到，但网站其他功能不受影响。
+const musicMap = {
+  afterimage: './bgm-game.mp3',
+  growingpains: './bgm-emotion.mp3',
+  blindbox: './bgm-visual.mp3',
+  maze: './bgm-game.mp3',
+  archive: './bgm-archive.mp3',
+  coursework: './bgm-workflow.mp3',
+  about: './bgm-ambient.mp3',
+  contact: './bgm-ambient.mp3',
+  hero: './bgm-ambient.mp3',
+  desk: './bgm-ambient.mp3'
+};
+
+bgMusic.volume = 0;
+
+function updateSoundLabel(){
+  const text = soundOn
+    ? (lang === 'zh' ? '声音 ON' : 'Sound ON')
+    : (lang === 'zh' ? '声音 OFF' : 'Sound OFF');
+  soundText.textContent = text;
+  soundControl.classList.toggle('on', soundOn);
+}
+
+function fadeAudio(targetVolume, duration = 900){
+  const start = bgMusic.volume;
+  const startTime = performance.now();
+
+  function tick(now){
+    const p = Math.min((now - startTime) / duration, 1);
+    bgMusic.volume = start + (targetVolume - start) * p;
+    if(p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+async function playMusic(){
+  try{
+    await bgMusic.play();
+    soundOn = true;
+    updateSoundLabel();
+    fadeAudio(0.38, 900);
+  }catch(err){
+    soundOn = false;
+    updateSoundLabel();
+    console.warn('Audio playback was blocked until user interaction.', err);
+  }
+}
+
+function pauseMusic(){
+  fadeAudio(0, 500);
+  setTimeout(()=>bgMusic.pause(), 520);
+  soundOn = false;
+  updateSoundLabel();
+}
+
+function switchMusic(key){
+  const next = musicMap[key] || './bgm-ambient.mp3';
+  if(next === currentTrack) return;
+  currentTrack = next;
+
+  if(!soundOn){
+    bgMusic.src = currentTrack;
+    return;
+  }
+
+  fadeAudio(0, 450);
+  setTimeout(async ()=>{
+    bgMusic.src = currentTrack;
+    try{
+      await bgMusic.play();
+      fadeAudio(0.38, 700);
+    }catch(err){
+      bgMusic.src = './bgm-ambient.mp3';
+      try{
+        await bgMusic.play();
+        fadeAudio(0.38, 700);
+      }catch(e){
+        console.warn('Music file missing or blocked.', e);
+      }
+    }
+  }, 480);
+}
+
+soundControl.addEventListener('click', ()=>{
+  if(soundOn) pauseMusic();
+  else playMusic();
+});
+updateSoundLabel();
 
 // ─────── LOADING ───────
 const ldMsgs_zh=T.zh.loading,ldMsgs_en=T.en.loading;
@@ -584,7 +1265,7 @@ const ring=document.getElementById('ring');
 let rx=0,ry=0,cx2=0,cy2=0;
 document.addEventListener('mousemove',e=>{cx2=e.clientX;cy2=e.clientY;cur.style.left=cx2+'px';cur.style.top=cy2+'px';});
 (function raf(){rx+=(cx2-rx)*.1;ry+=(cy2-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(raf);})();
-document.querySelectorAll('a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn').forEach(el=>{
+document.querySelectorAll('a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn,#soundControl').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cur.classList.add('h');ring.classList.add('h');});
   el.addEventListener('mouseleave',()=>{cur.classList.remove('h');ring.classList.remove('h');});
 });
@@ -616,8 +1297,8 @@ function dfB(){
 }dfB();
 
 // ─────── VIEWS ───────
-function goHero(){document.getElementById('hero').style.display='flex';document.getElementById('desk').classList.remove('on');}
-function goDesk(){document.getElementById('hero').style.display='none';document.getElementById('desk').classList.add('on');}
+function goHero(){document.getElementById('hero').style.display='flex';document.getElementById('desk').classList.remove('on');switchMusic('hero');}
+function goDesk(){document.getElementById('hero').style.display='none';document.getElementById('desk').classList.add('on');switchMusic('desk');}
 
 // ─────── LANG ───────
 function setLang(l){
@@ -631,6 +1312,7 @@ function setLang(l){
       el.innerHTML=el.getAttribute('data-'+l);
     });
     if(curKey)renderWin(curKey);
+    updateSoundLabel();
     document.body.classList.remove('switching');
   },280);
 }
@@ -703,6 +1385,7 @@ function buildPanel(key,idx){
 
 function openW(key){
   curKey=key;
+  switchMusic(key);
   renderWin(key);
   document.getElementById('ov').classList.add('on');
 }
