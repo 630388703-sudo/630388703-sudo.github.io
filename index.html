@@ -308,6 +308,65 @@ body.switching .t{opacity:0;transform:translateY(4px);}
   .sk-inner{padding:0 20px;}
 }
 
+/* ── CAROUSEL ── */
+#carousel{position:absolute;inset:0;display:none;padding:72px 0 44px;overflow:hidden;background:var(--bg);}
+#carousel.on{display:flex;align-items:center;justify-content:center;}
+#carousel::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);pointer-events:none;}
+.car-inner{position:relative;z-index:1;width:100%;max-width:1100px;padding:0 20px;display:flex;flex-direction:column;gap:16px;}
+.car-header{text-align:center;}
+.car-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--cyan);margin-bottom:8px;}
+.car-title{font-size:clamp(22px,3vw,40px);font-weight:700;color:var(--text);letter-spacing:-1px;}
+.car-title em{color:var(--cyan);font-style:normal;font-size:.55em;letter-spacing:3px;margin-left:10px;opacity:.7;}
+.car-stage{display:flex;align-items:center;gap:16px;}
+.car-arrow{background:none;border:1px solid var(--line);color:var(--cyan);font-size:32px;width:44px;height:44px;cursor:none;transition:all .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.car-arrow:hover{background:var(--cyan);color:#000;border-color:var(--cyan);}
+.car-track{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;overflow:hidden;}
+.car-card{background:var(--bg2);border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:none;transition:transform .3s,box-shadow .3s;position:relative;}
+.car-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.car-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,229,255,0.1);}
+.car-card:hover::before{transform:scaleX(1);}
+.car-card-img{width:100%;aspect-ratio:3/4;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.car-card-img svg{width:60%;height:60%;opacity:.3;}
+.car-card-body{padding:16px;}
+.car-card-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--cyan);opacity:.5;margin-bottom:6px;}
+.car-card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.car-card-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text-dim);margin-bottom:12px;}
+.car-card-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border:1px solid var(--cyan);color:var(--cyan);background:none;cursor:none;transition:all .2s;display:inline-block;}
+.car-card-btn:hover{background:var(--cyan);color:#000;}
+.car-dots{display:flex;justify-content:center;gap:8px;}
+.car-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,229,255,.3);background:none;cursor:none;transition:all .2s;}
+.car-dot.on{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+.car-return{text-align:left;}
+.car-return a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-decoration:none;transition:color .2s;}
+.car-return a:hover{color:var(--cyan);}
+
+/* ── CONTACT v2 ── */
+#contact2{position:absolute;inset:0;display:none;padding:72px 40px 44px;background:var(--bg);overflow:hidden;}
+#contact2.on{display:flex;align-items:center;justify-content:center;}
+#contact2::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);pointer-events:none;}
+.ct2-inner{position:relative;z-index:1;width:100%;max-width:900px;display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:center;}
+.ct2-left{display:flex;flex-direction:column;}
+.ct2-hi{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:700;color:var(--text);font-style:italic;line-height:1;}
+.ct2-callme{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:var(--cyan);letter-spacing:4px;margin-bottom:16px;text-shadow:0 0 20px rgba(0,229,255,0.4);}
+.ct2-avatar{width:100%;max-width:240px;filter:drop-shadow(0 0 24px rgba(0,229,255,0.2));}
+.ct2-right{display:flex;flex-direction:column;gap:0;}
+.ct2-card{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:22px;position:relative;}
+.ct2-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);}
+.ct2-card-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;}
+.ct2-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(0,229,255,.06);}
+.ct2-item-icon{font-size:16px;opacity:.6;width:20px;text-align:center;}
+.ct2-item-val{font-size:13px;color:var(--text);}
+.ct2-item-val a{color:var(--cyan);text-decoration:none;}
+.ct2-textarea{width:100%;height:80px;background:var(--bg3);border:1px solid var(--line);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;padding:12px;resize:none;outline:none;border-radius:4px;margin-bottom:10px;}
+.ct2-textarea:focus{border-color:var(--cyan);}
+.ct2-input{width:100%;background:var(--bg3);border:1px solid var(--line);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;padding:10px 12px;outline:none;border-radius:4px;margin-bottom:12px;}
+.ct2-input:focus{border-color:var(--cyan);}
+.ct2-send{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px 24px;border:1px solid var(--cyan);color:var(--cyan);background:none;cursor:none;transition:all .2s;}
+.ct2-send:hover{background:var(--cyan);color:#000;}
+.ct2-return{grid-column:1/-1;text-align:left;}
+.ct2-return a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-decoration:none;transition:color .2s;}
+.ct2-return a:hover{color:var(--cyan);}
+
 @keyframes fU{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
 /* music btn */
@@ -364,8 +423,9 @@ body.switching .t{opacity:0;transform:translateY(4px);}
       <li><a href="#" onclick="goHero();return false;" class="t" data-zh="首页" data-en="Home">首页</a></li>
       <li><a href="#" onclick="goDesk();return false;" class="t" data-zh="作品" data-en="Work">作品</a></li>
       <li><a href="#" onclick="goSkills();return false;" class="t" data-zh="技能" data-en="Skills">技能</a></li>
+      <li><a href="#" onclick="goCarousel();return false;" class="t" data-zh="作品集" data-en="Portfolio">作品集</a></li>
       <li><a href="#" onclick="openW('about');return false;" class="t" data-zh="关于" data-en="About">关于</a></li>
-      <li><a href="#" onclick="openW('contact');return false;" class="t" data-zh="联系" data-en="Contact">联系</a></li>
+      <li><a href="#" onclick="goContact2();return false;" class="t" data-zh="联系" data-en="Contact">联系</a></li>
     </ul>
     <div class="lang-toggle">
       <button class="lt-btn active" id="ltCN" onclick="setLang('zh')">CN</button>
@@ -567,6 +627,90 @@ body.switching .t{opacity:0;transform:translateY(4px);}
             <!-- rendered by JS -->
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO CAROUSEL -->
+  <div id="carousel">
+    <div class="car-inner">
+      <div class="car-header">
+        <div class="car-eyebrow t" data-zh="// 作品展示" data-en="// Portfolio Showcase">// 作品展示</div>
+        <h2 class="car-title t" data-zh="作品集" data-en="Portfolio">作品集 <em>portfolio</em></h2>
+      </div>
+      <div class="car-stage">
+        <button class="car-arrow car-prev" onclick="carMove(-1)">&#8249;</button>
+        <div class="car-track" id="carTrack"></div>
+        <button class="car-arrow car-next" onclick="carMove(1)">&#8250;</button>
+      </div>
+      <div class="car-dots" id="carDots"></div>
+      <div class="car-return">
+        <a href="#" onclick="goHero();return false;" class="t" data-zh="↙ 返回" data-en="↙ Return">↙ 返回</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT v2 -->
+  <div id="contact2">
+    <div class="ct2-inner">
+      <div class="ct2-left">
+        <div class="ct2-hi t" data-zh="Hi!" data-en="Hi!">Hi!</div>
+        <div class="ct2-callme t" data-zh="CALL ME" data-en="CALL ME">CALL ME</div>
+        <svg class="ct2-avatar" viewBox="0 0 200 280" fill="none">
+          <!-- body -->
+          <rect x="62" y="165" width="76" height="75" rx="16" fill="#1A2535"/>
+          <rect x="62" y="165" width="76" height="22" rx="8" fill="#243040"/>
+          <path d="M85 165 L100 185 L115 165" stroke="rgba(0,229,255,0.4)" stroke-width="1.5" fill="none"/>
+          <!-- arms -->
+          <rect x="28" y="168" width="34" height="14" rx="7" fill="#1A2535" transform="rotate(-18 28 168)"/>
+          <rect x="138" y="168" width="34" height="14" rx="7" fill="#1A2535" transform="rotate(18 172 168)"/>
+          <!-- head -->
+          <ellipse cx="100" cy="118" rx="44" ry="48" fill="#1E2D3D"/>
+          <!-- hair -->
+          <path d="M56 106 Q53 70 80 57 Q100 48 120 57 Q147 70 144 106 Q140 84 120 78 Q100 72 80 78 Q60 84 56 106Z" fill="#0D1520"/>
+          <!-- side hair strands -->
+          <path d="M56 106 Q42 130 48 160 Q52 175 58 168" fill="#0D1520"/>
+          <path d="M144 106 Q158 130 152 160 Q148 175 142 168" fill="#0D1520"/>
+          <!-- face -->
+          <ellipse cx="100" cy="123" rx="34" ry="36" fill="#243545"/>
+          <!-- eyes — squinting happy -->
+          <path d="M84 115 Q90 108 96 115" stroke="rgba(0,229,255,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M104 115 Q110 108 116 115" stroke="rgba(0,229,255,0.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- cheeks -->
+          <ellipse cx="80" cy="128" rx="8" ry="5" fill="rgba(201,164,164,0.35)"/>
+          <ellipse cx="120" cy="128" rx="8" ry="5" fill="rgba(201,164,164,0.35)"/>
+          <!-- smile -->
+          <path d="M88 138 Q100 148 112 138" stroke="rgba(0,229,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- headphones -->
+          <path d="M56 112 Q53 98 60 88" stroke="rgba(0,229,255,0.4)" stroke-width="2" fill="none"/>
+          <circle cx="56" cy="114" r="6" fill="#0D1520" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
+          <path d="M144 112 Q147 98 140 88" stroke="rgba(0,229,255,0.4)" stroke-width="2" fill="none"/>
+          <circle cx="144" cy="114" r="6" fill="#0D1520" stroke="rgba(0,229,255,0.4)" stroke-width="1.5"/>
+          <!-- falling apple -->
+          <circle cx="148" cy="48" r="18" fill="rgba(201,164,164,0.7)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+          <path d="M148 30 Q152 24 156 28" stroke="rgba(0,229,255,0.4)" stroke-width="1.5" fill="none"/>
+          <!-- impact lines -->
+          <path d="M88 58 Q72 68 65 80" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
+          <path d="M94 55 Q82 52 78 60" stroke="rgba(0,229,255,0.2)" stroke-width="1" fill="none"/>
+          <!-- ground wavy lines -->
+          <path d="M20 250 Q50 240 80 250 Q110 260 140 250 Q170 240 195 250" stroke="rgba(0,229,255,0.15)" stroke-width="1" fill="none"/>
+          <path d="M10 260 Q40 252 70 260 Q100 268 130 260 Q160 252 190 260" stroke="rgba(0,229,255,0.1)" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+      <div class="ct2-right">
+        <div class="ct2-card">
+          <div class="ct2-card-title t" data-zh="联系我" data-en="Contact Me">联系我</div>
+          <div class="ct2-items" id="ct2Items"></div>
+        </div>
+        <div class="ct2-card" style="margin-top:16px;">
+          <div class="ct2-card-title t" data-zh="留言板" data-en="Message Board">留言板</div>
+          <textarea class="ct2-textarea" placeholder="" id="ct2Msg"></textarea>
+          <input class="ct2-input" type="text" placeholder="" id="ct2Detail">
+          <button class="ct2-send t" data-zh="发送消息" data-en="Send Message" onclick="sendMsg()">发送消息</button>
+        </div>
+      </div>
+      <div class="ct2-return">
+        <a href="#" onclick="goHero();return false;" class="t" data-zh="↙ 返回" data-en="↙ Return">↙ 返回</a>
       </div>
     </div>
   </div>
@@ -1043,6 +1187,140 @@ const _setLang = setLang;
 setLang = function(l){
   _setLang(l);
   if(document.getElementById('skills').classList.contains('on')) renderSkills();
+};
+
+// ─────── CAROUSEL ───────
+const carProjects = [
+  { num:'001', key:'afterimage',  zh:'《残像》',      en:'AFTERIMAGE',      sub_zh:'赛博朋克叙事游戏', sub_en:'Cyberpunk Narrative Game',  color:'#4DA3FF' },
+  { num:'002', key:'growingpains',zh:'《生长痛》',    en:'GROWING PAINS',   sub_zh:'视觉小说 · 作品集No.1', sub_en:'Visual Novel · Portfolio #1', color:'#D9FF00' },
+  { num:'003', key:'blindbox',    zh:'名创优品盲盒广告',en:'MINISO Blind Box',sub_zh:'广告设计 · 平面+视频', sub_en:'Ad Design · Print+Video',   color:'#FF6B35' },
+  { num:'004', key:'maze',        zh:'《迷》',        en:'MAZE',            sub_zh:'Game Jam · AI影像', sub_en:'Game Jam · AI Film',         color:'#4DA3FF' },
+  { num:'005', key:'archive',     zh:'马家大院档案',  en:'Courtyard Archive',sub_zh:'信息设计 · 建筑可视化', sub_en:'Info Design · Architecture', color:'#D9FF00' },
+  { num:'006', key:'coursework',  zh:'课程作业集',    en:'Coursework',      sub_zh:'AI短片·角色设计·海报', sub_en:'AI Film·Character·Poster',   color:'#FF6B35' },
+];
+
+let carPage = 0;
+const PER_PAGE = 3;
+
+function renderCarousel(){
+  const track = document.getElementById('carTrack');
+  const dots = document.getElementById('carDots');
+  if(!track) return;
+  const totalPages = Math.ceil(carProjects.length / PER_PAGE);
+  const start = carPage * PER_PAGE;
+  const slice = carProjects.slice(start, start + PER_PAGE);
+
+  track.innerHTML = slice.map(p => `
+    <div class="car-card" onclick="openW('${p.key}')">
+      <div class="car-card-img">
+        <svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/>
+          <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono" font-size="10" fill="${p.color}" letter-spacing="2">${p.num}</text>
+          <circle cx="50" cy="50" r="30" fill="none" stroke="${p.color}" stroke-width="0.5" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="car-card-body">
+        <div class="car-card-num">${p.num}</div>
+        <div class="car-card-title">${lang==='zh'?p.zh:p.en}</div>
+        <div class="car-card-sub">${lang==='zh'?p.sub_zh:p.sub_en}</div>
+        <button class="car-card-btn t" data-zh="查看详情" data-en="View Details">查看详情</button>
+      </div>
+    </div>
+  `).join('');
+
+  dots.innerHTML = Array.from({length:totalPages},(_,i)=>
+    `<div class="car-dot${i===carPage?' on':''}" onclick="carGo(${i})"></div>`
+  ).join('');
+}
+
+function carMove(dir){
+  const total = Math.ceil(carProjects.length / PER_PAGE);
+  carPage = (carPage + dir + total) % total;
+  renderCarousel();
+}
+function carGo(i){ carPage=i; renderCarousel(); }
+
+function goCarousel(){
+  hideAll();
+  document.getElementById('carousel').classList.add('on');
+  renderCarousel();
+}
+
+// ─────── CONTACT v2 ───────
+const ct2Data = {
+  zh: [
+    { icon:'📞', val:'138-8889-9756' },
+    { icon:'✉️', val:'<a href="mailto:630388703@qq.com">630388703@qq.com</a>' },
+    { icon:'▶️', val:'<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">B站主页</a>' },
+    { icon:'📄', val:'<a href="刁思予_简历.pdf">下载简历 PDF</a>' },
+  ],
+  en: [
+    { icon:'📞', val:'138-8889-9756' },
+    { icon:'✉️', val:'<a href="mailto:630388703@qq.com">630388703@qq.com</a>' },
+    { icon:'▶️', val:'<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">Bilibili Channel</a>' },
+    { icon:'📄', val:'<a href="刁思予_简历.pdf">Download CV PDF</a>' },
+  ]
+};
+
+function renderContact2(){
+  const el = document.getElementById('ct2Items');
+  if(!el) return;
+  const data = lang==='zh' ? ct2Data.zh : ct2Data.en;
+  el.innerHTML = data.map(d=>`
+    <div class="ct2-item">
+      <div class="ct2-item-icon">${d.icon}</div>
+      <div class="ct2-item-val">${d.val}</div>
+    </div>
+  `).join('');
+  const msg = document.getElementById('ct2Msg');
+  const det = document.getElementById('ct2Detail');
+  if(msg) msg.placeholder = lang==='zh' ? '写下你的留言...' : 'Start your message...';
+  if(det) det.placeholder = lang==='zh' ? '你的联系方式' : 'Your contact details';
+}
+
+function goContact2(){
+  hideAll();
+  document.getElementById('contact2').classList.add('on');
+  renderContact2();
+}
+
+function sendMsg(){
+  const msg = document.getElementById('ct2Msg').value;
+  if(!msg.trim()) return;
+  alert(lang==='zh' ? '留言已发送！感谢你的消息 ✦' : 'Message sent! Thank you ✦');
+  document.getElementById('ct2Msg').value = '';
+  document.getElementById('ct2Detail').value = '';
+}
+
+// ─────── hideAll helper ───────
+function hideAll(){
+  document.getElementById('hero').style.display='none';
+  document.getElementById('desk').classList.remove('on');
+  document.getElementById('skills').classList.remove('on');
+  document.getElementById('carousel').classList.remove('on');
+  document.getElementById('contact2').classList.remove('on');
+}
+
+// patch goHero goDesk goSkills to use hideAll
+goHero = function(){
+  hideAll();
+  document.getElementById('hero').style.display='flex';
+};
+goDesk = function(){
+  hideAll();
+  document.getElementById('desk').classList.add('on');
+};
+goSkills = function(){
+  hideAll();
+  document.getElementById('skills').classList.add('on');
+  renderSkills();
+};
+
+// re-render on lang change
+const __setLang = setLang;
+setLang = function(l){
+  __setLang(l);
+  if(document.getElementById('carousel').classList.contains('on')) renderCarousel();
+  if(document.getElementById('contact2').classList.contains('on')) renderContact2();
 };
 
 // ─────── LIGHTBOX ───────
