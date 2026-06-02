@@ -8,339 +8,552 @@
     :root{
       --bg:#F7F6F2;
       --text:#1F1F1F;
-      --muted:#6b6b64;
+      --muted:#6E6E66;
       --primary:#C8E65A;
-      --primary-soft:rgba(200,230,90,.24);
-      --card:rgba(255,255,255,.72);
-      --line:rgba(31,31,31,.1);
-      --shadow:0 24px 80px rgba(31,31,31,.10);
-      --radius:28px;
+      --primary-dark:#6B7F1F;
+      --card:rgba(255,255,255,.74);
+      --stroke:rgba(31,31,31,.08);
+      --shadow:0 24px 80px rgba(75,88,35,.12);
+      --radius:30px;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
-      min-height:100vh;
-      font-family:Inter, Arial, sans-serif;
+      font-family:Inter,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
       color:var(--text);
-      background:var(--bg) url('网页背景.png') center/cover fixed no-repeat;
+      background:var(--bg);
+      min-height:100vh;
       overflow-x:hidden;
     }
+
     body::before{
       content:"";
-      position:fixed; inset:0;
-      background:rgba(247,246,242,.76);
+      position:fixed;
+      inset:0;
+      z-index:-3;
+      background:url("网页背景.png") center/cover no-repeat;
+      opacity:.92;
+      transform:scale(1.04);
+      animation:bgFloat 18s ease-in-out infinite alternate;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      z-index:-2;
+      background:
+        radial-gradient(circle at 18% 24%, rgba(200,230,90,.36), transparent 23%),
+        radial-gradient(circle at 82% 74%, rgba(200,230,90,.32), transparent 26%),
+        radial-gradient(circle at 55% 45%, rgba(255,255,255,.7), transparent 33%);
+      filter:blur(20px);
+      animation:blobMove 14s ease-in-out infinite alternate;
       pointer-events:none;
-      z-index:-1;
     }
-    a{text-decoration:none;color:inherit}
 
-    .topbar{
-      position:fixed; top:22px; left:50%; transform:translateX(-50%);
-      width:min(1180px, calc(100% - 36px));
-      height:72px; padding:0 18px 0 26px;
-      display:flex; align-items:center; justify-content:space-between;
-      background:rgba(255,255,255,.64);
-      backdrop-filter:blur(18px);
-      border:1px solid rgba(255,255,255,.65);
+    @keyframes bgFloat{
+      0%{transform:scale(1.04) translate3d(-10px,-8px,0)}
+      100%{transform:scale(1.08) translate3d(14px,12px,0)}
+    }
+    @keyframes blobMove{
+      0%{transform:translate3d(-18px,-10px,0) rotate(0deg)}
+      100%{transform:translate3d(22px,18px,0) rotate(6deg)}
+    }
+
+    .loader{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:grid;
+      place-items:center;
+      background:#F7F6F2;
+      transition:opacity .65s ease, visibility .65s ease;
+    }
+    .loader.hide{opacity:0;visibility:hidden}
+    .loader-inner{text-align:center;width:min(480px,82vw)}
+    .loader-avatar{width:120px;margin:0 auto 24px;animation:peekBounce 1.2s ease-in-out infinite alternate}
+    .loader-avatar img{width:100%;display:block}
+    .loader-title{font-size:14px;letter-spacing:.28em;font-weight:900;color:var(--primary-dark);text-transform:uppercase;margin-bottom:16px}
+    .loader-bar{height:12px;border-radius:999px;background:rgba(31,31,31,.08);overflow:hidden;border:1px solid rgba(31,31,31,.08)}
+    .loader-progress{height:100%;width:0;background:linear-gradient(90deg,var(--primary),#edf8a9);border-radius:999px;animation:loadBar 1.8s ease forwards}
+    .loader-percent{margin-top:10px;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.14em}
+    @keyframes loadBar{to{width:100%}}
+    @keyframes peekBounce{to{transform:translateY(-8px)}}
+
+    .nav-wrap{
+      position:fixed;
+      top:26px;
+      left:50%;
+      transform:translateX(-50%);
+      width:min(1120px,calc(100% - 34px));
+      z-index:1000;
+      padding:14px 18px;
       border-radius:999px;
-      box-shadow:0 12px 40px rgba(0,0,0,.08);
-      z-index:30;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:blur(18px);
+      box-shadow:0 16px 60px rgba(50,55,30,.12);
+      border:1px solid rgba(255,255,255,.7);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
     }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.06em}
-    .brand-dot{width:16px;height:16px;background:var(--primary);border-radius:50%;box-shadow:0 0 0 7px var(--primary-soft)}
-    .nav{display:flex;gap:8px;align-items:center}
-    .nav button{
-      border:0; background:transparent; color:var(--muted);
-      padding:12px 16px; border-radius:999px; cursor:pointer;
-      font-weight:700; letter-spacing:.02em; transition:.25s;
+    .brand{display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:.12em;white-space:nowrap}
+    .brand-dot{width:26px;height:26px;border-radius:50%;background:var(--primary);box-shadow:inset 0 0 0 8px rgba(255,255,255,.75)}
+    .nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .nav-links a,.lang-btn{
+      border:0;
+      color:var(--muted);
+      text-decoration:none;
+      padding:13px 18px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:850;
+      background:transparent;
+      cursor:pointer;
+      transition:.25s ease;
+      font-family:inherit;
     }
-    .nav button:hover,.nav button.active{background:var(--primary);color:#171717;transform:translateY(-1px)}
+    .nav-links a:hover,.nav-links a.active,.lang-btn:hover{color:var(--text);background:var(--primary)}
+    .lang-btn{border:1px solid rgba(31,31,31,.08);color:var(--text);background:rgba(255,255,255,.5)}
 
-    main{padding:118px 24px 40px; min-height:100vh;}
-    .page{
-      display:none;
-      width:min(1180px,100%);
-      min-height:calc(100vh - 160px);
-      margin:0 auto;
-      animation:fadeUp .45s ease both;
-    }
-    .page.active{display:block}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    main{padding-top:88px}
+    section{width:min(1120px,calc(100% - 34px));margin:0 auto;padding:90px 0;position:relative}
+    .hero{min-height:calc(100vh - 88px);display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:56px;padding-top:40px}
+    .eyebrow{font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:var(--primary-dark);font-weight:950;margin-bottom:24px}
+    h1{font-size:clamp(70px,10vw,132px);line-height:.86;letter-spacing:-.08em;font-weight:1000;margin-bottom:28px}
+    .hero h2{font-size:clamp(28px,3.3vw,44px);line-height:1.02;letter-spacing:-.05em;font-weight:1000;max-width:780px;margin-bottom:22px}
+    .lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:680px}
+    .pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+    .pill{padding:12px 18px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid var(--stroke);font-weight:850;color:#3d3d38}
 
-    .hero{
-      min-height:calc(100vh - 160px);
-      display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center;
-    }
-    .eyebrow{font-size:14px;font-weight:800;letter-spacing:.18em;color:#6d7d1a;text-transform:uppercase;margin-bottom:18px}
-    h1{font-size:clamp(58px,10vw,132px);line-height:.9;letter-spacing:-.07em;font-weight:900;margin-bottom:24px}
-    h2{font-size:clamp(36px,5vw,68px);line-height:.96;letter-spacing:-.045em;margin-bottom:22px}
-    .subtitle{font-size:clamp(18px,2.2vw,30px);font-weight:800;line-height:1.18;margin-bottom:18px}
-    .desc{font-size:18px;line-height:1.7;color:var(--muted);max-width:670px}
-    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-    .chip{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--line);font-weight:700;color:#3b3b35}
+    .hero-visual{position:relative;display:grid;place-items:center;min-height:530px}
     .hero-card{
-      position:relative; min-height:560px; border-radius:46px;
-      background:linear-gradient(145deg, rgba(255,255,255,.85), rgba(255,255,255,.42));
-      border:1px solid rgba(255,255,255,.7); box-shadow:var(--shadow);
-      display:flex;align-items:center;justify-content:center;overflow:hidden;
+      width:min(430px,90%);
+      aspect-ratio:1/1.12;
+      border-radius:42px;
+      background:rgba(255,255,255,.62);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.8);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      position:relative;
     }
-    .hero-card::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:var(--primary-soft);filter:blur(6px)}
-    .hero-card img{position:relative;width:min(86%,430px);filter:drop-shadow(0 22px 32px rgba(0,0,0,.16));}
+    .hero-card::before{content:"";position:absolute;width:74%;aspect-ratio:1;border-radius:50%;background:rgba(200,230,90,.35);filter:blur(5px);animation:pulse 4s ease-in-out infinite alternate}
+    .hero-card img{width:70%;position:relative;filter:drop-shadow(0 18px 28px rgba(31,31,31,.12));animation:float 4s ease-in-out infinite alternate}
+    @keyframes pulse{to{transform:scale(1.08);opacity:.8}}
+    @keyframes float{to{transform:translateY(-10px)}}
 
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:30px}
-    .card{
-      background:var(--card);border:1px solid rgba(255,255,255,.75);border-radius:var(--radius);
-      padding:26px;box-shadow:var(--shadow);backdrop-filter:blur(16px);transition:.25s;
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:34px}
+    .section-title{font-size:clamp(36px,5.4vw,78px);letter-spacing:-.06em;line-height:.95;font-weight:1000}
+    .section-desc{max-width:520px;color:var(--muted);line-height:1.7;font-size:16px}
+
+    .about{min-height:100vh;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:54px}
+    .about-visual{border-radius:42px;background:var(--card);border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow);padding:26px;min-height:520px;display:grid;place-items:center;overflow:hidden}
+    .about-visual img{width:100%;max-width:530px;display:block}
+    .about-copy{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-radius:42px;padding:42px;box-shadow:var(--shadow)}
+    .about-copy h2{font-size:clamp(42px,6vw,82px);letter-spacing:-.07em;line-height:.9;margin-bottom:12px}
+    .about-copy h3{font-size:22px;margin-bottom:22px;color:var(--primary-dark)}
+    .about-copy p{font-size:17px;line-height:1.75;color:var(--muted);margin-bottom:20px}
+    .identity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+    .identity-card,.info-card,.project-card,.process-card,.skill-card{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.8);
+      border-radius:var(--radius);
+      box-shadow:0 12px 42px rgba(50,55,30,.08);
     }
-    .card:hover{transform:translateY(-8px);border-color:var(--primary)}
-    .num{font-weight:900;color:#97ad39;margin-bottom:8px}
-    .card h3{font-size:28px;margin-bottom:10px;letter-spacing:-.03em}
-    .meta{font-weight:800;color:#556312;margin-bottom:18px}
-    .info{display:grid;gap:12px;color:var(--muted);line-height:1.55}
-    .info b{display:block;color:var(--text);font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      margin-top:20px;padding:12px 16px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.75);font-weight:800;transition:.25s;cursor:pointer;
+    .identity-card{padding:20px;min-height:138px}
+    .identity-card strong{display:block;font-size:15px;letter-spacing:.08em;margin-bottom:12px}
+    .identity-card span{display:block;color:var(--muted);font-size:14px;line-height:1.55}
+
+    .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+    .info-card{padding:24px}
+    .info-card .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:950;color:var(--primary-dark);margin-bottom:10px}
+    .info-card .value{font-weight:850;line-height:1.5;color:#30302c}
+
+    .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+    .project-card{overflow:hidden;transition:.28s ease;position:relative}
+    .project-card:hover{transform:translateY(-10px);border-color:rgba(200,230,90,.85);box-shadow:0 30px 90px rgba(82,95,30,.18)}
+    .preview{height:245px;overflow:hidden;position:relative;background:rgba(255,255,255,.58)}
+    .preview img,.preview video{width:100%;height:100%;object-fit:cover;display:block;transition:.45s ease}
+    .project-card:hover .preview img{transform:scale(1.07)}
+    .preview .fallback{height:100%;display:grid;place-items:center;font-weight:1000;font-size:28px;letter-spacing:-.04em;background:linear-gradient(135deg,rgba(200,230,90,.42),rgba(255,255,255,.75))}
+    .project-body{padding:26px}
+    .project-no{color:var(--primary-dark);font-size:13px;font-weight:950;letter-spacing:.16em;margin-bottom:10px}
+    .project-body h3{font-size:30px;letter-spacing:-.04em;margin-bottom:10px}
+    .project-meta{color:var(--muted);line-height:1.6;margin-bottom:18px}
+    .project-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .tag{font-size:12px;font-weight:850;padding:8px 11px;border-radius:999px;background:rgba(200,230,90,.28);color:#4f6117}
+    .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:950;border-radius:999px;padding:12px 18px;background:#fff;border:1px solid var(--stroke);transition:.25s ease}
+    .project-card:hover .btn,.btn:hover{background:var(--primary);border-color:var(--primary)}
+
+    .process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+    .process-card{padding:22px;min-height:180px;transition:.25s ease}
+    .process-card:hover{transform:translateY(-6px);border-color:rgba(200,230,90,.8)}
+    .process-num{font-size:12px;color:var(--primary-dark);font-weight:950;letter-spacing:.16em;margin-bottom:28px}
+    .process-card h3{font-size:22px;margin-bottom:10px}
+    .process-card p{color:var(--muted);line-height:1.55;font-size:14px}
+
+    .skills-grid{display:flex;flex-wrap:wrap;gap:13px}
+    .skill-card{padding:14px 18px;font-weight:900;color:#333;transition:.22s ease}
+    .skill-card:hover{background:var(--primary);transform:translateY(-4px)}
+
+    .contact-panel{
+      border-radius:46px;
+      padding:58px;
+      min-height:420px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+      background:rgba(255,255,255,.62);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:var(--shadow);
     }
-    .card:hover .btn,.btn:hover{background:var(--primary);border-color:var(--primary);transform:translateY(-1px)}
+    .contact-panel h2{font-size:clamp(42px,6vw,84px);line-height:.93;letter-spacing:-.07em;margin-bottom:22px}
+    .contact-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+    .contact-note{color:var(--muted);line-height:1.7}
+    footer{text-align:center;color:var(--muted);font-size:14px;padding:40px 0 70px}
 
-    .process{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:34px}
-    .process .card{padding:22px;min-height:210px}
-    .process h3{font-size:22px}.process p{color:var(--muted);line-height:1.55;margin-top:10px}
-
-    .about-wrap{min-height:calc(100vh - 160px);display:grid;grid-template-columns:.85fr 1.15fr;gap:36px;align-items:center}
-    .about-img{display:flex;align-items:center;justify-content:center;background:var(--card);border-radius:42px;box-shadow:var(--shadow);padding:30px;min-height:560px}
-    .about-img img{width:100%;max-width:520px;border-radius:28px}
-    .info-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-    .mini{padding:18px;border-radius:22px;background:rgba(255,255,255,.66);border:1px solid var(--line)}
-    .mini b{display:block;margin-bottom:8px;color:#5f7216}.mini span{color:var(--muted);line-height:1.45}
-
-    .skill-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.skill{padding:14px 18px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.06)}
-    .contact-card{min-height:calc(100vh - 160px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center}.contact-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}.footer{margin-top:40px;color:var(--muted)}
-
-    .assistant{
-      position:fixed; right:34px; bottom:24px; width:190px; z-index:40;
-      transform:translateX(150%); transition:transform .6s cubic-bezier(.22,1,.36,1), width .25s;
+    .mascot{
+      position:fixed;
+      right:42px;
+      bottom:46px;
+      z-index:900;
+      width:118px;
+      pointer-events:auto;
+      transform:translateX(170px);
+      transition:transform .55s cubic-bezier(.2,.9,.2,1);
     }
-    .assistant.show{transform:translateX(0)}
-    .assistant.jump{animation:jump .65s ease}
-    .assistant.float img{animation:float 3.2s ease-in-out infinite}
-    .assistant img{width:100%;display:block;cursor:pointer;filter:drop-shadow(0 20px 28px rgba(0,0,0,.18));transition:.25s}
-    .assistant img:hover{transform:scale(1.03)}
+    .mascot.show{transform:translateX(0)}
+    .mascot.float{animation:mascotFloat 3.4s ease-in-out infinite alternate}
+    .mascot.jump{animation:jump .8s ease}
+    .mascot img{width:100%;display:block;cursor:pointer;filter:drop-shadow(0 18px 30px rgba(31,31,31,.18))}
     .bubble{
-      position:absolute;right:96%;top:10px;width:max-content;max-width:220px;
-      padding:12px 16px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.9);border-radius:20px 20px 4px 20px;box-shadow:0 12px 35px rgba(0,0,0,.10);font-weight:800;opacity:0;transform:translateX(8px);transition:.25s;pointer-events:none;
+      position:absolute;
+      right:88px;
+      bottom:86px;
+      width:max-content;
+      max-width:220px;
+      padding:13px 16px;
+      border-radius:18px 18px 4px 18px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(31,31,31,.08);
+      box-shadow:0 12px 36px rgba(31,31,31,.12);
+      font-size:14px;
+      font-weight:850;
+      opacity:0;
+      transform:translateY(8px);
+      transition:.2s ease;
+      pointer-events:none;
     }
-    .bubble.show{opacity:1;transform:translateX(0)}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    @keyframes jump{0%,100%{transform:translateY(0)}45%{transform:translateY(-42px)}}
+    .bubble.visible{opacity:1;transform:translateY(0)}
+    @keyframes mascotFloat{to{transform:translateY(-10px)}}
+    @keyframes jump{0%,100%{transform:translateY(0)}45%{transform:translateY(-36px)}}
 
-    @media(max-width:900px){
-      .topbar{height:auto;border-radius:28px;align-items:flex-start;gap:12px;flex-direction:column;padding:16px}.nav{flex-wrap:wrap}.nav button{padding:9px 12px}
-      main{padding-top:150px}.hero,.about-wrap{grid-template-columns:1fr}.grid,.process,.info-cards{grid-template-columns:1fr}.assistant{width:128px;right:16px}.bubble{right:82%;font-size:13px}.hero-card,.about-img{min-height:420px}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:960px){
+      .nav-wrap{border-radius:28px;align-items:flex-start;flex-direction:column;top:12px}
+      .nav-links{justify-content:flex-start}
+      main{padding-top:150px}
+      .hero,.about,.contact-panel{grid-template-columns:1fr}
+      .hero{padding-top:20px}
+      .projects-grid{grid-template-columns:1fr}
+      .process-grid{grid-template-columns:repeat(2,1fr)}
+      .identity-grid,.info-grid{grid-template-columns:1fr}
+      .mascot{width:88px;right:18px;bottom:18px}
+      .bubble{right:58px;bottom:70px}
+    }
+    @media(max-width:560px){
+      section{padding:64px 0}
+      .process-grid{grid-template-columns:1fr}
+      .about-copy,.contact-panel{padding:28px}
+      .preview{height:190px}
+      .nav-links a,.lang-btn{padding:10px 12px;font-size:12px}
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" data-page="home"><span class="brand-dot"></span><span>SIYU DIAO</span></a>
-    <nav class="nav" aria-label="Main navigation">
-      <button class="active" data-page="home">Home</button>
-      <button data-page="projects">Projects</button>
-      <button data-page="process">UX Process</button>
-      <button data-page="about">About</button>
-      <button data-page="skills">Skills</button>
-      <button data-page="contact">Contact</button>
-    </nav>
-  </header>
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-avatar"><img src="peek.png" alt="loading avatar"></div>
+      <div class="loader-title" data-en="Loading Portfolio" data-zh="作品集加载中">Loading Portfolio</div>
+      <div class="loader-bar"><div class="loader-progress"></div></div>
+      <div class="loader-percent">SIYU DIAO · 2026</div>
+    </div>
+  </div>
+
+  <nav class="nav-wrap">
+    <div class="brand"><span class="brand-dot"></span><span>SIYU DIAO</span></div>
+    <div class="nav-links">
+      <a href="#home" class="nav-link active" data-en="Home" data-zh="首页">Home</a>
+      <a href="#about" class="nav-link" data-en="About" data-zh="关于我">About</a>
+      <a href="#projects" class="nav-link" data-en="Projects" data-zh="项目">Projects</a>
+      <a href="#process" class="nav-link" data-en="UX Process" data-zh="UX流程">UX Process</a>
+      <a href="#skills" class="nav-link" data-en="Skills" data-zh="技能">Skills</a>
+      <a href="#contact" class="nav-link" data-en="Contact" data-zh="联系">Contact</a>
+      <button class="lang-btn" id="langBtn" type="button">中文</button>
+    </div>
+  </nav>
 
   <main>
-    <section id="home" class="page active">
-      <div class="hero">
+    <section class="hero" id="home">
+      <div class="reveal">
+        <div class="eyebrow" data-en="Digital Media Art · Game UX · AIGC Creation" data-zh="数字媒体艺术 · 游戏体验 · AIGC创作">Digital Media Art · Game UX · AIGC Creation</div>
+        <h1>SIYU<br>DIAO</h1>
+        <h2 data-en="UX / GAME UX / INTERACTIVE NARRATIVE DESIGNER" data-zh="用户体验 / 游戏体验 / 交互叙事设计师">UX / GAME UX / INTERACTIVE NARRATIVE DESIGNER</h2>
+        <p class="lead" data-en="Designing emotional experiences through narrative, space and interaction." data-zh="通过叙事、空间与交互设计，创造有情感温度的体验。">Designing emotional experiences through narrative, space and interaction.</p>
+        <div class="pills">
+          <span class="pill">Unity 2D/3D</span><span class="pill">C#</span><span class="pill">Figma</span><span class="pill">AIGC Workflow</span><span class="pill">Blender</span>
+        </div>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="hero-card"><img src="默认.png" alt="Siyu avatar"></div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-visual reveal"><img src="打字（坐在电脑前设计）.png" alt="Siyu typing"></div>
+      <div class="about-copy reveal">
+        <h2 data-en="ABOUT ME" data-zh="关于我">ABOUT ME</h2>
+        <h3 data-en="Digital Media Art Student · UX / Game UX / AIGC Creator" data-zh="数字媒体艺术学生 · UX / 游戏体验 / AIGC创作者">Digital Media Art Student · UX / Game UX / AIGC Creator</h3>
+        <p data-en="Hi, I’m Siyu Diao, a Digital Media Art student focusing on UX, game experience, interactive narrative and AIGC creation." data-zh="你好，我是刁思予，一名数字媒体艺术专业学生，关注用户体验、游戏体验、交互叙事与AIGC创作。">Hi, I’m Siyu Diao, a Digital Media Art student focusing on UX, game experience, interactive narrative and AIGC creation.</p>
+        <p data-en="My work explores how narrative, interface and environment can shape human feelings and behavior. I enjoy turning abstract emotions and social issues into interactive experiences, visual systems and playable spaces." data-zh="我的作品探索叙事、界面与空间环境如何影响人的情绪和行为。我喜欢把抽象情绪与社会议题转化为可交互体验、视觉系统和可玩的空间。">My work explores how narrative, interface and environment can shape human feelings and behavior. I enjoy turning abstract emotions and social issues into interactive experiences, visual systems and playable spaces.</p>
+        <div class="identity-grid">
+          <div class="identity-card"><strong data-en="UX DESIGN" data-zh="用户体验设计">UX DESIGN</strong><span data-en="Research · User Flow · Interaction Design" data-zh="调研 · 用户流程 · 交互设计">Research · User Flow · Interaction Design</span></div>
+          <div class="identity-card"><strong data-en="GAME EXPERIENCE" data-zh="游戏体验设计">GAME EXPERIENCE</strong><span data-en="Unity · Narrative · Player Experience" data-zh="Unity · 叙事 · 玩家体验">Unity · Narrative · Player Experience</span></div>
+          <div class="identity-card"><strong data-en="AIGC CREATION" data-zh="AIGC创作">AIGC CREATION</strong><span data-en="Stable Diffusion · Kling · Runway" data-zh="Stable Diffusion · 可灵 · Runway">Stable Diffusion · Kling · Runway</span></div>
+        </div>
+        <div class="info-grid">
+          <div class="info-card"><div class="label" data-en="Education" data-zh="教育背景">Education</div><div class="value" data-en="Kunming University of Science and Technology · Digital Media Art" data-zh="昆明理工大学 · 数字媒体艺术">Kunming University of Science and Technology · Digital Media Art</div></div>
+          <div class="info-card"><div class="label" data-en="Focus" data-zh="方向">Focus</div><div class="value" data-en="UX Design / Game UX / Interactive Narrative / Spatial Experience" data-zh="UX设计 / 游戏体验 / 交互叙事 / 空间体验">UX Design / Game UX / Interactive Narrative / Spatial Experience</div></div>
+          <div class="info-card"><div class="label" data-en="Available" data-zh="可实习">Available</div><div class="value" data-en="2025.6.26 — Early September" data-zh="2025.6.26 — 9月初">2025.6.26 — Early September</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-en="Featured Works" data-zh="精选项目">Featured Works</h2>
+        <p class="section-desc" data-en="Project previews with UX thinking, interaction systems and narrative experience design." data-zh="通过项目预览展示UX思考、交互系统与叙事体验设计。">Project previews with UX thinking, interaction systems and narrative experience design.</p>
+      </div>
+      <div class="projects-grid">
+        <article class="project-card reveal">
+          <div class="preview"><img src="像残预览图.png" alt="AFTERIMAGE preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>AFTERIMAGE</div>'"></div>
+          <div class="project-body">
+            <div class="project-no">01</div>
+            <h3>AFTERIMAGE / 残像</h3>
+            <p class="project-meta" data-en="Unity 2D cyberpunk narrative puzzle game exploring how an AI teammate influences player trust and decision-making." data-zh="Unity 2D赛博朋克叙事解谜游戏，探索AI队友如何影响玩家信任与决策。">Unity 2D cyberpunk narrative puzzle game exploring how an AI teammate influences player trust and decision-making.</p>
+            <div class="project-tags"><span class="tag">Unity 2D</span><span class="tag">Game UX</span><span class="tag">AI Companion</span></div>
+            <a class="btn" href="projects.html#afterimage" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="preview"><img src="有色场景.png" alt="Growth Pain preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>Growth Pain</div>'"></div>
+          <div class="project-body">
+            <div class="project-no">02</div>
+            <h3>Growth Pain / 生长痛</h3>
+            <p class="project-meta" data-en="Visual novel experience visualizing invisible emotional pressure through branching narrative, UI and motion design." data-zh="视觉小说体验，通过分支叙事、UI与动态设计表现不可见的情绪压力。">Visual novel experience visualizing invisible emotional pressure through branching narrative, UI and motion design.</p>
+            <div class="project-tags"><span class="tag">Visual Novel</span><span class="tag">Narrative UX</span><span class="tag">Motion PV</span></div>
+            <a class="btn" href="projects.html#growth-pain" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="preview"><img src="分镜作业.png" alt="Spatial Rights preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>Spatial Rights</div>'"></div>
+          <div class="project-body">
+            <div class="project-no">03</div>
+            <h3>Spatial Rights</h3>
+            <p class="project-meta" data-en="VR spatial narrative about invisible spatial inequality in public places and workers’ hidden spaces." data-zh="关于公共空间中隐形空间不平等与劳动者隐藏空间的VR空间叙事体验。">VR spatial narrative about invisible spatial inequality in public places and workers’ hidden spaces.</p>
+            <div class="project-tags"><span class="tag">VR Experience</span><span class="tag">Social Issue</span><span class="tag">Spatial UX</span></div>
+            <a class="btn" href="projects.html#spatial-rights" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <div class="preview"><img src="盲盒广告设计1.jpg" alt="Blind Box preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>Blind Box</div>'"></div>
+          <div class="project-body">
+            <div class="project-no">04</div>
+            <h3 data-en="Blind Box Advertising" data-zh="盲盒广告设计">Blind Box Advertising</h3>
+            <p class="project-meta" data-en="Poster and video advertisement design communicating the surprise and emotional appeal of blind boxes." data-zh="围绕盲盒惊喜感与情绪吸引力完成海报与视频广告设计。">Poster and video advertisement design communicating the surprise and emotional appeal of blind boxes.</p>
+            <div class="project-tags"><span class="tag">Poster</span><span class="tag">Brand Visual</span><span class="tag">Video Ad</span></div>
+            <a class="btn" href="projects.html#blind-box" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-en="UX Design Process" data-zh="UX设计流程">UX Design Process</h2>
+        <p class="section-desc" data-en="A flexible workflow I use across game, interface, AIGC and spatial experience projects." data-zh="这是我在游戏、界面、AIGC与空间体验项目中使用的弹性设计流程。">A flexible workflow I use across game, interface, AIGC and spatial experience projects.</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-card reveal"><div class="process-num">01</div><h3 data-en="Research" data-zh="调研">Research</h3><p data-en="Interview / Survey / Observation" data-zh="访谈 / 问卷 / 观察">Interview / Survey / Observation</p></div>
+        <div class="process-card reveal"><div class="process-num">02</div><h3 data-en="Define" data-zh="定义">Define</h3><p data-en="Problem Statement / User Needs" data-zh="问题定义 / 用户需求">Problem Statement / User Needs</p></div>
+        <div class="process-card reveal"><div class="process-num">03</div><h3 data-en="Ideate" data-zh="构思">Ideate</h3><p data-en="Storyboard / User Flow / Interaction Concept" data-zh="分镜 / 用户流程 / 交互概念">Storyboard / User Flow / Interaction Concept</p></div>
+        <div class="process-card reveal"><div class="process-num">04</div><h3 data-en="Prototype" data-zh="原型">Prototype</h3><p data-en="Figma / HTML CSS JS / Blender / Unity" data-zh="Figma / HTML CSS JS / Blender / Unity">Figma / HTML CSS JS / Blender / Unity</p></div>
+        <div class="process-card reveal"><div class="process-num">05</div><h3 data-en="Test" data-zh="测试">Test</h3><p data-en="Feedback / Iteration / Presentation" data-zh="反馈 / 迭代 / 展示">Feedback / Iteration / Presentation</p></div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-en="Skills" data-zh="专业技能">Skills</h2>
+        <p class="section-desc" data-en="Tools and methods across game development, visual design, motion, AIGC and front-end implementation." data-zh="覆盖游戏开发、视觉设计、动态影像、AIGC与前端实现的工具和方法。">Tools and methods across game development, visual design, motion, AIGC and front-end implementation.</p>
+      </div>
+      <div class="skills-grid reveal">
+        <span class="skill-card">Unity 2D/3D</span><span class="skill-card">C#</span><span class="skill-card">Unreal Engine 5</span><span class="skill-card">Figma</span><span class="skill-card">Photoshop</span><span class="skill-card">Illustrator</span><span class="skill-card">After Effects</span><span class="skill-card">Premiere Pro</span><span class="skill-card">Blender</span><span class="skill-card">3ds Max</span><span class="skill-card">Stable Diffusion</span><span class="skill-card">ControlNet</span><span class="skill-card">Kling</span><span class="skill-card">Runway</span><span class="skill-card">HTML/CSS</span><span class="skill-card">Python</span>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact-panel reveal">
         <div>
-          <div class="eyebrow">Digital Media Art · Game UX · AIGC Creation</div>
-          <h1>SIYU<br>DIAO</h1>
-          <div class="subtitle">UX / GAME UX / INTERACTIVE NARRATIVE DESIGNER</div>
-          <p class="desc">Designing emotional experiences through narrative, space and interaction.</p>
-          <div class="chips">
-            <span class="chip">Unity 2D/3D</span><span class="chip">C#</span><span class="chip">Figma</span><span class="chip">AIGC Workflow</span><span class="chip">Blender</span>
+          <div class="eyebrow" data-en="Contact" data-zh="联系我">Contact</div>
+          <h2 data-en="Let’s create something meaningful." data-zh="让我们一起创造有意义的体验。">Let’s create something meaningful.</h2>
+          <p class="contact-note" data-en="Open to UX, game UX, interactive narrative and AIGC-related internship opportunities." data-zh="期待UX、游戏体验、交互叙事与AIGC相关实习机会。">Open to UX, game UX, interactive narrative and AIGC-related internship opportunities.</p>
+          <div class="contact-actions">
+            <a class="btn" href="mailto:630388703@qq.com" data-en="Email Me" data-zh="发送邮件">Email Me</a>
+            <a class="btn" href="刁思予_简历.pdf" target="_blank" data-en="View Resume" data-zh="查看简历">View Resume</a>
           </div>
         </div>
-        <div class="hero-card"><img src="默认.png" alt="Siyu chibi avatar"></div>
-      </div>
-    </section>
-
-    <section id="projects" class="page">
-      <div class="eyebrow">Selected Works</div>
-      <h2>Featured Projects</h2>
-      <p class="desc">Project-driven case studies focusing on game experience, interaction, narrative systems and AI-assisted creation.</p>
-      <div class="grid">
-        <article class="card"><div class="num">01</div><h3>AFTERIMAGE / 残像</h3><div class="meta">Unity 2D Cyberpunk Narrative Puzzle Game</div><div class="info"><p><b>Problem</b>How might an AI teammate influence player trust and decision-making?</p><p><b>Role</b>Independent Developer / Game UX / Narrative Design</p><p><b>Process</b>Scenario Design → Unity Development → NPC Dialogue → AI Video Integration → Testing</p><p><b>Outcome</b>Developed 10+ scenes, dual-layer Tab switching, NPC dialogue, behavior tracking and archive save system.</p></div><a class="btn" href="#">View Case Study</a></article>
-        <article class="card"><div class="num">02</div><h3>Growth Pain / 生长痛</h3><div class="meta">Visual Novel / Emotional Narrative</div><div class="info"><p><b>Problem</b>How might we visualize invisible emotional pressure during adolescence?</p><p><b>Role</b>Scriptwriting / Narrative Design / UI Layout / AI-assisted Character Design</p><p><b>Process</b>Script → Branching System → Character Design → UI Flow → Motion PV</p><p><b>Outcome</b>A visual novel concept with six acts, hidden value system and multiple endings.</p></div><a class="btn" href="#">View Case Study</a></article>
-        <article class="card"><div class="num">03</div><h3>Spatial Rights</h3><div class="meta">VR Spatial Narrative / Social Issue</div><div class="info"><p><b>Problem</b>How might we reveal invisible spatial inequality in public places?</p><p><b>Role</b>Research / Spatial Experience Design / Game Flow</p><p><b>Process</b>Interview → Survey → Space Mapping → Interactive Scene</p><p><b>Outcome</b>A three-space VR experience about workers’ hidden spaces.</p></div><a class="btn" href="#">View Case Study</a></article>
-        <article class="card"><div class="num">04</div><h3>AIGC Video / 迷</h3><div class="meta">AI Video Narrative / Game Jam</div><div class="info"><p><b>Problem</b>How might AI video express a game concept and emotional atmosphere?</p><p><b>Role</b>AI Video Creation / Editing / Visual Direction</p><p><b>Process</b>Theme Concept → AI Video Generation → Editing → Final Film</p><p><b>Outcome</b>A 2分30秒 AI video narrative created for Perfect World Training Camp Game Jam.</p></div><a class="btn" href="#">View Case Study</a></article>
-        <article class="card"><div class="num">05</div><h3>Blind Box Advertising Design</h3><div class="meta">Graphic Design / Video Advertisement</div><div class="info"><p><b>Problem</b>How might visual design communicate the surprise of blind boxes?</p><p><b>Role</b>Visual Design / Poster Design / Video Advertisement</p><p><b>Process</b>Brand Research → Poster Design → Motion Editing → Final Visual System</p><p><b>Outcome</b>Three poster designs and one video advertisement for a blind box series.</p></div><a class="btn" href="#">View Case Study</a></article>
-        <article class="card"><div class="num">06</div><h3>Portfolio Website</h3><div class="meta">Interactive Web Design</div><div class="info"><p><b>Problem</b>How might a portfolio website express my identity as an interactive designer?</p><p><b>Role</b>Web Design / Front-end / Visual System</p><p><b>Process</b>Moodboard → Layout → Character Interaction → GitHub Pages</p><p><b>Outcome</b>A personal interactive portfolio website with a character-based micro-interaction system.</p></div><a class="btn" href="#">View Case Study</a></article>
-      </div>
-    </section>
-
-    <section id="process" class="page">
-      <div class="eyebrow">UX Design Process</div>
-      <h2>How I Design</h2>
-      <p class="desc">A flexible workflow for transforming social issues, emotions and game ideas into interactive experiences.</p>
-      <div class="process">
-        <div class="card"><h3>Research</h3><p>Interview / Survey / Observation</p></div>
-        <div class="card"><h3>Define</h3><p>Problem Statement / User Needs</p></div>
-        <div class="card"><h3>Ideate</h3><p>Storyboard / User Flow / Interaction Concept</p></div>
-        <div class="card"><h3>Prototype</h3><p>Figma / HTML CSS JS / Blender / Unity</p></div>
-        <div class="card"><h3>Test</h3><p>Feedback / Iteration / Presentation</p></div>
-      </div>
-    </section>
-
-    <section id="about" class="page">
-      <div class="about-wrap">
-        <div class="about-img"><img src="打字（坐在电脑前设计）.png" alt="Typing avatar"></div>
-        <div>
-          <div class="eyebrow">About Me</div>
-          <h2>UX / Interactive / Game Experience Designer</h2>
-          <p class="desc">Hi, I’m Siyu Diao, a Digital Media Art student focusing on UX, game experience, interactive narrative and AIGC creation.<br><br>I have experience in Unity 2D/3D, C# scripting, UI prototyping, video production, Blender scene building and AI-assisted visual creation. My work explores emotional storytelling, social issues and player experience through games, interfaces and spatial interaction.</p>
-          <div class="info-cards">
-            <div class="mini"><b>Education</b><span>Kunming University of Science and Technology<br>Digital Media Art, BFA<br>2024.09 — 2028.06 expected</span></div>
-            <div class="mini"><b>Focus</b><span>UX Design / Game UX / Interactive Narrative / AIGC Creation</span></div>
-            <div class="mini"><b>Available</b><span>2025.6.26 — early September<br>around 10 weeks</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="skills" class="page">
-      <div class="eyebrow">Toolkit</div>
-      <h2>Skills</h2>
-      <p class="desc">Design, development, video, 3D and AIGC tools used across my projects.</p>
-      <div class="skill-grid">
-        <span class="skill">Unity 2D/3D</span><span class="skill">C#</span><span class="skill">Unreal Engine 5</span><span class="skill">Figma</span><span class="skill">Photoshop</span><span class="skill">Illustrator</span><span class="skill">After Effects</span><span class="skill">Premiere Pro</span><span class="skill">Blender</span><span class="skill">3ds Max</span><span class="skill">Stable Diffusion</span><span class="skill">ControlNet</span><span class="skill">Kling</span><span class="skill">Runway</span><span class="skill">HTML/CSS</span><span class="skill">Python</span><span class="skill">UX Research</span><span class="skill">Prototyping</span><span class="skill">Motion Design</span>
-      </div>
-    </section>
-
-    <section id="contact" class="page">
-      <div class="contact-card">
-        <div class="eyebrow">Contact</div>
-        <h2>Let’s create something meaningful.</h2>
-        <p class="desc">Open to UX, Game UX, interactive design and AIGC creation internship opportunities.</p>
-        <div class="contact-actions">
-          <a class="btn" href="mailto:630388703@qq.com">Email Me</a>
-          <a class="btn" href="刁思予_简历.pdf" target="_blank">View Resume</a>
-        </div>
-        <div class="footer">© 2026 Siyu Diao Portfolio</div>
+        <div class="about-visual"><img src="点击爱心跳一下.png" alt="contact avatar"></div>
       </div>
     </section>
   </main>
 
-  <div class="assistant float show" id="assistant">
+  <div class="mascot" id="mascot">
     <div class="bubble" id="bubble">Hi! I'm Siyu :)</div>
-    <img id="assistantImg" src="peek.png" alt="Interactive avatar">
+    <img id="mascotImg" src="peek.png" alt="interactive avatar">
   </div>
 
-  <script>
-    const pages = document.querySelectorAll('.page');
-    const navButtons = document.querySelectorAll('[data-page]');
-    const assistant = document.getElementById('assistant');
-    const assistantImg = document.getElementById('assistantImg');
-    const bubble = document.getElementById('bubble');
+  <footer>© 2026 Siyu Diao Portfolio · Designed & Developed by Siyu</footer>
 
-    const img = {
-      idle: '默认.png',
-      hover: 'HOVER 打招呼.png',
-      click: '点击爱心跳一下.png',
-      typing: '打字（坐在电脑前设计）.png',
-      walk: '步行.png',
-      peek: 'peek.png'
+  <script>
+    const assets = {
+      idle: '默认.png', hover: 'HOVER 打招呼.png', click: '点击爱心跳一下.png',
+      typing: '打字（坐在电脑前设计）.png', walk: '步行.png', peek: 'peek.png'
     };
 
-    let currentPage = 'home';
+    let currentLang = localStorage.getItem('lang') || 'en';
+    let state = 'loading';
     let isHover = false;
     let isClick = false;
+    let isAbout = false;
     let scrollTimer = null;
 
-    function showBubble(text){ bubble.textContent = text; bubble.classList.add('show'); }
-    function hideBubble(){ bubble.classList.remove('show'); }
+    const loader = document.getElementById('loader');
+    const langBtn = document.getElementById('langBtn');
+    const mascot = document.getElementById('mascot');
+    const mascotImg = document.getElementById('mascotImg');
+    const bubble = document.getElementById('bubble');
 
-    function setAvatar(state){ assistantImg.src = img[state]; }
+    const bubbleText = {
+      hover: { en: "Hi! I'm Siyu :)", zh: '你好！我是思予～' },
+      click: { en: 'Thanks for visiting ♡', zh: '感谢来访 ♡' },
+      typing: { en: 'Working on a new design...', zh: '正在设计新项目...' },
+      walk: { en: 'Let’s explore!', zh: '一起看看吧！' }
+    };
 
-    function baseState(){
+    function switchLanguage(lang){
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = lang === 'zh' ? el.dataset.zh : el.dataset.en;
+      });
+      langBtn.textContent = lang === 'zh' ? 'EN' : '中文';
+      updateBubbleForState();
+    }
+
+    function setMascot(nextState){
+      state = nextState;
+      mascotImg.src = assets[nextState] || assets.idle;
+      mascot.classList.toggle('float', nextState === 'idle' || nextState === 'typing');
+    }
+
+    function showBubble(text){
+      bubble.textContent = text;
+      bubble.classList.add('visible');
+    }
+
+    function hideBubble(){
+      if(!isHover && !isClick && !isAbout) bubble.classList.remove('visible');
+    }
+
+    function updateBubbleForState(){
+      if(isClick) showBubble(bubbleText.click[currentLang]);
+      else if(isHover) showBubble(bubbleText.hover[currentLang]);
+      else if(isAbout) showBubble(bubbleText.typing[currentLang]);
+    }
+
+    function resolveState(){
       if(isClick) return;
-      if(isHover){ setAvatar('hover'); return; }
-      if(currentPage === 'about'){ setAvatar('typing'); return; }
-      setAvatar('idle');
+      if(isHover){ setMascot('hover'); showBubble(bubbleText.hover[currentLang]); return; }
+      if(isAbout){ setMascot('typing'); showBubble(bubbleText.typing[currentLang]); return; }
+      setMascot('idle'); hideBubble();
     }
 
-    function goToPage(pageId){
-      currentPage = pageId;
-      pages.forEach(p => p.classList.toggle('active', p.id === pageId));
-      navButtons.forEach(b => b.classList.toggle('active', b.dataset.page === pageId));
-      window.scrollTo({top:0, behavior:'instant'});
-      if(pageId === 'projects' || pageId === 'process'){
-        setAvatar('walk');
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(baseState, 520);
-      } else if(pageId === 'contact'){
-        setAvatar('click'); showBubble('Thanks for visiting ♡');
-        setTimeout(() => { hideBubble(); baseState(); }, 1000);
-      } else {
-        baseState();
-      }
-    }
+    window.addEventListener('load', () => {
+      switchLanguage(currentLang);
+      setTimeout(() => loader.classList.add('hide'), 1850);
+      setTimeout(() => {
+        mascot.classList.add('show');
+        setMascot('peek');
+        showBubble(currentLang === 'zh' ? '你好～' : 'Hello!');
+      }, 650);
+      setTimeout(() => { bubble.classList.remove('visible'); setMascot('idle'); }, 2200);
+    });
 
-    navButtons.forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        const pageId = btn.dataset.page;
-        if(pageId) goToPage(pageId);
+    langBtn.addEventListener('click', () => switchLanguage(currentLang === 'en' ? 'zh' : 'en'));
+
+    mascot.addEventListener('mouseenter', () => { isHover = true; if(!isClick){ setMascot('hover'); showBubble(bubbleText.hover[currentLang]); } });
+    mascot.addEventListener('mouseleave', () => { isHover = false; if(!isClick) resolveState(); });
+    mascot.addEventListener('click', () => {
+      isClick = true;
+      setMascot('click');
+      mascot.classList.add('jump');
+      showBubble(bubbleText.click[currentLang]);
+      setTimeout(() => mascot.classList.remove('jump'), 850);
+      setTimeout(() => { isClick = false; resolveState(); }, 1100);
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if(link.getAttribute('href') === '#about') { setMascot('typing'); showBubble(bubbleText.typing[currentLang]); }
+        else if(link.getAttribute('href') === '#contact') { setMascot('click'); showBubble(bubbleText.click[currentLang]); }
+        else { setMascot('walk'); showBubble(bubbleText.walk[currentLang]); }
+        setTimeout(resolveState, 900);
       });
     });
 
-    window.addEventListener('load', () => {
-      setAvatar('peek');
-      assistant.classList.add('show');
-      setTimeout(() => setAvatar('idle'), 1500);
-    });
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: .16 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    assistant.addEventListener('mouseenter', () => {
-      if(isClick) return;
-      isHover = true;
-      setAvatar('hover');
-      showBubble("Hi! I'm Siyu :)");
-    });
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+          if(active) active.classList.add('active');
+          isAbout = entry.target.id === 'about';
+          if(!isClick && !isHover) resolveState();
+        }
+      });
+    }, { threshold: .52 });
+    document.querySelectorAll('main section').forEach(section => sectionObserver.observe(section));
 
-    assistant.addEventListener('mouseleave', () => {
-      isHover = false;
-      hideBubble();
-      baseState();
-    });
-
-    assistant.addEventListener('click', () => {
-      isClick = true;
-      setAvatar('click');
-      showBubble('Thanks for visiting ♡');
-      assistant.classList.remove('jump');
-      void assistant.offsetWidth;
-      assistant.classList.add('jump');
-      setTimeout(() => {
-        isClick = false;
-        hideBubble();
-        assistant.classList.remove('jump');
-        baseState();
-      }, 1000);
-    });
-
-    window.addEventListener('wheel', () => {
+    window.addEventListener('scroll', () => {
       if(isClick || isHover) return;
-      setAvatar('walk');
+      if(!isAbout){ setMascot('walk'); }
       clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(baseState, 500);
-    }, {passive:true});
+      scrollTimer = setTimeout(resolveState, 500);
+    }, { passive:true });
   </script>
 </body>
 </html>
