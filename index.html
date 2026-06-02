@@ -1,559 +1,762 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Siyu Diao Portfolio</title>
-  <style>
-    :root{
-      --bg:#F7F6F2;
-      --text:#1F1F1F;
-      --muted:#6E6E66;
-      --primary:#C8E65A;
-      --primary-dark:#6B7F1F;
-      --card:rgba(255,255,255,.74);
-      --stroke:rgba(31,31,31,.08);
-      --shadow:0 24px 80px rgba(75,88,35,.12);
-      --radius:30px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siyu Diao · Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   TOKENS
+============================================= */
+:root {
+  --lime:#C8E65A; --lime-l:#dff285; --lime-p:#eef9c0;
+  --bg:#F7F6F2; --card:rgba(255,255,255,0.75);
+  --text:#1F1F1F; --muted:#6B6B5E; --soft:#A8A896;
+  --nav-h:68px; --radius:28px;
+  --shadow:0 4px 32px rgba(0,0,0,0.07);
+  --shadow-h:0 16px 48px rgba(0,0,0,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);cursor:none;overflow-x:hidden;}
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Inter,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
-      color:var(--text);
-      background:var(--bg);
-      min-height:100vh;
-      overflow-x:hidden;
-    }
+/* =============================================
+   CURSOR
+============================================= */
+#cur{position:fixed;width:10px;height:10px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,opacity .15s;}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .2s,height .2s;}
+body:hover #cur{opacity:1;}
 
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      z-index:-3;
-      background:url("网页背景.png") center/cover no-repeat;
-      opacity:.92;
-      transform:scale(1.04);
-      animation:bgFloat 18s ease-in-out infinite alternate;
-    }
+/* =============================================
+   BACKGROUND
+============================================= */
+#bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-img{position:absolute;inset:-30px;background:url('网页背景.png') center/cover no-repeat;opacity:.16;transition:transform .1s linear;will-change:transform;}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;animation:orbFloat 8s ease-in-out infinite;}
+.orb1{width:420px;height:420px;background:radial-gradient(circle,rgba(200,230,90,.55),transparent 70%);top:-80px;left:-60px;animation-delay:0s;}
+.orb2{width:340px;height:340px;background:radial-gradient(circle,rgba(200,230,90,.4),transparent 70%);bottom:10%;right:-40px;animation-delay:-3s;}
+.orb3{width:260px;height:260px;background:radial-gradient(circle,rgba(200,230,90,.3),transparent 70%);top:50%;left:55%;animation-delay:-6s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-28px) scale(1.04)}}
 
-    body::after{
-      content:"";
-      position:fixed;
-      inset:-20%;
-      z-index:-2;
-      background:
-        radial-gradient(circle at 18% 24%, rgba(200,230,90,.36), transparent 23%),
-        radial-gradient(circle at 82% 74%, rgba(200,230,90,.32), transparent 26%),
-        radial-gradient(circle at 55% 45%, rgba(255,255,255,.7), transparent 33%);
-      filter:blur(20px);
-      animation:blobMove 14s ease-in-out infinite alternate;
-      pointer-events:none;
-    }
+/* =============================================
+   LOADING
+============================================= */
+#ld{position:fixed;inset:0;z-index:9990;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity .8s;}
+#ld.out{opacity:0;pointer-events:none;}
+.ld-peek{position:absolute;bottom:0;right:80px;width:140px;animation:peekUp .7s .3s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes peekUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.ld-name{font-family:'Playfair Display',serif;font-size:clamp(40px,8vw,80px);font-weight:700;letter-spacing:-.02em;line-height:.95;text-align:center;}
+.ld-name span{color:var(--lime);}
+.ld-sub{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
+.ld-bar-wrap{width:240px;height:2px;background:rgba(200,230,90,.22);border-radius:2px;overflow:hidden;}
+.ld-bar{height:100%;width:0;background:var(--lime);box-shadow:0 0 8px rgba(200,230,90,.6);transition:width .4s cubic-bezier(.4,0,.2,1);}
+.ld-pct{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--soft);}
 
-    @keyframes bgFloat{
-      0%{transform:scale(1.04) translate3d(-10px,-8px,0)}
-      100%{transform:scale(1.08) translate3d(14px,12px,0)}
-    }
-    @keyframes blobMove{
-      0%{transform:translate3d(-18px,-10px,0) rotate(0deg)}
-      100%{transform:translate3d(22px,18px,0) rotate(6deg)}
-    }
+/* =============================================
+   MUSIC MODAL
+============================================= */
+#music-modal{position:fixed;inset:0;z-index:9980;background:rgba(247,246,242,.82);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
+#music-modal.show{display:flex;}
+.mm-box{background:var(--card);border-radius:var(--radius);padding:44px 52px;box-shadow:var(--shadow-h);text-align:center;backdrop-filter:blur(12px);animation:mmIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes mmIn{from{opacity:0;transform:scale(.9) translateY(16px)}to{opacity:1;transform:none}}
+.mm-icon{font-size:36px;margin-bottom:16px;}
+.mm-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;}
+.mm-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.mm-btns{display:flex;gap:12px;justify-content:center;}
+.mm-btn{padding:12px 32px;border-radius:100px;font-size:14px;font-weight:500;cursor:none;border:none;transition:all .22s;font-family:'DM Sans',sans-serif;}
+.mm-yes{background:var(--lime);color:var(--text);}
+.mm-yes:hover{background:var(--lime-l);transform:translateY(-2px);}
+.mm-no{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.mm-no:hover{background:rgba(200,230,90,.15);transform:translateY(-2px);}
 
-    .loader{
-      position:fixed;
-      inset:0;
-      z-index:9999;
-      display:grid;
-      place-items:center;
-      background:#F7F6F2;
-      transition:opacity .65s ease, visibility .65s ease;
-    }
-    .loader.hide{opacity:0;visibility:hidden}
-    .loader-inner{text-align:center;width:min(480px,82vw)}
-    .loader-avatar{width:120px;margin:0 auto 24px;animation:peekBounce 1.2s ease-in-out infinite alternate}
-    .loader-avatar img{width:100%;display:block}
-    .loader-title{font-size:14px;letter-spacing:.28em;font-weight:900;color:var(--primary-dark);text-transform:uppercase;margin-bottom:16px}
-    .loader-bar{height:12px;border-radius:999px;background:rgba(31,31,31,.08);overflow:hidden;border:1px solid rgba(31,31,31,.08)}
-    .loader-progress{height:100%;width:0;background:linear-gradient(90deg,var(--primary),#edf8a9);border-radius:999px;animation:loadBar 1.8s ease forwards}
-    .loader-percent{margin-top:10px;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.14em}
-    @keyframes loadBar{to{width:100%}}
-    @keyframes peekBounce{to{transform:translateY(-8px)}}
+/* =============================================
+   NAV
+============================================= */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(247,246,242,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,230,90,.2);transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06);}
+.nav-logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--text);text-decoration:none;cursor:none;}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{display:flex;align-items:center;height:var(--nav-h);padding:0 18px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--lime);transition:left .22s,right .22s;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-links a:hover::after,.nav-links a.active::after{left:12px;right:12px;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;padding:6px 14px;border-radius:100px;background:rgba(200,230,90,.18);border:none;color:var(--muted);cursor:none;transition:all .2s;}
+.lang-btn:hover{background:var(--lime);color:var(--text);}
+.music-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;padding:6px 14px;border-radius:100px;background:transparent;border:1.5px solid rgba(31,31,31,.14);color:var(--muted);cursor:none;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.music-btn:hover{border-color:var(--lime);color:var(--text);}
+.music-btn.on{border-color:var(--lime);background:rgba(200,230,90,.12);}
 
-    .nav-wrap{
-      position:fixed;
-      top:26px;
-      left:50%;
-      transform:translateX(-50%);
-      width:min(1120px,calc(100% - 34px));
-      z-index:1000;
-      padding:14px 18px;
-      border-radius:999px;
-      background:rgba(255,255,255,.78);
-      backdrop-filter:blur(18px);
-      box-shadow:0 16px 60px rgba(50,55,30,.12);
-      border:1px solid rgba(255,255,255,.7);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:18px;
-    }
-    .brand{display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:.12em;white-space:nowrap}
-    .brand-dot{width:26px;height:26px;border-radius:50%;background:var(--primary);box-shadow:inset 0 0 0 8px rgba(255,255,255,.75)}
-    .nav-links{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .nav-links a,.lang-btn{
-      border:0;
-      color:var(--muted);
-      text-decoration:none;
-      padding:13px 18px;
-      border-radius:999px;
-      font-size:14px;
-      font-weight:850;
-      background:transparent;
-      cursor:pointer;
-      transition:.25s ease;
-      font-family:inherit;
-    }
-    .nav-links a:hover,.nav-links a.active,.lang-btn:hover{color:var(--text);background:var(--primary)}
-    .lang-btn{border:1px solid rgba(31,31,31,.08);color:var(--text);background:rgba(255,255,255,.5)}
+/* =============================================
+   MASCOT
+============================================= */
+#mascot{position:fixed;right:32px;bottom:32px;z-index:600;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none;}
+.m-bubble{background:white;border-radius:18px 18px 4px 18px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:var(--shadow);margin-bottom:10px;opacity:0;transform:translateY(6px) scale(.93);transition:all .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+.m-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+.m-img{width:92px;pointer-events:all;cursor:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12));}
+.m-img.float{animation:mfloat 3s ease-in-out infinite;}
+.m-img.jump{animation:mjump .44s ease-out;}
+.m-img.peek-anim{animation:mpeek .8s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes mfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes mjump{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-22px) scale(1.06)}65%{transform:translateY(-5px) scale(.97)}100%{transform:translateY(0) scale(1)}}
+@keyframes mpeek{from{transform:translateX(130px);opacity:0}to{transform:translateX(0);opacity:1}}
 
-    main{padding-top:88px}
-    section{width:min(1120px,calc(100% - 34px));margin:0 auto;padding:90px 0;position:relative}
-    .hero{min-height:calc(100vh - 88px);display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:56px;padding-top:40px}
-    .eyebrow{font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:var(--primary-dark);font-weight:950;margin-bottom:24px}
-    h1{font-size:clamp(70px,10vw,132px);line-height:.86;letter-spacing:-.08em;font-weight:1000;margin-bottom:28px}
-    .hero h2{font-size:clamp(28px,3.3vw,44px);line-height:1.02;letter-spacing:-.05em;font-weight:1000;max-width:780px;margin-bottom:22px}
-    .lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:680px}
-    .pills{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-    .pill{padding:12px 18px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid var(--stroke);font-weight:850;color:#3d3d38}
+/* =============================================
+   SHARED LAYOUT
+============================================= */
+.page-section{position:relative;z-index:1;}
+.container{max-width:1160px;margin:0 auto;padding:0 52px;}
 
-    .hero-visual{position:relative;display:grid;place-items:center;min-height:530px}
-    .hero-card{
-      width:min(430px,90%);
-      aspect-ratio:1/1.12;
-      border-radius:42px;
-      background:rgba(255,255,255,.62);
-      box-shadow:var(--shadow);
-      border:1px solid rgba(255,255,255,.8);
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-      position:relative;
-    }
-    .hero-card::before{content:"";position:absolute;width:74%;aspect-ratio:1;border-radius:50%;background:rgba(200,230,90,.35);filter:blur(5px);animation:pulse 4s ease-in-out infinite alternate}
-    .hero-card img{width:70%;position:relative;filter:drop-shadow(0 18px 28px rgba(31,31,31,.12));animation:float 4s ease-in-out infinite alternate}
-    @keyframes pulse{to{transform:scale(1.08);opacity:.8}}
-    @keyframes float{to{transform:translateY(-10px)}}
+/* =============================================
+   HERO
+============================================= */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-h);}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;width:100%;}
+.hero-left{}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:28px;opacity:0;animation:fadeUp .6s .1s forwards;}
+.hero-eyebrow::before{content:'';width:28px;height:1.5px;background:var(--lime);}
+.hero-name{font-family:'Playfair Display',serif;font-size:clamp(60px,8vw,104px);font-weight:700;line-height:.92;letter-spacing:-.025em;margin-bottom:20px;opacity:0;animation:fadeUp .6s .2s forwards;}
+.hero-name .acc{color:var(--lime);}
+.hero-name em{font-style:italic;font-weight:400;display:block;font-size:.42em;color:var(--muted);letter-spacing:.02em;margin-top:6px;}
+.hero-roles{margin-bottom:28px;opacity:0;animation:fadeUp .6s .35s forwards;}
+.hero-role{font-family:'Space Mono',monospace;font-size:clamp(9px,1vw,11px);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:2.2;display:flex;align-items:center;gap:8px;}
+.hero-role::before{content:'◆';font-size:5px;color:var(--lime);}
+.hero-desc{font-size:16px;color:var(--muted);line-height:1.75;max-width:400px;margin-bottom:36px;opacity:0;animation:fadeUp .6s .5s forwards;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:44px;opacity:0;animation:fadeUp .6s .6s forwards;}
+.tag{padding:8px 18px;border-radius:100px;font-size:12px;font-weight:500;background:var(--card);border:1.5px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,.05);transition:all .2s;cursor:default;}
+.tag:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
+.hero-cta{display:flex;gap:14px;opacity:0;animation:fadeUp .6s .7s forwards;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;cursor:none;border:none;font-family:'DM Sans',sans-serif;transition:all .25s;letter-spacing:.02em;}
+.btn-lime{background:var(--lime);color:var(--text);}
+.btn-lime:hover{background:var(--lime-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,230,90,.4);}
+.btn-ghost{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.btn-ghost:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
 
-    .section-head{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:34px}
-    .section-title{font-size:clamp(36px,5.4vw,78px);letter-spacing:-.06em;line-height:.95;font-weight:1000}
-    .section-desc{max-width:520px;color:var(--muted);line-height:1.7;font-size:16px}
+/* hero right — peek character */
+.hero-right{display:flex;justify-content:flex-end;align-items:flex-end;opacity:0;animation:fadeUp .7s .3s forwards;}
+.hero-char-wrap{position:relative;width:340px;height:420px;}
+.hero-char-bg{position:absolute;inset:0;border-radius:var(--radius);background:var(--lime-p);box-shadow:var(--shadow);}
+.hero-char{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:260px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.1));}
+.hero-char.peek-hero{animation:peekHero 1s .4s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes peekHero{from{transform:translateX(-50%) translateY(60px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
 
-    .about{min-height:100vh;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:54px}
-    .about-visual{border-radius:42px;background:var(--card);border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow);padding:26px;min-height:520px;display:grid;place-items:center;overflow:hidden}
-    .about-visual img{width:100%;max-width:530px;display:block}
-    .about-copy{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-radius:42px;padding:42px;box-shadow:var(--shadow)}
-    .about-copy h2{font-size:clamp(42px,6vw,82px);letter-spacing:-.07em;line-height:.9;margin-bottom:12px}
-    .about-copy h3{font-size:22px;margin-bottom:22px;color:var(--primary-dark)}
-    .about-copy p{font-size:17px;line-height:1.75;color:var(--muted);margin-bottom:20px}
-    .identity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-    .identity-card,.info-card,.project-card,.process-card,.skill-card{
-      background:var(--card);
-      border:1px solid rgba(255,255,255,.8);
-      border-radius:var(--radius);
-      box-shadow:0 12px 42px rgba(50,55,30,.08);
-    }
-    .identity-card{padding:20px;min-height:138px}
-    .identity-card strong{display:block;font-size:15px;letter-spacing:.08em;margin-bottom:12px}
-    .identity-card span{display:block;color:var(--muted);font-size:14px;line-height:1.55}
+/* =============================================
+   ABOUT SNIPPET
+============================================= */
+#about-snippet{padding:100px 0;border-top:1px solid rgba(200,230,90,.18);}
+.snippet-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.snip-left{}
+.snip-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:14px;}
+.snip-h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.1;margin-bottom:20px;}
+.snip-body{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:32px;}
+.snip-info{display:flex;flex-direction:column;gap:10px;}
+.snip-row{display:flex;align-items:baseline;gap:14px;}
+.snip-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);width:90px;flex-shrink:0;}
+.snip-val{font-size:13px;color:var(--muted);}
+.snip-right{display:flex;flex-direction:column;gap:14px;}
+.id-card{background:var(--card);border-radius:20px;padding:24px 26px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;transition:all .25s;}
+.id-card:hover{border-color:var(--lime);transform:translateY(-3px);box-shadow:var(--shadow-h);}
+.id-card-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.id-card-items{display:flex;gap:8px;flex-wrap:wrap;}
+.id-pill{font-size:12px;color:var(--muted);background:rgba(200,230,90,.15);padding:4px 12px;border-radius:100px;}
 
-    .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
-    .info-card{padding:24px}
-    .info-card .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:950;color:var(--primary-dark);margin-bottom:10px}
-    .info-card .value{font-weight:850;line-height:1.5;color:#30302c}
+/* =============================================
+   FEATURED PROJECTS
+============================================= */
+#featured{padding:80px 0 100px;}
+.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:48px;}
+.section-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:700;}
+.section-title span{color:var(--lime);}
+.see-all{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
+.see-all:hover{color:var(--lime);}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.proj-card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1.5px solid transparent;transition:all .32s cubic-bezier(.22,1,.36,1);cursor:none;text-decoration:none;color:inherit;display:block;backdrop-filter:blur(12px);}
+.proj-card:hover{transform:translateY(-8px);border-color:var(--lime);box-shadow:var(--shadow-h);}
+.proj-card.wide{grid-column:span 2;}
+.proj-thumb{position:relative;overflow:hidden;background:var(--lime-p);}
+.proj-thumb img,.proj-thumb video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+.proj-card:hover .proj-thumb img,.proj-card:hover .proj-thumb video{transform:scale(1.04);}
+.proj-thumb-placeholder{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
+.proj-thumb-num{font-family:'Playfair Display',serif;font-size:72px;font-weight:700;color:rgba(200,230,90,.4);}
+.proj-thumb video{aspect-ratio:16/9;}
+.proj-hover-label{position:absolute;inset:0;background:rgba(200,230,90,.82);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text);font-weight:700;}
+.proj-card:hover .proj-hover-label{opacity:1;}
+.proj-body{padding:22px 26px;}
+.proj-type{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
+.proj-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:8px;line-height:1.2;}
+.proj-problem{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+.proj-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.proj-tag{font-size:11px;color:var(--muted);background:rgba(200,230,90,.18);padding:3px 10px;border-radius:100px;}
 
-    .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-    .project-card{overflow:hidden;transition:.28s ease;position:relative}
-    .project-card:hover{transform:translateY(-10px);border-color:rgba(200,230,90,.85);box-shadow:0 30px 90px rgba(82,95,30,.18)}
-    .preview{height:245px;overflow:hidden;position:relative;background:rgba(255,255,255,.58)}
-    .preview img,.preview video{width:100%;height:100%;object-fit:cover;display:block;transition:.45s ease}
-    .project-card:hover .preview img{transform:scale(1.07)}
-    .preview .fallback{height:100%;display:grid;place-items:center;font-weight:1000;font-size:28px;letter-spacing:-.04em;background:linear-gradient(135deg,rgba(200,230,90,.42),rgba(255,255,255,.75))}
-    .project-body{padding:26px}
-    .project-no{color:var(--primary-dark);font-size:13px;font-weight:950;letter-spacing:.16em;margin-bottom:10px}
-    .project-body h3{font-size:30px;letter-spacing:-.04em;margin-bottom:10px}
-    .project-meta{color:var(--muted);line-height:1.6;margin-bottom:18px}
-    .project-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-    .tag{font-size:12px;font-weight:850;padding:8px 11px;border-radius:999px;background:rgba(200,230,90,.28);color:#4f6117}
-    .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-weight:950;border-radius:999px;padding:12px 18px;background:#fff;border:1px solid var(--stroke);transition:.25s ease}
-    .project-card:hover .btn,.btn:hover{background:var(--primary);border-color:var(--primary)}
+/* =============================================
+   CURRENT FOCUS
+============================================= */
+#current-focus{padding:60px 0 100px;}
+.focus-inner{background:var(--lime-p);border-radius:var(--radius);padding:52px 60px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+.focus-left{}
+.focus-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.focus-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,40px);font-weight:700;margin-bottom:16px;line-height:1.1;}
+.focus-items{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;}
+.focus-item{background:rgba(255,255,255,.7);border-radius:100px;padding:8px 18px;font-size:13px;font-weight:500;box-shadow:0 2px 10px rgba(0,0,0,.05);}
+.focus-avail{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.avail-dot{width:8px;height:8px;border-radius:50%;background:#3cb043;box-shadow:0 0 0 3px rgba(60,176,67,.2);animation:avpulse 2s infinite;flex-shrink:0;}
+@keyframes avpulse{0%,100%{box-shadow:0 0 0 3px rgba(60,176,67,.2)}50%{box-shadow:0 0 0 7px rgba(60,176,67,.06)}}
+.focus-right{flex-shrink:0;}
 
-    .process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
-    .process-card{padding:22px;min-height:180px;transition:.25s ease}
-    .process-card:hover{transform:translateY(-6px);border-color:rgba(200,230,90,.8)}
-    .process-num{font-size:12px;color:var(--primary-dark);font-weight:950;letter-spacing:.16em;margin-bottom:28px}
-    .process-card h3{font-size:22px;margin-bottom:10px}
-    .process-card p{color:var(--muted);line-height:1.55;font-size:14px}
+/* =============================================
+   FOOTER
+============================================= */
+footer{border-top:1px solid rgba(200,230,90,.2);padding:36px 0;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;}
+.footer-copy{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;}
+.footer-links a:hover{color:var(--lime);}
 
-    .skills-grid{display:flex;flex-wrap:wrap;gap:13px}
-    .skill-card{padding:14px 18px;font-weight:900;color:#333;transition:.22s ease}
-    .skill-card:hover{background:var(--primary);transform:translateY(-4px)}
+/* =============================================
+   SCROLL REVEAL
+============================================= */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.1s;}.reveal-d2{transition-delay:.2s;}.reveal-d3{transition-delay:.3s;}.reveal-d4{transition-delay:.4s;}.reveal-d5{transition-delay:.5s;}
 
-    .contact-panel{
-      border-radius:46px;
-      padding:58px;
-      min-height:420px;
-      display:grid;
-      grid-template-columns:1.1fr .9fr;
-      gap:28px;
-      align-items:center;
-      background:rgba(255,255,255,.62);
-      border:1px solid rgba(255,255,255,.8);
-      box-shadow:var(--shadow);
-    }
-    .contact-panel h2{font-size:clamp(42px,6vw,84px);line-height:.93;letter-spacing:-.07em;margin-bottom:22px}
-    .contact-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
-    .contact-note{color:var(--muted);line-height:1.7}
-    footer{text-align:center;color:var(--muted);font-size:14px;padding:40px 0 70px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-    .mascot{
-      position:fixed;
-      right:42px;
-      bottom:46px;
-      z-index:900;
-      width:118px;
-      pointer-events:auto;
-      transform:translateX(170px);
-      transition:transform .55s cubic-bezier(.2,.9,.2,1);
-    }
-    .mascot.show{transform:translateX(0)}
-    .mascot.float{animation:mascotFloat 3.4s ease-in-out infinite alternate}
-    .mascot.jump{animation:jump .8s ease}
-    .mascot img{width:100%;display:block;cursor:pointer;filter:drop-shadow(0 18px 30px rgba(31,31,31,.18))}
-    .bubble{
-      position:absolute;
-      right:88px;
-      bottom:86px;
-      width:max-content;
-      max-width:220px;
-      padding:13px 16px;
-      border-radius:18px 18px 4px 18px;
-      background:rgba(255,255,255,.9);
-      border:1px solid rgba(31,31,31,.08);
-      box-shadow:0 12px 36px rgba(31,31,31,.12);
-      font-size:14px;
-      font-weight:850;
-      opacity:0;
-      transform:translateY(8px);
-      transition:.2s ease;
-      pointer-events:none;
-    }
-    .bubble.visible{opacity:1;transform:translateY(0)}
-    @keyframes mascotFloat{to{transform:translateY(-10px)}}
-    @keyframes jump{0%,100%{transform:translateY(0)}45%{transform:translateY(-36px)}}
-
-    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease, transform .7s ease}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-
-    @media(max-width:960px){
-      .nav-wrap{border-radius:28px;align-items:flex-start;flex-direction:column;top:12px}
-      .nav-links{justify-content:flex-start}
-      main{padding-top:150px}
-      .hero,.about,.contact-panel{grid-template-columns:1fr}
-      .hero{padding-top:20px}
-      .projects-grid{grid-template-columns:1fr}
-      .process-grid{grid-template-columns:repeat(2,1fr)}
-      .identity-grid,.info-grid{grid-template-columns:1fr}
-      .mascot{width:88px;right:18px;bottom:18px}
-      .bubble{right:58px;bottom:70px}
-    }
-    @media(max-width:560px){
-      section{padding:64px 0}
-      .process-grid{grid-template-columns:1fr}
-      .about-copy,.contact-panel{padding:28px}
-      .preview{height:190px}
-      .nav-links a,.lang-btn{padding:10px 12px;font-size:12px}
-    }
-  </style>
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;}
+  .hero-right{justify-content:flex-start;}
+  .snippet-inner{grid-template-columns:1fr;gap:40px;}
+  .projects-grid{grid-template-columns:1fr 1fr;}
+  .proj-card.wide{grid-column:span 1;}
+}
+@media(max-width:768px){
+  nav{padding:0 20px;}.container{padding:0 20px;}
+  .nav-links{display:none;}
+  .projects-grid{grid-template-columns:1fr;}
+  .focus-inner{flex-direction:column;}
+  .footer-inner{flex-direction:column;gap:16px;text-align:center;}
+  .hero-char-wrap{width:240px;height:300px;}
+  .hero-char{width:190px;}
+}
+</style>
 </head>
 <body>
-  <div class="loader" id="loader">
-    <div class="loader-inner">
-      <div class="loader-avatar"><img src="peek.png" alt="loading avatar"></div>
-      <div class="loader-title" data-en="Loading Portfolio" data-zh="作品集加载中">Loading Portfolio</div>
-      <div class="loader-bar"><div class="loader-progress"></div></div>
-      <div class="loader-percent">SIYU DIAO · 2026</div>
+
+<!-- ── BACKGROUND ── -->
+<div id="bg-layer">
+  <div id="bg-img"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- ── CURSOR ── -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- ── LOADING ── -->
+<div id="ld">
+  <img src="peek.png" alt="" class="ld-peek" id="ldPeek">
+  <div class="ld-name">SIYU<br><span>DIAO</span></div>
+  <div class="ld-sub" data-en="Loading Portfolio..." data-zh="加载中...">Loading Portfolio...</div>
+  <div class="ld-bar-wrap"><div class="ld-bar" id="ldBar"></div></div>
+  <div class="ld-pct" id="ldPct">0%</div>
+</div>
+
+<!-- ── MUSIC MODAL ── -->
+<div id="music-modal">
+  <div class="mm-box">
+    <div class="mm-icon">🎵</div>
+    <div class="mm-title" data-en="Enable Background Music?" data-zh="开启背景音乐？">Enable Background Music?</div>
+    <div class="mm-sub" data-en="A light ambient track to accompany your visit." data-zh="一段轻柔的背景音乐陪你浏览。">A light ambient track to accompany your visit.</div>
+    <div class="mm-btns">
+      <button class="mm-btn mm-yes" onclick="enableMusic()" data-en="Yes, play it ♪" data-zh="好的，开启 ♪">Yes, play it ♪</button>
+      <button class="mm-btn mm-no" onclick="skipMusic()" data-en="No thanks" data-zh="不了，谢谢">No thanks</button>
     </div>
   </div>
+</div>
 
-  <nav class="nav-wrap">
-    <div class="brand"><span class="brand-dot"></span><span>SIYU DIAO</span></div>
-    <div class="nav-links">
-      <a href="#home" class="nav-link active" data-en="Home" data-zh="首页">Home</a>
-      <a href="#about" class="nav-link" data-en="About" data-zh="关于我">About</a>
-      <a href="#projects" class="nav-link" data-en="Projects" data-zh="项目">Projects</a>
-      <a href="#process" class="nav-link" data-en="UX Process" data-zh="UX流程">UX Process</a>
-      <a href="#skills" class="nav-link" data-en="Skills" data-zh="技能">Skills</a>
-      <a href="#contact" class="nav-link" data-en="Contact" data-zh="联系">Contact</a>
-      <button class="lang-btn" id="langBtn" type="button">中文</button>
-    </div>
-  </nav>
+<!-- ── AUDIO ── -->
+<audio id="bgm" src="bgm.mp3" loop></audio>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="reveal">
-        <div class="eyebrow" data-en="Digital Media Art · Game UX · AIGC Creation" data-zh="数字媒体艺术 · 游戏体验 · AIGC创作">Digital Media Art · Game UX · AIGC Creation</div>
-        <h1>SIYU<br>DIAO</h1>
-        <h2 data-en="UX / GAME UX / INTERACTIVE NARRATIVE DESIGNER" data-zh="用户体验 / 游戏体验 / 交互叙事设计师">UX / GAME UX / INTERACTIVE NARRATIVE DESIGNER</h2>
-        <p class="lead" data-en="Designing emotional experiences through narrative, space and interaction." data-zh="通过叙事、空间与交互设计，创造有情感温度的体验。">Designing emotional experiences through narrative, space and interaction.</p>
-        <div class="pills">
-          <span class="pill">Unity 2D/3D</span><span class="pill">C#</span><span class="pill">Figma</span><span class="pill">AIGC Workflow</span><span class="pill">Blender</span>
-        </div>
-      </div>
-      <div class="hero-visual reveal">
-        <div class="hero-card"><img src="默认.png" alt="Siyu avatar"></div>
-      </div>
-    </section>
-
-    <section class="about" id="about">
-      <div class="about-visual reveal"><img src="打字（坐在电脑前设计）.png" alt="Siyu typing"></div>
-      <div class="about-copy reveal">
-        <h2 data-en="ABOUT ME" data-zh="关于我">ABOUT ME</h2>
-        <h3 data-en="Digital Media Art Student · UX / Game UX / AIGC Creator" data-zh="数字媒体艺术学生 · UX / 游戏体验 / AIGC创作者">Digital Media Art Student · UX / Game UX / AIGC Creator</h3>
-        <p data-en="Hi, I’m Siyu Diao, a Digital Media Art student focusing on UX, game experience, interactive narrative and AIGC creation." data-zh="你好，我是刁思予，一名数字媒体艺术专业学生，关注用户体验、游戏体验、交互叙事与AIGC创作。">Hi, I’m Siyu Diao, a Digital Media Art student focusing on UX, game experience, interactive narrative and AIGC creation.</p>
-        <p data-en="My work explores how narrative, interface and environment can shape human feelings and behavior. I enjoy turning abstract emotions and social issues into interactive experiences, visual systems and playable spaces." data-zh="我的作品探索叙事、界面与空间环境如何影响人的情绪和行为。我喜欢把抽象情绪与社会议题转化为可交互体验、视觉系统和可玩的空间。">My work explores how narrative, interface and environment can shape human feelings and behavior. I enjoy turning abstract emotions and social issues into interactive experiences, visual systems and playable spaces.</p>
-        <div class="identity-grid">
-          <div class="identity-card"><strong data-en="UX DESIGN" data-zh="用户体验设计">UX DESIGN</strong><span data-en="Research · User Flow · Interaction Design" data-zh="调研 · 用户流程 · 交互设计">Research · User Flow · Interaction Design</span></div>
-          <div class="identity-card"><strong data-en="GAME EXPERIENCE" data-zh="游戏体验设计">GAME EXPERIENCE</strong><span data-en="Unity · Narrative · Player Experience" data-zh="Unity · 叙事 · 玩家体验">Unity · Narrative · Player Experience</span></div>
-          <div class="identity-card"><strong data-en="AIGC CREATION" data-zh="AIGC创作">AIGC CREATION</strong><span data-en="Stable Diffusion · Kling · Runway" data-zh="Stable Diffusion · 可灵 · Runway">Stable Diffusion · Kling · Runway</span></div>
-        </div>
-        <div class="info-grid">
-          <div class="info-card"><div class="label" data-en="Education" data-zh="教育背景">Education</div><div class="value" data-en="Kunming University of Science and Technology · Digital Media Art" data-zh="昆明理工大学 · 数字媒体艺术">Kunming University of Science and Technology · Digital Media Art</div></div>
-          <div class="info-card"><div class="label" data-en="Focus" data-zh="方向">Focus</div><div class="value" data-en="UX Design / Game UX / Interactive Narrative / Spatial Experience" data-zh="UX设计 / 游戏体验 / 交互叙事 / 空间体验">UX Design / Game UX / Interactive Narrative / Spatial Experience</div></div>
-          <div class="info-card"><div class="label" data-en="Available" data-zh="可实习">Available</div><div class="value" data-en="2025.6.26 — Early September" data-zh="2025.6.26 — 9月初">2025.6.26 — Early September</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects">
-      <div class="section-head reveal">
-        <h2 class="section-title" data-en="Featured Works" data-zh="精选项目">Featured Works</h2>
-        <p class="section-desc" data-en="Project previews with UX thinking, interaction systems and narrative experience design." data-zh="通过项目预览展示UX思考、交互系统与叙事体验设计。">Project previews with UX thinking, interaction systems and narrative experience design.</p>
-      </div>
-      <div class="projects-grid">
-        <article class="project-card reveal">
-          <div class="preview"><img src="像残预览图.png" alt="AFTERIMAGE preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>AFTERIMAGE</div>'"></div>
-          <div class="project-body">
-            <div class="project-no">01</div>
-            <h3>AFTERIMAGE / 残像</h3>
-            <p class="project-meta" data-en="Unity 2D cyberpunk narrative puzzle game exploring how an AI teammate influences player trust and decision-making." data-zh="Unity 2D赛博朋克叙事解谜游戏，探索AI队友如何影响玩家信任与决策。">Unity 2D cyberpunk narrative puzzle game exploring how an AI teammate influences player trust and decision-making.</p>
-            <div class="project-tags"><span class="tag">Unity 2D</span><span class="tag">Game UX</span><span class="tag">AI Companion</span></div>
-            <a class="btn" href="projects.html#afterimage" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
-          </div>
-        </article>
-        <article class="project-card reveal">
-          <div class="preview"><img src="有色场景.png" alt="Growth Pain preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>Growth Pain</div>'"></div>
-          <div class="project-body">
-            <div class="project-no">02</div>
-            <h3>Growth Pain / 生长痛</h3>
-            <p class="project-meta" data-en="Visual novel experience visualizing invisible emotional pressure through branching narrative, UI and motion design." data-zh="视觉小说体验，通过分支叙事、UI与动态设计表现不可见的情绪压力。">Visual novel experience visualizing invisible emotional pressure through branching narrative, UI and motion design.</p>
-            <div class="project-tags"><span class="tag">Visual Novel</span><span class="tag">Narrative UX</span><span class="tag">Motion PV</span></div>
-            <a class="btn" href="projects.html#growth-pain" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
-          </div>
-        </article>
-        <article class="project-card reveal">
-          <div class="preview"><img src="分镜作业.png" alt="Spatial Rights preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>Spatial Rights</div>'"></div>
-          <div class="project-body">
-            <div class="project-no">03</div>
-            <h3>Spatial Rights</h3>
-            <p class="project-meta" data-en="VR spatial narrative about invisible spatial inequality in public places and workers’ hidden spaces." data-zh="关于公共空间中隐形空间不平等与劳动者隐藏空间的VR空间叙事体验。">VR spatial narrative about invisible spatial inequality in public places and workers’ hidden spaces.</p>
-            <div class="project-tags"><span class="tag">VR Experience</span><span class="tag">Social Issue</span><span class="tag">Spatial UX</span></div>
-            <a class="btn" href="projects.html#spatial-rights" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
-          </div>
-        </article>
-        <article class="project-card reveal">
-          <div class="preview"><img src="盲盒广告设计1.jpg" alt="Blind Box preview" onerror="this.parentElement.innerHTML='<div class=&quot;fallback&quot;>Blind Box</div>'"></div>
-          <div class="project-body">
-            <div class="project-no">04</div>
-            <h3 data-en="Blind Box Advertising" data-zh="盲盒广告设计">Blind Box Advertising</h3>
-            <p class="project-meta" data-en="Poster and video advertisement design communicating the surprise and emotional appeal of blind boxes." data-zh="围绕盲盒惊喜感与情绪吸引力完成海报与视频广告设计。">Poster and video advertisement design communicating the surprise and emotional appeal of blind boxes.</p>
-            <div class="project-tags"><span class="tag">Poster</span><span class="tag">Brand Visual</span><span class="tag">Video Ad</span></div>
-            <a class="btn" href="projects.html#blind-box" data-en="View Case Study →" data-zh="查看项目 →">View Case Study →</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="process">
-      <div class="section-head reveal">
-        <h2 class="section-title" data-en="UX Design Process" data-zh="UX设计流程">UX Design Process</h2>
-        <p class="section-desc" data-en="A flexible workflow I use across game, interface, AIGC and spatial experience projects." data-zh="这是我在游戏、界面、AIGC与空间体验项目中使用的弹性设计流程。">A flexible workflow I use across game, interface, AIGC and spatial experience projects.</p>
-      </div>
-      <div class="process-grid">
-        <div class="process-card reveal"><div class="process-num">01</div><h3 data-en="Research" data-zh="调研">Research</h3><p data-en="Interview / Survey / Observation" data-zh="访谈 / 问卷 / 观察">Interview / Survey / Observation</p></div>
-        <div class="process-card reveal"><div class="process-num">02</div><h3 data-en="Define" data-zh="定义">Define</h3><p data-en="Problem Statement / User Needs" data-zh="问题定义 / 用户需求">Problem Statement / User Needs</p></div>
-        <div class="process-card reveal"><div class="process-num">03</div><h3 data-en="Ideate" data-zh="构思">Ideate</h3><p data-en="Storyboard / User Flow / Interaction Concept" data-zh="分镜 / 用户流程 / 交互概念">Storyboard / User Flow / Interaction Concept</p></div>
-        <div class="process-card reveal"><div class="process-num">04</div><h3 data-en="Prototype" data-zh="原型">Prototype</h3><p data-en="Figma / HTML CSS JS / Blender / Unity" data-zh="Figma / HTML CSS JS / Blender / Unity">Figma / HTML CSS JS / Blender / Unity</p></div>
-        <div class="process-card reveal"><div class="process-num">05</div><h3 data-en="Test" data-zh="测试">Test</h3><p data-en="Feedback / Iteration / Presentation" data-zh="反馈 / 迭代 / 展示">Feedback / Iteration / Presentation</p></div>
-      </div>
-    </section>
-
-    <section id="skills">
-      <div class="section-head reveal">
-        <h2 class="section-title" data-en="Skills" data-zh="专业技能">Skills</h2>
-        <p class="section-desc" data-en="Tools and methods across game development, visual design, motion, AIGC and front-end implementation." data-zh="覆盖游戏开发、视觉设计、动态影像、AIGC与前端实现的工具和方法。">Tools and methods across game development, visual design, motion, AIGC and front-end implementation.</p>
-      </div>
-      <div class="skills-grid reveal">
-        <span class="skill-card">Unity 2D/3D</span><span class="skill-card">C#</span><span class="skill-card">Unreal Engine 5</span><span class="skill-card">Figma</span><span class="skill-card">Photoshop</span><span class="skill-card">Illustrator</span><span class="skill-card">After Effects</span><span class="skill-card">Premiere Pro</span><span class="skill-card">Blender</span><span class="skill-card">3ds Max</span><span class="skill-card">Stable Diffusion</span><span class="skill-card">ControlNet</span><span class="skill-card">Kling</span><span class="skill-card">Runway</span><span class="skill-card">HTML/CSS</span><span class="skill-card">Python</span>
-      </div>
-    </section>
-
-    <section id="contact">
-      <div class="contact-panel reveal">
-        <div>
-          <div class="eyebrow" data-en="Contact" data-zh="联系我">Contact</div>
-          <h2 data-en="Let’s create something meaningful." data-zh="让我们一起创造有意义的体验。">Let’s create something meaningful.</h2>
-          <p class="contact-note" data-en="Open to UX, game UX, interactive narrative and AIGC-related internship opportunities." data-zh="期待UX、游戏体验、交互叙事与AIGC相关实习机会。">Open to UX, game UX, interactive narrative and AIGC-related internship opportunities.</p>
-          <div class="contact-actions">
-            <a class="btn" href="mailto:630388703@qq.com" data-en="Email Me" data-zh="发送邮件">Email Me</a>
-            <a class="btn" href="刁思予_简历.pdf" target="_blank" data-en="View Resume" data-zh="查看简历">View Resume</a>
-          </div>
-        </div>
-        <div class="about-visual"><img src="点击爱心跳一下.png" alt="contact avatar"></div>
-      </div>
-    </section>
-  </main>
-
-  <div class="mascot" id="mascot">
-    <div class="bubble" id="bubble">Hi! I'm Siyu :)</div>
-    <img id="mascotImg" src="peek.png" alt="interactive avatar">
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">SIYU DIAO</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active" data-en="Home" data-zh="首页">Home</a></li>
+    <li><a href="projects.html" data-en="Projects" data-zh="项目">Projects</a></li>
+    <li><a href="about.html" data-en="About" data-zh="关于">About</a></li>
+    <li><a href="resume.html" data-en="Resume" data-zh="简历">Resume</a></li>
+    <li><a href="contact.html" data-en="Contact" data-zh="联系">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">中文</button>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+      <span id="musicIcon">♪</span>
+      <span id="musicLbl" data-en="Music" data-zh="音乐">Music</span>
+    </button>
   </div>
+</nav>
 
-  <footer>© 2026 Siyu Diao Portfolio · Designed & Developed by Siyu</footer>
+<!-- ── MASCOT ── -->
+<div id="mascot">
+  <div class="m-bubble" id="mbubble"></div>
+  <img src="peek.png" alt="Siyu mascot" class="m-img peek-anim" id="mimg">
+</div>
 
-  <script>
-    const assets = {
-      idle: '默认.png', hover: 'HOVER 打招呼.png', click: '点击爱心跳一下.png',
-      typing: '打字（坐在电脑前设计）.png', walk: '步行.png', peek: 'peek.png'
-    };
+<!-- ══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="hero" class="page-section">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-eyebrow" data-en="Digital Media Art · Game UX · AIGC Creation" data-zh="数字媒体艺术 · 游戏用户体验 · AIGC 创作">Digital Media Art · Game UX · AIGC Creation</div>
+        <h1 class="hero-name">
+          SIYU<br><span class="acc">DIAO</span>
+          <em data-en="刁思予" data-zh="Siyu Diao">刁思予</em>
+        </h1>
+        <div class="hero-roles">
+          <div class="hero-role" data-en="UX DESIGNER" data-zh="用户体验设计师">UX DESIGNER</div>
+          <div class="hero-role" data-en="GAME UX DESIGNER" data-zh="游戏用户体验设计师">GAME UX DESIGNER</div>
+          <div class="hero-role" data-en="INTERACTIVE NARRATIVE DESIGNER" data-zh="互动叙事设计师">INTERACTIVE NARRATIVE DESIGNER</div>
+          <div class="hero-role" data-en="AIGC CREATOR" data-zh="AIGC 创作者">AIGC CREATOR</div>
+        </div>
+        <p class="hero-desc" data-en="Designing emotional experiences through narrative, space and interaction." data-zh="通过叙事、空间与互动，设计触动人心的体验。">Designing emotional experiences through narrative, space and interaction.</p>
+        <div class="hero-tags">
+          <span class="tag">Unity 2D/3D</span>
+          <span class="tag">C#</span>
+          <span class="tag">Figma</span>
+          <span class="tag" data-en="AIGC Workflow" data-zh="AIGC 工作流">AIGC Workflow</span>
+          <span class="tag">Blender</span>
+        </div>
+        <div class="hero-cta">
+          <a href="projects.html" class="btn btn-lime" data-en="View Projects →" data-zh="查看项目 →">View Projects →</a>
+          <a href="contact.html" class="btn btn-ghost" data-en="Get in Touch" data-zh="联系我">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-char-wrap">
+          <div class="hero-char-bg"></div>
+          <img src="peek.png" alt="Siyu character" class="hero-char peek-hero" id="heroChar">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    let currentLang = localStorage.getItem('lang') || 'en';
-    let state = 'loading';
-    let isHover = false;
-    let isClick = false;
-    let isAbout = false;
-    let scrollTimer = null;
+<!-- ══════════════════════════════════════════
+     ABOUT SNIPPET
+═══════════════════════════════════════════ -->
+<section id="about-snippet" class="page-section">
+  <div class="container">
+    <div class="snippet-inner">
+      <div class="snip-left reveal">
+        <div class="snip-eyebrow" data-en="Who I Am" data-zh="关于我">Who I Am</div>
+        <h2 class="snip-h2" data-en="About Me" data-zh="关于我">About Me</h2>
+        <p class="snip-body" data-en="Hi, I'm Siyu Diao — a Digital Media Art student at KMUST focusing on UX design, game experience, interactive narrative and AI-assisted creation. My work explores how narrative, space and interaction can shape human emotions and behaviour." data-zh="你好，我是刁思予 —— 昆明理工大学数字媒体艺术专业学生，专注于用户体验设计、游戏体验、互动叙事与 AIGC 创作。我探索叙事、空间与互动如何塑造人的情感与行为。">Hi, I'm Siyu Diao — a Digital Media Art student at KMUST focusing on UX design, game experience, interactive narrative and AI-assisted creation. My work explores how narrative, space and interaction can shape human emotions and behaviour.</p>
+        <div class="snip-info">
+          <div class="snip-row">
+            <span class="snip-lbl" data-en="School" data-zh="学校">School</span>
+            <span class="snip-val" data-en="Kunming University of Science and Technology" data-zh="昆明理工大学">Kunming University of Science and Technology</span>
+          </div>
+          <div class="snip-row">
+            <span class="snip-lbl" data-en="Major" data-zh="专业">Major</span>
+            <span class="snip-val" data-en="Digital Media Art · BFA · 2024–2028" data-zh="数字媒体艺术 · 本科 · 2024–2028">Digital Media Art · BFA · 2024–2028</span>
+          </div>
+          <div class="snip-row">
+            <span class="snip-lbl" data-en="Available" data-zh="实习时间">Available</span>
+            <span class="snip-val" data-en="Jun 26 – Early Sep 2025 (~10 weeks)" data-zh="2025年6月26日 – 9月初（约10周）">Jun 26 – Early Sep 2025 (~10 weeks)</span>
+          </div>
+        </div>
+      </div>
+      <div class="snip-right reveal reveal-d2">
+        <div class="id-card">
+          <div class="id-card-title" data-en="UX DESIGN" data-zh="用户体验设计">UX DESIGN</div>
+          <div class="id-card-items">
+            <span class="id-pill" data-en="Research" data-zh="用户研究">Research</span>
+            <span class="id-pill" data-en="User Flow" data-zh="用户流程">User Flow</span>
+            <span class="id-pill" data-en="Interaction Design" data-zh="交互设计">Interaction Design</span>
+          </div>
+        </div>
+        <div class="id-card">
+          <div class="id-card-title" data-en="GAME EXPERIENCE" data-zh="游戏体验">GAME EXPERIENCE</div>
+          <div class="id-card-items">
+            <span class="id-pill">Unity</span>
+            <span class="id-pill" data-en="Narrative" data-zh="叙事设计">Narrative</span>
+            <span class="id-pill" data-en="Player Experience" data-zh="玩家体验">Player Experience</span>
+          </div>
+        </div>
+        <div class="id-card">
+          <div class="id-card-title" data-en="AIGC CREATION" data-zh="AIGC 创作">AIGC CREATION</div>
+          <div class="id-card-items">
+            <span class="id-pill">Stable Diffusion</span>
+            <span class="id-pill">Runway</span>
+            <span class="id-pill">Kling</span>
+          </div>
+        </div>
+        <a href="about.html" class="btn btn-ghost" style="align-self:flex-start;margin-top:8px;" data-en="Full Profile →" data-zh="查看完整介绍 →">Full Profile →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    const loader = document.getElementById('loader');
-    const langBtn = document.getElementById('langBtn');
-    const mascot = document.getElementById('mascot');
-    const mascotImg = document.getElementById('mascotImg');
-    const bubble = document.getElementById('bubble');
+<!-- ══════════════════════════════════════════
+     FEATURED PROJECTS
+═══════════════════════════════════════════ -->
+<section id="featured" class="page-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-eyebrow" data-en="Selected Work" data-zh="精选作品">Selected Work</div>
+        <h2 class="section-title" data-en="Featured <span>Projects</span>" data-zh="精选<span>项目</span>">Featured <span>Projects</span></h2>
+      </div>
+      <a href="projects.html" class="see-all" data-en="View All Projects →" data-zh="查看全部项目 →">View All Projects →</a>
+    </div>
 
-    const bubbleText = {
-      hover: { en: "Hi! I'm Siyu :)", zh: '你好！我是思予～' },
-      click: { en: 'Thanks for visiting ♡', zh: '感谢来访 ♡' },
-      typing: { en: 'Working on a new design...', zh: '正在设计新项目...' },
-      walk: { en: 'Let’s explore!', zh: '一起看看吧！' }
-    };
+    <div class="projects-grid">
 
-    function switchLanguage(lang){
-      currentLang = lang;
-      localStorage.setItem('lang', lang);
-      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-      document.querySelectorAll('[data-en]').forEach(el => {
-        el.textContent = lang === 'zh' ? el.dataset.zh : el.dataset.en;
-      });
-      langBtn.textContent = lang === 'zh' ? 'EN' : '中文';
-      updateBubbleForState();
-    }
+      <!-- 01 AFTERIMAGE — wide -->
+      <a href="project-afterimage.html" class="proj-card wide reveal reveal-d1">
+        <div class="proj-thumb" style="aspect-ratio:21/9;">
+          <img src="像残预览图.png" alt="AFTERIMAGE preview" style="aspect-ratio:21/9;">
+          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" data-en="Unity 2D · Cyberpunk Narrative Puzzle Game" data-zh="Unity 2D · 赛博朋克叙事解谜游戏">Unity 2D · Cyberpunk Narrative Puzzle Game</div>
+          <div class="proj-title">AFTERIMAGE / 残像</div>
+          <div class="proj-problem" data-en="How might an AI teammate influence player trust and decision-making?" data-zh="AI 队友如何影响玩家信任与决策？">How might an AI teammate influence player trust and decision-making?</div>
+          <div class="proj-tags">
+            <span class="proj-tag" data-en="Game UX" data-zh="游戏 UX">Game UX</span>
+            <span class="proj-tag" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
+            <span class="proj-tag">C# / Unity</span>
+          </div>
+        </div>
+      </a>
 
-    function setMascot(nextState){
-      state = nextState;
-      mascotImg.src = assets[nextState] || assets.idle;
-      mascot.classList.toggle('float', nextState === 'idle' || nextState === 'typing');
-    }
+      <!-- 02 GROWTH PAIN -->
+      <a href="project-growthpain.html" class="proj-card reveal reveal-d2">
+        <div class="proj-thumb" style="aspect-ratio:4/3;">
+          <img src="奶茶店png.png" alt="Growth Pain preview" style="aspect-ratio:4/3;">
+          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" data-en="Visual Novel · Emotional Narrative" data-zh="视觉小说 · 情感叙事">Visual Novel · Emotional Narrative</div>
+          <div class="proj-title">Growth Pain / 生长痛</div>
+          <div class="proj-problem" data-en="How might we visualize invisible emotional pressure?" data-zh="如何将无形的情感压力视觉化？">How might we visualize invisible emotional pressure?</div>
+          <div class="proj-tags">
+            <span class="proj-tag" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
+            <span class="proj-tag">UI Design</span>
+          </div>
+        </div>
+      </a>
 
-    function showBubble(text){
-      bubble.textContent = text;
-      bubble.classList.add('visible');
-    }
+      <!-- 03 SPATIAL RIGHTS -->
+      <a href="project-spatialrights.html" class="proj-card reveal reveal-d3">
+        <div class="proj-thumb">
+          <div class="proj-thumb-placeholder" style="aspect-ratio:4/3;">
+            <span class="proj-thumb-num">03</span>
+          </div>
+          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" data-en="VR Spatial Narrative · Social Issue" data-zh="VR 空间叙事 · 社会议题">VR Spatial Narrative · Social Issue</div>
+          <div class="proj-title">Spatial Rights</div>
+          <div class="proj-problem" data-en="How might we reveal invisible spatial inequality?" data-zh="如何揭示无形的空间不平等？">How might we reveal invisible spatial inequality?</div>
+          <div class="proj-tags">
+            <span class="proj-tag" data-en="Spatial UX" data-zh="空间 UX">Spatial UX</span>
+            <span class="proj-tag" data-en="Research" data-zh="研究">Research</span>
+          </div>
+        </div>
+      </a>
 
-    function hideBubble(){
-      if(!isHover && !isClick && !isAbout) bubble.classList.remove('visible');
-    }
+      <!-- 04 BLIND BOX -->
+      <a href="project-blindbox.html" class="proj-card reveal reveal-d2">
+        <div class="proj-thumb" style="aspect-ratio:4/3;">
+          <img src="盲盒广告设计1.jpg" alt="Blind Box Advertising" style="aspect-ratio:4/3;">
+          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" data-en="Graphic Design · Video Ad" data-zh="平面设计 · 视频广告">Graphic Design · Video Ad</div>
+          <div class="proj-title" data-en="Blind Box Advertising" data-zh="盲盒广告设计">Blind Box Advertising</div>
+          <div class="proj-problem" data-en="Three posters and one advertisement video for MINISO." data-zh="为名创优品设计三张海报和一支视频广告。">Three posters and one advertisement video for MINISO.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" data-en="Brand Visual" data-zh="品牌视觉">Brand Visual</span>
+            <span class="proj-tag" data-en="Motion" data-zh="动效">Motion</span>
+          </div>
+        </div>
+      </a>
 
-    function updateBubbleForState(){
-      if(isClick) showBubble(bubbleText.click[currentLang]);
-      else if(isHover) showBubble(bubbleText.hover[currentLang]);
-      else if(isAbout) showBubble(bubbleText.typing[currentLang]);
-    }
+      <!-- 05 迷 — video hover -->
+      <a href="project-mi.html" class="proj-card reveal reveal-d3">
+        <div class="proj-thumb" style="aspect-ratio:4/3;position:relative;">
+          <video id="miVideo" src="迷.mp4" muted loop playsinline style="aspect-ratio:4/3;width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-type" data-en="AI Video Narrative · Game Jam" data-zh="AI 影像叙事 · Game Jam">AI Video Narrative · Game Jam</div>
+          <div class="proj-title" data-en="MAZE / 迷" data-zh="迷 / MAZE">MAZE / 迷</div>
+          <div class="proj-problem" data-en="2min30s AI-generated narrative short film." data-zh="2分30秒 AI 生成叙事短片。">2min30s AI-generated narrative short film.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">AIGC</span>
+            <span class="proj-tag" data-en="Video Direction" data-zh="视频导演">Video Direction</span>
+          </div>
+        </div>
+      </a>
 
-    function resolveState(){
-      if(isClick) return;
-      if(isHover){ setMascot('hover'); showBubble(bubbleText.hover[currentLang]); return; }
-      if(isAbout){ setMascot('typing'); showBubble(bubbleText.typing[currentLang]); return; }
-      setMascot('idle'); hideBubble();
-    }
+    </div>
+  </div>
+</section>
 
-    window.addEventListener('load', () => {
-      switchLanguage(currentLang);
-      setTimeout(() => loader.classList.add('hide'), 1850);
-      setTimeout(() => {
-        mascot.classList.add('show');
-        setMascot('peek');
-        showBubble(currentLang === 'zh' ? '你好～' : 'Hello!');
-      }, 650);
-      setTimeout(() => { bubble.classList.remove('visible'); setMascot('idle'); }, 2200);
-    });
+<!-- ══════════════════════════════════════════
+     CURRENT FOCUS
+═══════════════════════════════════════════ -->
+<section id="current-focus" class="page-section">
+  <div class="container">
+    <div class="focus-inner reveal">
+      <div class="focus-left">
+        <div class="focus-eyebrow" data-en="Right Now" data-zh="当前状态">Right Now</div>
+        <h2 class="focus-title" data-en="Open to Internship &amp; Graduate Applications" data-zh="正在寻求实习与研究生申请机会">Open to Internship &amp; Graduate Applications</h2>
+        <div class="focus-items">
+          <span class="focus-item" data-en="Game UX Internship" data-zh="游戏 UX 实习">Game UX Internship</span>
+          <span class="focus-item" data-en="Interaction Design Internship" data-zh="交互设计实习">Interaction Design Internship</span>
+          <span class="focus-item" data-en="PolyU IME" data-zh="香港理工 IME">PolyU IME</span>
+          <span class="focus-item" data-en="CityU" data-zh="香港城市大学">CityU</span>
+          <span class="focus-item" data-en="University of Bristol" data-zh="布里斯托大学">University of Bristol</span>
+        </div>
+        <div class="focus-avail">
+          <span class="avail-dot"></span>
+          <span data-en="Available Jun 26 – Early Sep 2025 · ~10 weeks" data-zh="2025年6月26日 – 9月初 · 约10周">Available Jun 26 – Early Sep 2025 · ~10 weeks</span>
+        </div>
+      </div>
+      <div class="focus-right">
+        <a href="contact.html" class="btn btn-lime" data-en="Get in Touch →" data-zh="联系我 →">Get in Touch →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-    langBtn.addEventListener('click', () => switchLanguage(currentLang === 'en' ? 'zh' : 'en'));
+<!-- ══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="page-section">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 Siyu Diao · <span data-en="Designed &amp; Developed by Siyu" data-zh="由思予设计与开发">Designed &amp; Developed by Siyu</span></div>
+      <div class="footer-links">
+        <a href="projects.html" data-en="Projects" data-zh="项目">Projects</a>
+        <a href="about.html" data-en="About" data-zh="关于">About</a>
+        <a href="mailto:630388703@qq.com">630388703@qq.com</a>
+        <a href="刁思予_简历.pdf" target="_blank" data-en="Resume" data-zh="简历">Resume</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
-    mascot.addEventListener('mouseenter', () => { isHover = true; if(!isClick){ setMascot('hover'); showBubble(bubbleText.hover[currentLang]); } });
-    mascot.addEventListener('mouseleave', () => { isHover = false; if(!isClick) resolveState(); });
-    mascot.addEventListener('click', () => {
-      isClick = true;
-      setMascot('click');
-      mascot.classList.add('jump');
-      showBubble(bubbleText.click[currentLang]);
-      setTimeout(() => mascot.classList.remove('jump'), 850);
-      setTimeout(() => { isClick = false; resolveState(); }, 1100);
-    });
+<script>
+/* =============================================
+   CURSOR
+============================================= */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function rafCursor(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(rafCursor);
+})();
+document.querySelectorAll('a,button,.proj-card,.id-card,.tag').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='44px';ring.style.height='44px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
+});
 
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        if(link.getAttribute('href') === '#about') { setMascot('typing'); showBubble(bubbleText.typing[currentLang]); }
-        else if(link.getAttribute('href') === '#contact') { setMascot('click'); showBubble(bubbleText.click[currentLang]); }
-        else { setMascot('walk'); showBubble(bubbleText.walk[currentLang]); }
-        setTimeout(resolveState, 900);
-      });
-    });
+/* =============================================
+   PARALLAX BACKGROUND
+============================================= */
+const bgImg=document.getElementById('bg-img');
+document.addEventListener('mousemove',e=>{
+  const xPct=(e.clientX/window.innerWidth-.5)*12;
+  const yPct=(e.clientY/window.innerHeight-.5)*10;
+  bgImg.style.transform=`translate(${xPct}px,${yPct}px)`;
+});
 
-    const revealObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-    }, { threshold: .16 });
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+/* =============================================
+   LOADING
+============================================= */
+const ldEl=document.getElementById('ld');
+const ldBar=document.getElementById('ldBar');
+const ldPct=document.getElementById('ldPct');
+let pct=0;
+const ldTimer=setInterval(()=>{
+  pct+=Math.random()*18+8;
+  if(pct>=100){pct=100;clearInterval(ldTimer);
+    setTimeout(()=>{
+      ldEl.classList.add('out');
+      setTimeout(()=>{ldEl.remove();checkMusic();},800);
+    },300);
+  }
+  ldBar.style.width=pct+'%';
+  ldPct.textContent=Math.round(pct)+'%';
+},200);
 
-    const sectionObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
-          const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
-          if(active) active.classList.add('active');
-          isAbout = entry.target.id === 'about';
-          if(!isClick && !isHover) resolveState();
-        }
-      });
-    }, { threshold: .52 });
-    document.querySelectorAll('main section').forEach(section => sectionObserver.observe(section));
+/* =============================================
+   LANGUAGE
+============================================= */
+let lang=localStorage.getItem('sd-lang')||'en';
+const langBtn=document.getElementById('langBtn');
 
-    window.addEventListener('scroll', () => {
-      if(isClick || isHover) return;
-      if(!isAbout){ setMascot('walk'); }
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(resolveState, 500);
-    }, { passive:true });
-  </script>
+function applyLang(){
+  document.querySelectorAll('[data-en][data-zh]').forEach(el=>{
+    const val=el.getAttribute('data-'+lang);
+    if(val!==null)el.innerHTML=val;
+  });
+  langBtn.textContent=lang==='en'?'中文':'EN';
+  document.documentElement.lang=lang==='zh'?'zh':'en';
+}
+function toggleLang(){
+  lang=lang==='en'?'zh':'en';
+  localStorage.setItem('sd-lang',lang);
+  applyLang();
+}
+applyLang();
+
+/* =============================================
+   MUSIC
+============================================= */
+const bgm=document.getElementById('bgm');
+const musicBtn=document.getElementById('musicBtn');
+const musicIcon=document.getElementById('musicIcon');
+let musicOn=false;
+bgm.volume=0.3;
+
+function checkMusic(){
+  const pref=localStorage.getItem('sd-music');
+  if(pref==='yes'){enableMusic();}
+  else if(pref==='no'){skipMusic();}
+  else{document.getElementById('music-modal').classList.add('show');}
+}
+function enableMusic(){
+  document.getElementById('music-modal').classList.remove('show');
+  bgm.play().catch(()=>{});
+  musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');
+  localStorage.setItem('sd-music','yes');
+}
+function skipMusic(){
+  document.getElementById('music-modal').classList.remove('show');
+  musicOn=false;musicIcon.textContent='♪';
+  localStorage.setItem('sd-music','no');
+}
+function toggleMusic(){
+  if(!musicOn){bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');}
+  else{bgm.pause();musicOn=false;musicIcon.textContent='♪';musicBtn.classList.remove('on');}
+}
+
+/* =============================================
+   MASCOT
+============================================= */
+const mimg=document.getElementById('mimg');
+const mbub=document.getElementById('mbubble');
+const mascot=document.getElementById('mascot');
+const IMGS={
+  idle:'默认.png',hover:'HOVER 打招呼.png',
+  click:'点击爱心跳一下.png',walk:'步行.png',type:'打字（坐在电脑前设计）.png'
+};
+const BUBBLE={
+  hover:{en:"Hi! I'm Siyu :)",zh:'你好！我是思予～'},
+  click:{en:'Thanks for visiting ♡',zh:'感谢来访 ♡'}
+};
+let mState='peek',mHover=false,mScrollT=null,mInAbout=false;
+
+function goMascot(s,bubbleKey,dur){
+  mState=s;
+  mimg.className='m-img';
+  mimg.src=s==='peek'?'peek.png':(IMGS[s]||IMGS.idle);
+  if(s==='click')mimg.classList.add('jump');
+  if(s==='idle'||s==='type')mimg.classList.add('float');
+  if(bubbleKey){
+    mbub.textContent=BUBBLE[bubbleKey][lang]||BUBBLE[bubbleKey].en;
+    mbub.classList.add('show');
+  }else{mbub.classList.remove('show');}
+  if(dur)setTimeout(resolve,dur);
+}
+function resolve(){
+  if(mHover)goMascot('hover','hover');
+  else if(mInAbout)goMascot('type',null);
+  else goMascot('idle',null);
+}
+setTimeout(()=>goMascot('idle',null),1500);
+
+mascot.addEventListener('mouseenter',()=>{if(mState==='click')return;mHover=true;goMascot('hover','hover');});
+mascot.addEventListener('mouseleave',()=>{mHover=false;if(mState!=='click')resolve();});
+mascot.addEventListener('click',e=>{e.stopPropagation();goMascot('click','click',1000);});
+
+// scroll → walk
+window.addEventListener('scroll',()=>{
+  if(mState==='click')return;
+  if(mState!=='walk'){mimg.className='m-img';mimg.src=IMGS.walk;}
+  clearTimeout(mScrollT);
+  mScrollT=setTimeout(resolve,500);
+});
+
+// about section observer
+const aboutSnip=document.getElementById('about-snippet');
+if(aboutSnip){
+  new IntersectionObserver(entries=>{
+    mInAbout=entries[0].isIntersecting;
+    if(mState!=='click'&&!mHover)resolve();
+  },{threshold:.3}).observe(aboutSnip);
+}
+
+// bubble text updates when lang changes
+const _tl=toggleLang;
+// patch: re-render bubble on lang toggle
+const origToggleLang=toggleLang;
+window.toggleLang=function(){origToggleLang();
+  if(mState==='hover'&&mHover)mbub.textContent=BUBBLE.hover[lang];
+};
+
+/* =============================================
+   HERO CHAR — switch to idle after load
+============================================= */
+const heroChar=document.getElementById('heroChar');
+setTimeout(()=>{
+  if(heroChar){heroChar.src='默认.png';heroChar.className='hero-char';}
+},1600);
+
+/* =============================================
+   VIDEO HOVER (迷.mp4)
+============================================= */
+const miCard=document.querySelector('#featured .proj-card:last-child');
+const miVideo=document.getElementById('miVideo');
+if(miCard&&miVideo){
+  miCard.addEventListener('mouseenter',()=>miVideo.play().catch(()=>{}));
+  miCard.addEventListener('mouseleave',()=>{miVideo.pause();miVideo.currentTime=0;});
+}
+
+/* =============================================
+   NAV SCROLL
+============================================= */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+});
+
+/* =============================================
+   SCROLL REVEAL
+============================================= */
+const revEls=document.querySelectorAll('.reveal');
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:.12});
+revEls.forEach(el=>revObs.observe(el));
+</script>
 </body>
 </html>
