@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth Pain · Siyu Diao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --lime:#C8E65A; --lime-l:#dff285; --lime-p:#eef9c0;
+  --bg:#F7F6F2; --card:rgba(255,255,255,0.75);
+  --text:#1F1F1F; --muted:#6B6B5E; --soft:#A8A896;
+  --nav-h:68px; --radius:28px;
+  --shadow:0 4px 32px rgba(0,0,0,0.07);
+  --shadow-h:0 16px 48px rgba(0,0,0,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);cursor:none;overflow-x:hidden;}
+
+#cur{position:fixed;width:10px;height:10px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .2s,height .2s;}
+
+#bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-img{position:absolute;inset:-30px;background:url('网页背景.png') center/cover no-repeat;opacity:.12;transition:transform .1s linear;will-change:transform;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.25;animation:orbFloat 9s ease-in-out infinite;}
+.orb1{width:480px;height:480px;background:radial-gradient(circle,rgba(200,230,90,.5),transparent 70%);top:-80px;left:-60px;}
+.orb2{width:360px;height:360px;background:radial-gradient(circle,rgba(200,230,90,.38),transparent 70%);bottom:15%;right:-60px;animation-delay:-5s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(247,246,242,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,230,90,.2);transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06);}
+.nav-logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--text);text-decoration:none;cursor:none;}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{display:flex;align-items:center;height:var(--nav-h);padding:0 18px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--lime);transition:left .22s,right .22s;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-links a:hover::after,.nav-links a.active::after{left:12px;right:12px;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;padding:6px 14px;border-radius:100px;background:rgba(200,230,90,.18);border:none;color:var(--muted);cursor:none;transition:all .2s;}
+.lang-btn:hover{background:var(--lime);color:var(--text);}
+.music-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;padding:6px 14px;border-radius:100px;background:transparent;border:1.5px solid rgba(31,31,31,.14);color:var(--muted);cursor:none;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.music-btn:hover{border-color:var(--lime);color:var(--text);}
+.music-btn.on{border-color:var(--lime);background:rgba(200,230,90,.12);}
+
+#mascot{position:fixed;right:32px;bottom:32px;z-index:600;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none;}
+.m-bubble{background:white;border-radius:18px 18px 4px 18px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:var(--shadow);margin-bottom:10px;opacity:0;transform:translateY(6px) scale(.93);transition:all .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+.m-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+.m-img{width:92px;pointer-events:all;cursor:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12));}
+.m-img.float{animation:mfloat 3s ease-in-out infinite;}
+.m-img.jump{animation:mjump .44s ease-out;}
+@keyframes mfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes mjump{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-22px) scale(1.06)}65%{transform:translateY(-5px) scale(.97)}100%{transform:translateY(0) scale(1)}}
+
+#music-modal{position:fixed;inset:0;z-index:9980;background:rgba(247,246,242,.82);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
+#music-modal.show{display:flex;}
+.mm-box{background:var(--card);border-radius:var(--radius);padding:44px 52px;box-shadow:var(--shadow-h);text-align:center;backdrop-filter:blur(12px);animation:mmIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes mmIn{from{opacity:0;transform:scale(.9) translateY(16px)}to{opacity:1;transform:none}}
+.mm-icon{font-size:36px;margin-bottom:16px;}
+.mm-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;}
+.mm-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.mm-btns{display:flex;gap:12px;justify-content:center;}
+.mm-btn{padding:12px 32px;border-radius:100px;font-size:14px;font-weight:500;cursor:none;border:none;transition:all .22s;font-family:'DM Sans',sans-serif;}
+.mm-yes{background:var(--lime);color:var(--text);}
+.mm-yes:hover{background:var(--lime-l);transform:translateY(-2px);}
+.mm-no{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.mm-no:hover{background:rgba(200,230,90,.15);transform:translateY(-2px);}
+
+.page-wrap{position:relative;z-index:1;padding-top:var(--nav-h);}
+.container{max-width:1000px;margin:0 auto;padding:0 52px;}
+.container-wide{max-width:1160px;margin:0 auto;padding:0 52px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;cursor:none;border:none;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.btn-lime{background:var(--lime);color:var(--text);}
+.btn-lime:hover{background:var(--lime-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,230,90,.4);}
+.btn-ghost{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.btn-ghost:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
+
+/* progress */
+#progress-bar{position:fixed;top:var(--nav-h);left:0;right:0;height:3px;z-index:499;}
+#progress-fill{height:100%;width:0;background:var(--lime);box-shadow:0 0 8px rgba(200,230,90,.6);}
+
+/* breadcrumb */
+.breadcrumb{padding:32px 0 0;}
+.breadcrumb a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;display:inline-flex;align-items:center;gap:8px;transition:color .2s;}
+.breadcrumb a:hover{color:var(--lime);}
+
+/* ── HERO ── */
+#cs-hero{padding:40px 0 0;}
+.cs-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);margin-bottom:16px;opacity:0;animation:fadeUp .5s .05s forwards;}
+.cs-title{font-family:'Playfair Display',serif;font-size:clamp(48px,7.5vw,92px);font-weight:700;line-height:.92;letter-spacing:-.03em;margin-bottom:16px;opacity:0;animation:fadeUp .6s .12s forwards;}
+.cs-title .acc{color:var(--lime);}
+.cs-title .cn{font-size:.45em;color:var(--muted);font-style:italic;font-weight:400;display:block;margin-top:8px;letter-spacing:.02em;}
+.cs-subtitle{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:32px;opacity:0;animation:fadeUp .6s .2s forwards;}
+.cs-meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(200,230,90,.25);border-radius:18px;overflow:hidden;margin-bottom:52px;opacity:0;animation:fadeUp .6s .28s forwards;background:var(--card);backdrop-filter:blur(12px);}
+.cs-meta-item{padding:20px 24px;border-right:1px solid rgba(200,230,90,.2);}
+.cs-meta-item:last-child{border-right:none;}
+.cs-meta-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
+.cs-meta-val{font-size:13px;font-weight:500;line-height:1.5;color:var(--text);}
+.cs-meta-val small{font-weight:400;color:var(--muted);font-size:12px;display:block;}
+
+/* cover */
+.cs-cover-wrap{max-width:1160px;margin:0 auto;padding:0 52px;margin-bottom:80px;opacity:0;animation:fadeUp .7s .35s forwards;}
+.cs-cover-inner{width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-h);display:grid;grid-template-columns:1fr 1fr;}
+.cs-cover-inner img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ── BODY ── */
+.cs-body{padding-bottom:100px;}
+.cs-section{margin-bottom:80px;}
+.cs-section-label{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
+.cs-section-num{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--lime);}
+.cs-section-line{flex:1;height:1px;background:rgba(200,230,90,.3);}
+.cs-section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,40px);font-weight:700;margin-bottom:20px;line-height:1.15;}
+.cs-section-title .acc{color:var(--lime);}
+.cs-body-text{font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:20px;}
+.cs-body-text strong{color:var(--text);font-weight:600;}
+.cs-body-text em{font-style:italic;color:var(--text);}
+
+.cs-quote{border-left:3px solid var(--lime);padding:20px 28px;margin:28px 0;background:var(--lime-p);border-radius:0 16px 16px 0;}
+.cs-quote p{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;line-height:1.6;color:var(--text);}
+.cs-quote cite{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--muted);margin-top:10px;display:block;}
+
+.cs-insight{background:var(--lime-p);border-radius:20px;padding:32px 36px;margin-bottom:28px;display:flex;gap:18px;align-items:flex-start;}
+.cs-insight-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.cs-insight-body{}
+.cs-insight-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
+.cs-insight-text{font-size:15px;color:var(--text);line-height:1.75;}
+
+.cs-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.cs-stat{background:var(--lime-p);border-radius:18px;padding:24px;text-align:center;}
+.cs-stat-num{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--text);line-height:1;}
+.cs-stat-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+
+.cs-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.cs-card{background:var(--card);border-radius:20px;padding:28px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;transition:all .25s;}
+.cs-card:hover{border-color:var(--lime);transform:translateY(-3px);}
+.cs-card-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.cs-card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:8px;}
+.cs-card-body{font-size:13px;color:var(--muted);line-height:1.75;}
+
+.cs-cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+
+/* act grid — narrative structure */
+.act-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;}
+.act-card{background:var(--card);border-radius:18px;padding:22px 20px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border-top:3px solid rgba(200,230,90,.4);transition:all .25s;position:relative;overflow:hidden;}
+.act-card:hover{border-top-color:var(--lime);transform:translateY(-4px);box-shadow:var(--shadow-h);}
+.act-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--soft);margin-bottom:8px;}
+.act-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+.act-location{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--lime);margin-bottom:10px;}
+.act-desc{font-size:12px;color:var(--muted);line-height:1.65;}
+
+/* value axis */
+.axis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px;}
+.axis-card{background:var(--card);border-radius:18px;padding:22px 24px;box-shadow:var(--shadow);backdrop-filter:blur(12px);}
+.axis-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:6px;}
+.axis-en{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.axis-bar-wrap{height:6px;background:rgba(200,230,90,.18);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.axis-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--lime),var(--lime-l));animation:barGrow 1.2s ease forwards;}
+@keyframes barGrow{from{width:0}to{width:var(--w)}}
+.axis-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* scene images */
+.cs-img-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px;}
+.cs-img-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:12px;}
+.cs-img-wrap{border-radius:18px;overflow:hidden;box-shadow:var(--shadow);cursor:none;transition:transform .3s;}
+.cs-img-wrap:hover{transform:scale(1.02);}
+.cs-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.cs-img-caption{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);margin-bottom:24px;text-align:center;}
+
+.cs-video{width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-h);margin-bottom:12px;}
+.cs-video video,.cs-video iframe{width:100%;height:100%;border:none;display:block;}
+
+.cs-steps{display:flex;flex-direction:column;gap:0;margin-bottom:28px;}
+.cs-step{display:grid;grid-template-columns:48px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid rgba(200,230,90,.18);align-items:start;}
+.cs-step:last-child{border-bottom:none;}
+.cs-step-dot{width:48px;height:48px;border-radius:50%;background:var(--lime-p);border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--text);flex-shrink:0;margin-top:2px;}
+.cs-step-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:6px;}
+.cs-step-body{font-size:14px;color:var(--muted);line-height:1.7;}
+.cs-step-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.cs-step-tag{font-size:11px;color:var(--muted);background:rgba(200,230,90,.2);padding:3px 10px;border-radius:100px;}
+
+.cs-2col{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:28px;}
+.cs-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.cs-list li{display:flex;align-items:baseline;gap:12px;font-size:15px;color:var(--muted);line-height:1.7;}
+.cs-list li::before{content:'◆';font-size:7px;color:var(--lime);flex-shrink:0;margin-top:5px;}
+.cs-tag-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.cs-tag{padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;background:rgba(200,230,90,.2);border:1.5px solid transparent;cursor:default;transition:all .2s;}
+.cs-tag:hover{border-color:var(--lime);}
+
+/* next */
+#next-project{padding:0 0 80px;}
+.next-inner{background:var(--card);border-radius:var(--radius);padding:44px 52px;display:flex;align-items:center;justify-content:space-between;gap:32px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;text-decoration:none;color:inherit;cursor:none;transition:all .3s;}
+.next-inner:hover{border-color:var(--lime);transform:translateY(-4px);box-shadow:var(--shadow-h);}
+.next-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.next-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);font-weight:700;}
+.next-type{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-top:6px;}
+.next-arrow{font-size:36px;color:var(--lime);transition:transform .25s;flex-shrink:0;}
+.next-inner:hover .next-arrow{transform:translateX(8px);}
+
+footer{border-top:1px solid rgba(200,230,90,.2);padding:36px 0;position:relative;z-index:1;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;}
+.footer-copy{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;}
+.footer-links a:hover{color:var(--lime);}
+
+#lightbox{position:fixed;inset:0;z-index:9990;background:rgba(31,31,31,.92);display:none;align-items:center;justify-content:center;cursor:none;backdrop-filter:blur(8px);}
+#lightbox.on{display:flex;}
+#lightbox img{max-width:88vw;max-height:88vh;object-fit:contain;border-radius:12px;}
+#lightbox-close{position:absolute;top:24px;right:32px;font-size:32px;color:rgba(255,255,255,.6);cursor:none;background:none;border:none;transition:color .2s;line-height:1;}
+#lightbox-close:hover{color:white;}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.1s;}.reveal-d2{transition-delay:.2s;}.reveal-d3{transition-delay:.3s;}.reveal-d4{transition-delay:.4s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:1024px){
+  .cs-meta-strip{grid-template-columns:1fr 1fr;}
+  .cs-cards,.cs-2col,.act-grid,.axis-grid{grid-template-columns:1fr;}
+  .cs-cards-3{grid-template-columns:1fr 1fr;}
+  .cs-stats{grid-template-columns:1fr 1fr;}
+  .cs-cover-inner{grid-template-columns:1fr;}
+  .cs-cover-inner img:last-child{display:none;}
+}
+@media(max-width:768px){
+  nav{padding:0 20px;}.container,.container-wide{padding:0 20px;}
+  .nav-links{display:none;}
+  .cs-img-2,.cs-img-3{grid-template-columns:1fr;}
+  .cs-cards-3{grid-template-columns:1fr;}
+  .next-inner{flex-direction:column;}
+  .footer-inner{flex-direction:column;gap:16px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="bg-layer"><div id="bg-img"></div><div class="orb orb1"></div><div class="orb orb2"></div></div>
+<div id="cur"></div><div id="cur-r"></div>
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<div id="music-modal">
+  <div class="mm-box">
+    <div class="mm-icon">🎵</div>
+    <div class="mm-title" data-en="Enable Background Music?" data-zh="开启背景音乐？">Enable Background Music?</div>
+    <div class="mm-sub" data-en="A light ambient track to accompany your visit." data-zh="一段轻柔的背景音乐陪你浏览。">A light ambient track to accompany your visit.</div>
+    <div class="mm-btns">
+      <button class="mm-btn mm-yes" onclick="enableMusic()" data-en="Yes, play it ♪" data-zh="好的，开启 ♪">Yes, play it ♪</button>
+      <button class="mm-btn mm-no" onclick="skipMusic()" data-en="No thanks" data-zh="不了，谢谢">No thanks</button>
+    </div>
+  </div>
+</div>
+<audio id="bgm" src="bgm.mp3" loop></audio>
+
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">SIYU DIAO</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home" data-zh="首页">Home</a></li>
+    <li><a href="projects.html" class="active" data-en="Projects" data-zh="项目">Projects</a></li>
+    <li><a href="about.html" data-en="About" data-zh="关于">About</a></li>
+    <li><a href="resume.html" data-en="Resume" data-zh="简历">Resume</a></li>
+    <li><a href="contact.html" data-en="Contact" data-zh="联系">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">中文</button>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+      <span id="musicIcon">♪</span><span id="musicLbl">Music</span>
+    </button>
+  </div>
+</nav>
+
+<div id="mascot">
+  <div class="m-bubble" id="mbubble"></div>
+  <img src="默认.png" alt="Siyu" class="m-img float" id="mimg">
+</div>
+
+<div id="lightbox" onclick="closeLb()">
+  <button id="lightbox-close" onclick="closeLb()">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<div class="page-wrap">
+
+<div class="breadcrumb"><div class="container">
+  <a href="projects.html" data-en="← All Projects" data-zh="← 所有项目">← All Projects</a>
+</div></div>
+
+<!-- ══ HERO ══ -->
+<section id="cs-hero">
+  <div class="container">
+    <div class="cs-eyebrow" data-en="Case Study · 002 · Visual Novel · Narrative Design · 2024–2025" data-zh="案例研究 · 002 · 视觉小说 · 叙事设计 · 2024–2025">Case Study · 002 · Visual Novel · Narrative Design · 2024–2025</div>
+    <h1 class="cs-title">
+      GROWTH <span class="acc">PAIN</span>
+      <span class="cn" data-en="生长痛" data-zh="Growth Pain">生长痛</span>
+    </h1>
+    <div class="cs-subtitle" data-en="Visual Novel — Emotional Narrative · Portfolio Piece No.1" data-zh="视觉小说 —— 情感叙事 · 留学申请作品集 No.1">Visual Novel — Emotional Narrative · Portfolio Piece No.1</div>
+
+    <div class="cs-meta-strip">
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Role" data-zh="角色">Role</div>
+        <div class="cs-meta-val" data-en="Narrative Designer<small>Script · UI · AI Character Design</small>" data-zh="叙事设计师<small>剧本 · UI · AI 角色设计</small>">Narrative Designer<small>Script · UI · AI Character Design</small></div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Type" data-zh="类型">Type</div>
+        <div class="cs-meta-val" data-en="Visual Novel<small>Six Acts · Hidden Value System</small>" data-zh="视觉小说<small>六幕 · 隐性价值系统</small>">Visual Novel<small>Six Acts · Hidden Value System</small></div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Context" data-zh="背景">Context</div>
+        <div class="cs-meta-val" data-en="Portfolio Piece No.1<small>Graduate School Application</small>" data-zh="留学作品集 No.1<small>研究生申请</small>">Portfolio Piece No.1<small>Graduate School Application</small></div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Timeline" data-zh="周期">Timeline</div>
+        <div class="cs-meta-val">2024 – 2025<small>~8 months</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- cover -->
+<div class="cs-cover-wrap">
+  <div class="cs-cover-inner">
+    <img src="奶茶店png.png" alt="Growth Pain — milk tea shop scene">
+    <img src="有色场景.png" alt="Growth Pain — coloured scene">
+  </div>
+</div>
+
+<!-- ══ BODY ══ -->
+<div class="cs-body"><div class="container">
+
+  <!-- 01 OVERVIEW -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">01</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Project <span class='acc'>Overview</span>" data-zh="项目<span class='acc'>概述</span>">Project <span class="acc">Overview</span></h2>
+    <p class="cs-body-text"
+      data-en="<strong>Growth Pain / 生长痛</strong> is a visual novel about the invisible emotional weight carried by students navigating academic pressure, parental expectations, and the anxiety of growing up in a competitive system. The protagonist, Jiang Xun, is a high school student facing the same pressures shared by millions — but rarely spoken about."
+      data-zh="<strong>《生长痛》</strong>是一部关于无形情感重量的视觉小说，讲述学生们在应对学业压力、父母期望以及在竞争性体制中成长焦虑时所承受的一切。主角姜巡是一名高中生，面对着数百万人共同承受却鲜少被言说的压力。">
+      <strong>Growth Pain / 生长痛</strong> is a visual novel about the invisible emotional weight carried by students navigating academic pressure, parental expectations, and the anxiety of growing up in a competitive system. The protagonist, Jiang Xun, is a high school student facing the same pressures shared by millions — but rarely spoken about.
+    </p>
+    <p class="cs-body-text"
+      data-en="The game is my <strong>Portfolio Piece No.1</strong> — the work I'm most proud of as a narrative designer. It exists at the intersection of interaction design, emotional storytelling, and social commentary."
+      data-zh="这款游戏是我的<strong>留学申请作品集 No.1</strong> —— 作为叙事设计师我最引以为傲的作品。它处于交互设计、情感叙事与社会评论的交汇点。">
+      The game is my <strong>Portfolio Piece No.1</strong> — the work I'm most proud of as a narrative designer. It exists at the intersection of interaction design, emotional storytelling, and social commentary.
+    </p>
+
+    <div class="cs-quote">
+      <p data-en="&ldquo;You can't choose where you start. But the path you take — that's yours.&rdquo;" data-zh="「你无法选择起点。但你走的路 —— 是你自己的。」">"You can't choose where you start. But the path you take — that's yours."</p>
+      <cite data-en="— Jiang Xun, Act VI, Growth Pain" data-zh="— 姜巡，第六幕，《生长痛》">— Jiang Xun, Act VI, Growth Pain</cite>
+    </div>
+
+    <div class="cs-stats">
+      <div class="cs-stat"><div class="cs-stat-num">6</div><div class="cs-stat-lbl" data-en="Acts" data-zh="幕">Acts</div></div>
+      <div class="cs-stat"><div class="cs-stat-num">6</div><div class="cs-stat-lbl" data-en="Endings" data-zh="结局">Endings</div></div>
+      <div class="cs-stat"><div class="cs-stat-num">4</div><div class="cs-stat-lbl" data-en="Value Axes" data-zh="价值维度">Value Axes</div></div>
+      <div class="cs-stat"><div class="cs-stat-num">6</div><div class="cs-stat-lbl" data-en="Scenes" data-zh="场景">Scenes</div></div>
+    </div>
+  </div>
+
+  <!-- 02 PROBLEM -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">02</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Design <span class='acc'>Problem</span>" data-zh="设计<span class='acc'>问题</span>">Design <span class="acc">Problem</span></h2>
+    <p class="cs-body-text"
+      data-en="Academic pressure is one of the most pervasive emotional experiences for young people in East Asia — yet it's rarely depicted with nuance in interactive media. Most portrayals either dramatise it for effect or trivialise it. I wanted to ask:"
+      data-zh="学业压力是东亚青少年最普遍的情感体验之一 —— 但在交互媒体中却鲜有细腻的呈现。大多数描绘要么为了效果而戏剧化，要么轻描淡写。我想问的是：">
+      Academic pressure is one of the most pervasive emotional experiences for young people in East Asia — yet it's rarely depicted with nuance in interactive media. Most portrayals either dramatise it for effect or trivialise it. I wanted to ask:
+    </p>
+
+    <div class="cs-insight">
+      <div class="cs-insight-icon">❓</div>
+      <div class="cs-insight-body">
+        <div class="cs-insight-label" data-en="Design Question" data-zh="设计问题">Design Question</div>
+        <div class="cs-insight-text" data-en="How might a visual novel let players feel the weight of invisible emotional pressure — without telling them how to feel about it?" data-zh="一部视觉小说如何让玩家感受到无形情感压力的重量 —— 而不是告诉他们该有什么感受？">How might a visual novel let players feel the weight of invisible emotional pressure — without telling them how to feel about it?</div>
+      </div>
+    </div>
+
+    <div class="cs-cards">
+      <div class="cs-card">
+        <div class="cs-card-label" data-en="Narrative Challenge" data-zh="叙事挑战">Narrative Challenge</div>
+        <div class="cs-card-title" data-en="Show, Don't Tell" data-zh="展示，而非讲述">Show, Don't Tell</div>
+        <p class="cs-card-body" data-en="The emotional state of the protagonist had to be communicated through environmental storytelling, dialogue subtext, and UI choices — not explicit internal monologue. The player should arrive at empathy through inference, not instruction." data-zh="主角的情感状态必须通过环境叙事、对话潜台词和 UI 选择来传达 —— 而非显式的内心独白。玩家应通过推断而非指令来达到共情。">The emotional state of the protagonist had to be communicated through environmental storytelling, dialogue subtext, and UI choices — not explicit internal monologue. The player should arrive at empathy through inference, not instruction.</p>
+      </div>
+      <div class="cs-card">
+        <div class="cs-card-label" data-en="System Challenge" data-zh="系统挑战">System Challenge</div>
+        <div class="cs-card-title" data-en="Choice Without Judgment" data-zh="选择而不评判">Choice Without Judgment</div>
+        <p class="cs-card-body" data-en="Most branching visual novels signal 'correct' choices through tone or reward. Growth Pain needed to resist this — every path had to feel valid, even contradictory ones. The value system had to be invisible until the very end." data-zh="大多数分支视觉小说通过语气或奖励来暗示「正确」选择。《生长痛》需要抵抗这一点 —— 每条路都必须感觉是合理的，即使是矛盾的选择。价值系统必须在最后才显现。">Most branching visual novels signal 'correct' choices through tone or reward. Growth Pain needed to resist this — every path had to feel valid, even contradictory ones. The value system had to be invisible until the very end.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 NARRATIVE STRUCTURE -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">03</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Narrative <span class='acc'>Structure</span>" data-zh="叙事<span class='acc'>结构</span>">Narrative <span class="acc">Structure</span></h2>
+    <p class="cs-body-text"
+      data-en="The game unfolds across six acts, each set in a distinct location that carries its own emotional atmosphere. The scenes were chosen not just as backdrops but as active participants in the storytelling — the classroom's fluorescent silence, the milk tea shop's brief freedom, the gym's forced camaraderie."
+      data-zh="游戏在六幕中展开，每幕都设定在一个具有独特情感氛围的地点。这些场景不仅仅作为背景，更是叙事的主动参与者 —— 教室的日光灯沉默、奶茶店短暂的自由、体育馆被迫的集体感。">
+      The game unfolds across six acts, each set in a distinct location that carries its own emotional atmosphere. The scenes were chosen not just as backdrops but as active participants in the storytelling — the classroom's fluorescent silence, the milk tea shop's brief freedom, the gym's forced camaraderie.
+    </p>
+
+    <div class="act-grid">
+      <div class="act-card">
+        <div class="act-num">ACT I</div>
+        <div class="act-title" data-en="Classroom" data-zh="教室">Classroom</div>
+        <div class="act-location" data-en="Morning · Before Class" data-zh="早晨 · 上课前">Morning · Before Class</div>
+        <p class="act-desc" data-en="The day begins. Jiang Xun sits in silence as pressure accumulates before a single word is spoken." data-zh="新的一天开始。姜巡沉默地坐着，压力在第一句话说出之前就已积聚。">The day begins. Jiang Xun sits in silence as pressure accumulates before a single word is spoken.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-num">ACT II</div>
+        <div class="act-title" data-en="Teacher's Office" data-zh="教师办公室">Teacher's Office</div>
+        <div class="act-location" data-en="After Exam Results" data-zh="考试成绩公布后">After Exam Results</div>
+        <p class="act-desc" data-en="A confrontation with authority. The gap between what adults say and what they mean becomes visible." data-zh="与权威的正面交锋。成年人所说的话与其真实含义之间的落差变得清晰可见。">A confrontation with authority. The gap between what adults say and what they mean becomes visible.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-num">ACT III</div>
+        <div class="act-title" data-en="Milk Tea Shop" data-zh="奶茶店">Milk Tea Shop</div>
+        <div class="act-location" data-en="After School" data-zh="放学后">After School</div>
+        <p class="act-desc" data-en="A brief reprieve. Friendship, small choices, the feeling of being — briefly — just a person." data-zh="短暂的喘息。友谊，细小的选择，短暂地感觉自己只是一个普通人。">A brief reprieve. Friendship, small choices, the feeling of being — briefly — just a person.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-num">ACT IV</div>
+        <div class="act-title" data-en="Living Room" data-zh="客厅">Living Room</div>
+        <div class="act-location" data-en="Evening · Home" data-zh="晚上 · 家中">Evening · Home</div>
+        <p class="act-desc" data-en="The family space. Words left unsaid. The distance between people who love each other." data-zh="家庭空间。未说出口的话。相爱的人之间的距离。">The family space. Words left unsaid. The distance between people who love each other.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-num">ACT V</div>
+        <div class="act-title" data-en="Study Room" data-zh="书房">Study Room</div>
+        <div class="act-location" data-en="Late Night" data-zh="深夜">Late Night</div>
+        <p class="act-desc" data-en="Alone with the work. The weight of time. The question of whether any of it means anything." data-zh="独自面对功课。时间的重量。这一切究竟是否有意义的疑问。">Alone with the work. The weight of time. The question of whether any of it means anything.</p>
+      </div>
+      <div class="act-card">
+        <div class="act-num">ACT VI</div>
+        <div class="act-title" data-en="Gymnasium" data-zh="体育馆">Gymnasium</div>
+        <div class="act-location" data-en="Graduation Day" data-zh="毕业典礼">Graduation Day</div>
+        <p class="act-desc" data-en="The ending — but not a conclusion. Six different ways to leave the same building." data-zh="结局 —— 但不是终点。从同一栋楼离开的六种不同方式。">The ending — but not a conclusion. Six different ways to leave the same building.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 VALUE SYSTEM -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">04</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Hidden Value <span class='acc'>System</span>" data-zh="隐性价值<span class='acc'>系统</span>">Hidden Value <span class="acc">System</span></h2>
+    <p class="cs-body-text"
+      data-en="The branching system is driven by four hidden value axes — invisible to the player, accumulating silently with every choice. The player never sees a score or a meter. They only feel the consequences in Act VI, when Jiang Xun's path resolves into one of six endings."
+      data-zh="分支系统由四个隐性价值维度驱动 —— 对玩家不可见，随每个选择静默积累。玩家从不会看到分数或进度条。他们只会在第六幕感受到后果，此时姜巡的路径将汇聚为六种结局之一。">
+      The branching system is driven by four hidden value axes — invisible to the player, accumulating silently with every choice. The player never sees a score or a meter. They only feel the consequences in Act VI, when Jiang Xun's path resolves into one of six endings.
+    </p>
+
+    <div class="axis-grid">
+      <div class="axis-card">
+        <div class="axis-name" data-en="Identity (认同感)" data-zh="认同感">Identity (认同感)</div>
+        <div class="axis-en" data-en="How much does Jiang Xun value external approval?" data-zh="姜巡对外部认可的重视程度">How much does Jiang Xun value external approval?</div>
+        <div class="axis-bar-wrap"><div class="axis-bar" style="--w:72%"></div></div>
+        <p class="axis-desc" data-en="Tracks choices that seek validation from teachers, parents, and peers versus choices that prioritise internal motivation." data-zh="追踪寻求教师、父母和同伴认可的选择，对比优先考虑内在动力的选择。">Tracks choices that seek validation from teachers, parents, and peers versus choices that prioritise internal motivation.</p>
+      </div>
+      <div class="axis-card">
+        <div class="axis-name" data-en="Time (时间感)" data-zh="时间感">Time (时间感)</div>
+        <div class="axis-en" data-en="How does Jiang Xun relate to the irreversibility of choices?" data-zh="姜巡如何看待选择的不可逆性">How does Jiang Xun relate to the irreversibility of choices?</div>
+        <div class="axis-bar-wrap"><div class="axis-bar" style="--w:55%"></div></div>
+        <p class="axis-desc" data-en="Tracks whether the player dwells on past decisions, rushes forward, or sits with uncertainty — directly tied to the 'temporal irreversibility' theme." data-zh="追踪玩家是否纠结于过去的决定、急于向前，或是与不确定性共处 —— 直接关联「时间不可逆」主题。">Tracks whether the player dwells on past decisions, rushes forward, or sits with uncertainty — directly tied to the 'temporal irreversibility' theme.</p>
+      </div>
+      <div class="axis-card">
+        <div class="axis-name" data-en="Pressure (压力值)" data-zh="压力值">Pressure (压力值)</div>
+        <div class="axis-en" data-en="How much has accumulated — and what does Jiang Xun do with it?" data-zh="积累了多少，姜巡如何应对">How much has accumulated — and what does Jiang Xun do with it?</div>
+        <div class="axis-bar-wrap"><div class="axis-bar" style="--w:88%"></div></div>
+        <p class="axis-desc" data-en="Unlike the others, this axis can only increase. Choices may slow or redirect the accumulation, but never eliminate it — mirroring the systemic nature of academic pressure." data-zh="与其他维度不同，这个维度只会增加。选择可以减缓或转移积累，但永远无法消除 —— 映射出学业压力的系统性本质。">Unlike the others, this axis can only increase. Choices may slow or redirect the accumulation, but never eliminate it — mirroring the systemic nature of academic pressure.</p>
+      </div>
+      <div class="axis-card">
+        <div class="axis-name" data-en="Self (自我感)" data-zh="自我感">Self (自我感)</div>
+        <div class="axis-en" data-en="Does Jiang Xun know who she is, outside of the system?" data-zh="姜巡是否知道系统之外的自己是谁">Does Jiang Xun know who she is, outside of the system?</div>
+        <div class="axis-bar-wrap"><div class="axis-bar" style="--w:45%"></div></div>
+        <p class="axis-desc" data-en="The quietest axis. Rises when Jiang Xun chooses moments of genuine self-expression. The ending most players miss is the one where this axis is highest." data-zh="最安静的维度。当姜巡选择真实自我表达的时刻时上升。大多数玩家错过的结局，正是这个维度最高时触发的那个。">The quietest axis. Rises when Jiang Xun chooses moments of genuine self-expression. The ending most players miss is the one where this axis is highest.</p>
+      </div>
+    </div>
+
+    <div class="cs-insight">
+      <div class="cs-insight-icon">💡</div>
+      <div class="cs-insight-body">
+        <div class="cs-insight-label" data-en="Key Design Decision" data-zh="关键设计决策">Key Design Decision</div>
+        <div class="cs-insight-text" data-en="The value axes are never shown to the player. This was a deliberate choice — the moment you show someone a score, they optimise for it rather than playing authentically. The system only works if it's invisible." data-zh="价值维度对玩家永远不可见。这是一个刻意的选择 —— 一旦向玩家显示分数，他们就会为优化分数而玩，而非真实地游玩。这个系统只有在不可见的情况下才有效。">The value axes are never shown to the player. This was a deliberate choice — the moment you show someone a score, they optimise for it rather than playing authentically. The system only works if it's invisible.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 VISUAL DESIGN -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">05</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Visual <span class='acc'>Design</span>" data-zh="视觉<span class='acc'>设计</span>">Visual <span class="acc">Design</span></h2>
+    <p class="cs-body-text"
+      data-en="Character sprites were generated using Stable Diffusion with IP-Adapter + Lineart ControlNet — ensuring visual consistency across all six scenes while allowing stylistic variation. The colour palette shifts gradually across acts, moving from cooler, more desaturated tones in early acts toward warmer but more fragmented palettes toward the end."
+      data-zh="角色立绘使用 Stable Diffusion 配合 IP-Adapter + Lineart ControlNet 生成 —— 确保六个场景间的视觉一致性，同时允许风格变化。配色方案在各幕之间逐渐变化，从早期幕次较冷、去饱和的色调，向结尾更温暖但更破碎的配色过渡。">
+      Character sprites were generated using Stable Diffusion with IP-Adapter + Lineart ControlNet — ensuring visual consistency across all six scenes while allowing stylistic variation. The colour palette shifts gradually across acts, moving from cooler, more desaturated tones in early acts toward warmer but more fragmented palettes toward the end.
+    </p>
+
+    <div class="cs-img-2">
+      <div class="cs-img-wrap" style="aspect-ratio:16/9;" onclick="openLb('奶茶店png.png')">
+        <img src="奶茶店png.png" alt="Milk tea shop scene">
+      </div>
+      <div class="cs-img-wrap" style="aspect-ratio:16/9;" onclick="openLb('有色场景.png')">
+        <img src="有色场景.png" alt="Coloured environment scene">
+      </div>
+    </div>
+    <p class="cs-img-caption" data-en="Scene renders — Act III (Milk Tea Shop) and environment study" data-zh="场景渲染 —— 第三幕（奶茶店）与环境研究">Scene renders — Act III (Milk Tea Shop) and environment study</p>
+
+    <div class="cs-cards-3">
+      <div class="cs-card">
+        <div class="cs-card-label" data-en="Character Design" data-zh="角色设计">Character Design</div>
+        <div class="cs-card-title" data-en="SD + IP-Adapter" data-zh="SD + IP-Adapter">SD + IP-Adapter</div>
+        <p class="cs-card-body" data-en="Stable Diffusion IP-Adapter maintained consistent character appearance across all sprite variations — expressions, costumes, postures — without manual illustration for each." data-zh="Stable Diffusion IP-Adapter 在所有立绘变体中保持一致的角色外观 —— 表情、服装、姿势 —— 无需为每一张手动绘制。">Stable Diffusion IP-Adapter maintained consistent character appearance across all sprite variations — expressions, costumes, postures — without manual illustration for each.</p>
+      </div>
+      <div class="cs-card">
+        <div class="cs-card-label" data-en="Line Control" data-zh="线稿控制">Line Control</div>
+        <div class="cs-card-title">Lineart ControlNet</div>
+        <p class="cs-card-body" data-en="Lineart ControlNet ensured clean outlines and consistent anatomy across generated images. Combined with img2img refinement for expression-specific adjustments." data-zh="Lineart ControlNet 确保生成图像中清晰的轮廓和一致的人体结构。结合 img2img 进行特定表情的细化调整。">Lineart ControlNet ensured clean outlines and consistent anatomy across generated images. Combined with img2img refinement for expression-specific adjustments.</p>
+      </div>
+      <div class="cs-card">
+        <div class="cs-card-label" data-en="Motion PV" data-zh="宣传动画">Motion PV</div>
+        <div class="cs-card-title" data-en="After Effects" data-zh="After Effects">After Effects</div>
+        <p class="cs-card-body" data-en="A promotional PV was produced in After Effects — typewriter text animations, sprite highlight transitions, scene composition with dynamic music sync across 11 sub-compositions." data-zh="在 After Effects 中制作了宣传动画 —— 打字机文字动画、立绘高光切换、带动态音乐同步的场景合成，跨越 11 个子合成。">A promotional PV was produced in After Effects — typewriter text animations, sprite highlight transitions, scene composition with dynamic music sync across 11 sub-compositions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 PV -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">06</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Promotional <span class='acc'>PV</span>" data-zh="宣传<span class='acc'>动画</span>">Promotional <span class="acc">PV</span></h2>
+    <p class="cs-body-text"
+      data-en="A 3.5-minute motion PV was produced alongside the game as a standalone portfolio piece. Built in After Effects across 11 sub-compositions at 1920×1080/30fps, it uses typewriter expressions, Venetian Blinds transitions, and Math.sin-driven animations to convey the emotional arc of the full game in compressed form."
+      data-zh="与游戏同步制作了一支 3.5 分钟的动态宣传视频，作为独立的作品集展示。在 After Effects 中跨越 11 个子合成构建，分辨率 1920×1080/30fps，使用打字机表达式、百叶窗过渡和 Math.sin 驱动的动画，以压缩形式传达完整游戏的情感弧线。">
+      A 3.5-minute motion PV was produced alongside the game as a standalone portfolio piece. Built in After Effects across 11 sub-compositions at 1920×1080/30fps, it uses typewriter expressions, Venetian Blinds transitions, and Math.sin-driven animations to convey the emotional arc of the full game in compressed form.
+    </p>
+    <div class="cs-video">
+      <video controls poster="奶茶店png.png">
+        <source src="pv.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="cs-img-caption" data-en="Growth Pain — Promotional PV · After Effects · 3.5 min" data-zh="《生长痛》宣传动画 · After Effects · 3.5 分钟">Growth Pain — Promotional PV · After Effects · 3.5 min</p>
+  </div>
+
+  <!-- 07 PROCESS -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">07</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Design <span class='acc'>Process</span>" data-zh="设计<span class='acc'>过程</span>">Design <span class="acc">Process</span></h2>
+
+    <div class="cs-steps">
+      <div class="cs-step">
+        <div class="cs-step-dot">01</div>
+        <div>
+          <div class="cs-step-title" data-en="Research — Social Issue Grounding" data-zh="研究 —— 社会议题扎根">Research — Social Issue Grounding</div>
+          <p class="cs-step-body" data-en="The design began with personal reflection and secondary research into academic pressure among East Asian youth — existing studies, personal interviews, and observed behaviour patterns. This shaped which emotional truths the game needed to honour." data-zh="设计始于个人反思和对东亚青少年学业压力的二次研究 —— 现有研究、个人访谈和观察到的行为模式。这塑造了游戏需要尊重的情感真实。">The design began with personal reflection and secondary research into academic pressure among East Asian youth — existing studies, personal interviews, and observed behaviour patterns. This shaped which emotional truths the game needed to honour.</p>
+          <div class="cs-step-tags"><span class="cs-step-tag" data-en="User Research" data-zh="用户研究">User Research</span><span class="cs-step-tag" data-en="Social Issue" data-zh="社会议题">Social Issue</span></div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-dot">02</div>
+        <div>
+          <div class="cs-step-title" data-en="Script — Six-Act Branching Structure" data-zh="剧本 —— 六幕分支结构">Script — Six-Act Branching Structure</div>
+          <p class="cs-step-body" data-en="The full six-act script was written in English (for portfolio clarity) with complete dialogue for each scene, branch points annotated with their value axis effects, and all six ending conditions documented. This was the most time-intensive phase — roughly 3 months." data-zh="完整的六幕剧本以英文写成（为方便作品集展示），每个场景都有完整对话，分支点标注了其价值维度效果，所有六个结局条件均已记录。这是最耗时的阶段 —— 大约3个月。">The full six-act script was written in English (for portfolio clarity) with complete dialogue for each scene, branch points annotated with their value axis effects, and all six ending conditions documented. This was the most time-intensive phase — roughly 3 months.</p>
+          <div class="cs-step-tags"><span class="cs-step-tag" data-en="Script Writing" data-zh="剧本创作">Script Writing</span><span class="cs-step-tag" data-en="Branching Logic" data-zh="分支逻辑">Branching Logic</span></div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-dot">03</div>
+        <div>
+          <div class="cs-step-title" data-en="Character Design — AI-Assisted Pipeline" data-zh="角色设计 —— AI 辅助流程">Character Design — AI-Assisted Pipeline</div>
+          <p class="cs-step-body" data-en="Character sprites were generated using a Stable Diffusion pipeline: initial design concept → IP-Adapter for style consistency → Lineart ControlNet for structural control → img2img refinement → manual background removal via OpenCV flood-fill in Python." data-zh="角色立绘通过 Stable Diffusion 流程生成：初始设计概念 → IP-Adapter 确保风格一致性 → Lineart ControlNet 进行结构控制 → img2img 细化 → 通过 Python 中的 OpenCV 泛洪填充手动去背景。">Character sprites were generated using a Stable Diffusion pipeline: initial design concept → IP-Adapter for style consistency → Lineart ControlNet for structural control → img2img refinement → manual background removal via OpenCV flood-fill in Python.</p>
+          <div class="cs-step-tags"><span class="cs-step-tag">Stable Diffusion</span><span class="cs-step-tag">ControlNet</span><span class="cs-step-tag">Python / OpenCV</span></div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-dot">04</div>
+        <div>
+          <div class="cs-step-title" data-en="UI Layout — Scene Composition in Figma" data-zh="UI 布局 —— 在 Figma 中进行场景合成">UI Layout — Scene Composition in Figma</div>
+          <p class="cs-step-body" data-en="Each scene's visual layout was prototyped in Figma — dialogue box positioning, character placement, background layering, and choice UI presentation. The goal was to ensure readability without sacrificing atmosphere." data-zh="每个场景的视觉布局在 Figma 中原型化 —— 对话框定位、角色摆放、背景分层和选项 UI 呈现。目标是在不牺牲氛围的情况下确保可读性。">Each scene's visual layout was prototyped in Figma — dialogue box positioning, character placement, background layering, and choice UI presentation. The goal was to ensure readability without sacrificing atmosphere.</p>
+          <div class="cs-step-tags"><span class="cs-step-tag">Figma</span><span class="cs-step-tag" data-en="UI Layout" data-zh="UI 布局">UI Layout</span></div>
+        </div>
+      </div>
+      <div class="cs-step">
+        <div class="cs-step-dot">05</div>
+        <div>
+          <div class="cs-step-title" data-en="Motion PV — After Effects Production" data-zh="动态宣传视频 —— After Effects 制作">Motion PV — After Effects Production</div>
+          <p class="cs-step-body" data-en="The promotional PV was produced last — as a synthesis of all elements into a single coherent emotional arc. 11 sub-compositions, typewriter expressions (via AE expressions), Venetian Blinds transitions, and wiggle/Math.sin animations timed to the BGM." data-zh="宣传视频最后制作 —— 将所有元素综合成一个连贯的情感弧线。11 个子合成，打字机表达式（通过 AE 表达式实现），百叶窗过渡，以及与 BGM 同步的 wiggle/Math.sin 动画。">The promotional PV was produced last — as a synthesis of all elements into a single coherent emotional arc. 11 sub-compositions, typewriter expressions (via AE expressions), Venetian Blinds transitions, and wiggle/Math.sin animations timed to the BGM.</p>
+          <div class="cs-step-tags"><span class="cs-step-tag">After Effects</span><span class="cs-step-tag" data-en="Motion Design" data-zh="动效设计">Motion Design</span><span class="cs-step-tag" data-en="Expression Scripting" data-zh="表达式脚本">Expression Scripting</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 OUTCOME -->
+  <div class="cs-section reveal">
+    <div class="cs-section-label"><span class="cs-section-num">08</span><span class="cs-section-line"></span></div>
+    <h2 class="cs-section-title" data-en="Outcome &amp; <span class='acc'>Reflection</span>" data-zh="成果与<span class='acc'>反思</span>">Outcome &amp; <span class="acc">Reflection</span></h2>
+
+    <div class="cs-2col">
+      <div>
+        <p class="cs-body-text"
+          data-en="Growth Pain is the project where I found my voice as a narrative designer. It taught me that the most powerful design decisions are often the ones you remove — the scores you hide, the instructions you don't give, the endings you make the player discover for themselves."
+          data-zh="《生长痛》是我作为叙事设计师找到自己声音的项目。它教会我，最有力的设计决策往往是你移除的那些 —— 你隐藏的分数，你不给出的指示，你让玩家自己发现的结局。">
+          Growth Pain is the project where I found my voice as a narrative designer. It taught me that the most powerful design decisions are often the ones you remove — the scores you hide, the instructions you don't give, the endings you make the player discover for themselves.
+        </p>
+        <p class="cs-body-text"
+          data-en="It's also the project that clarified what I want to do with interactive design: <em>create experiences that make people feel understood — not entertained, not impressed, but genuinely seen.</em>"
+          data-zh="这也是让我明确了我想用交互设计做什么的项目：<em>创造让人感到被理解的体验 —— 不是被娱乐，不是被打动，而是真正地被看见。</em>">
+          It's also the project that clarified what I want to do with interactive design: <em>create experiences that make people feel understood — not entertained, not impressed, but genuinely seen.</em>
+        </p>
+      </div>
+      <div>
+        <ul class="cs-list">
+          <li data-en="Designed a complete six-act branching script with four hidden value axes" data-zh="设计了包含四个隐性价值维度的完整六幕分支剧本">Designed a complete six-act branching script with four hidden value axes</li>
+          <li data-en="Built a full AIGC character design pipeline (SD + ControlNet + Python)" data-zh="构建了完整的 AIGC 角色设计流程（SD + ControlNet + Python）">Built a full AIGC character design pipeline (SD + ControlNet + Python)</li>
+          <li data-en="Produced a 3.5-min motion PV entirely in After Effects" data-zh="在 After Effects 中完整制作了 3.5 分钟宣传动画">Produced a 3.5-min motion PV entirely in After Effects</li>
+          <li data-en="Designed six scene layouts with UI components prototyped in Figma" data-zh="在 Figma 中为六个场景设计了带 UI 组件的布局原型">Designed six scene layouts with UI components prototyped in Figma</li>
+          <li data-en="First portfolio piece for graduate school applications abroad" data-zh="海外研究生申请的第一件作品集作品">First portfolio piece for graduate school applications abroad</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cs-insight">
+      <div class="cs-insight-icon">🔮</div>
+      <div class="cs-insight-body">
+        <div class="cs-insight-label" data-en="What I'd Do Differently" data-zh="如果重做我会改变什么">What I'd Do Differently</div>
+        <div class="cs-insight-text" data-en="I'd prototype the ending conditions earlier — specifically, I'd playtest the value system with at least five people before locking in the script. The axis weights were largely intuitive, and some balance issues only became visible after the full script was written. Earlier playtesting would have caught these sooner." data-zh="我会更早地对结局条件进行原型设计 —— 具体来说，在确定剧本之前，我会至少与五个人测试价值系统。价值维度的权重很大程度上是直觉性的，一些平衡问题只在完整剧本写完后才变得明显。更早的用户测试会更快发现这些问题。">I'd prototype the ending conditions earlier — specifically, I'd playtest the value system with at least five people before locking in the script. The axis weights were largely intuitive, and some balance issues only became visible after the full script was written. Earlier playtesting would have caught these sooner.</div>
+      </div>
+    </div>
+
+    <div class="cs-tag-group">
+      <span class="cs-tag" data-en="Visual Novel" data-zh="视觉小说">Visual Novel</span>
+      <span class="cs-tag" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
+      <span class="cs-tag">Stable Diffusion</span>
+      <span class="cs-tag">ControlNet</span>
+      <span class="cs-tag">After Effects</span>
+      <span class="cs-tag">Figma</span>
+      <span class="cs-tag">Python / OpenCV</span>
+      <span class="cs-tag" data-en="Portfolio No.1" data-zh="作品集 No.1">Portfolio No.1</span>
+    </div>
+  </div>
+
+</div></div><!-- /cs-body /container -->
+
+<!-- NEXT PROJECT -->
+<section id="next-project">
+  <div class="container">
+    <a href="project-spatialrights.html" class="next-inner reveal">
+      <div class="next-left">
+        <div class="next-eyebrow" data-en="Next Case Study" data-zh="下一个案例">Next Case Study</div>
+        <div class="next-title">Spatial Rights</div>
+        <div class="next-type" data-en="VR Spatial Narrative · Social Issue" data-zh="VR 空间叙事 · 社会议题">VR Spatial Narrative · Social Issue</div>
+      </div>
+      <div class="next-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 Siyu Diao · <span data-en="Designed &amp; Developed by Siyu" data-zh="由思予设计与开发">Designed &amp; Developed by Siyu</span></div>
+      <div class="footer-links">
+        <a href="projects.html" data-en="All Projects" data-zh="所有项目">All Projects</a>
+        <a href="about.html" data-en="About" data-zh="关于">About</a>
+        <a href="mailto:630388703@qq.com">630388703@qq.com</a>
+        <a href="刁思予_简历.pdf" target="_blank" data-en="Resume" data-zh="简历">Resume</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page-wrap -->
+
+<script>
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function raf(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(raf);})();
+document.querySelectorAll('a,button,.cs-card,.act-card,.axis-card,.next-inner').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='44px';ring.style.height='44px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
+});
+
+document.addEventListener('mousemove',e=>{
+  const xp=(e.clientX/window.innerWidth-.5)*10,yp=(e.clientY/window.innerHeight-.5)*8;
+  document.getElementById('bg-img').style.transform=`translate(${xp}px,${yp}px)`;
+});
+
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  document.getElementById('progress-fill').style.width=(s.scrollTop/(s.scrollHeight-s.clientHeight)*100)+'%';
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+});
+
+let lang=localStorage.getItem('sd-lang')||'en';
+const langBtn=document.getElementById('langBtn');
+function applyLang(){
+  document.querySelectorAll('[data-en][data-zh]').forEach(el=>{const v=el.getAttribute('data-'+lang);if(v!==null)el.innerHTML=v;});
+  langBtn.textContent=lang==='en'?'中文':'EN';
+  document.documentElement.lang=lang==='zh'?'zh':'en';
+  if(mState==='hover'&&mHover)mbub.textContent=BUBBLE.hover[lang];
+}
+function toggleLang(){lang=lang==='en'?'zh':'en';localStorage.setItem('sd-lang',lang);applyLang();}
+applyLang();
+
+const bgm=document.getElementById('bgm'),musicBtn=document.getElementById('musicBtn'),musicIcon=document.getElementById('musicIcon');
+let musicOn=false;bgm.volume=0.3;
+function checkMusic(){const p=localStorage.getItem('sd-music');if(p==='yes')enableMusic();else if(p==='no')skipMusic();else document.getElementById('music-modal').classList.add('show');}
+function enableMusic(){document.getElementById('music-modal').classList.remove('show');bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');localStorage.setItem('sd-music','yes');}
+function skipMusic(){document.getElementById('music-modal').classList.remove('show');musicOn=false;musicIcon.textContent='♪';localStorage.setItem('sd-music','no');}
+function toggleMusic(){if(!musicOn){bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');}else{bgm.pause();musicOn=false;musicIcon.textContent='♪';musicBtn.classList.remove('on');}}
+checkMusic();
+
+const mimg=document.getElementById('mimg'),mbub=document.getElementById('mbubble'),mascot=document.getElementById('mascot');
+const IMGS={idle:'默认.png',hover:'HOVER 打招呼.png',click:'点击爱心跳一下.png',walk:'步行.png'};
+const BUBBLE={hover:{en:"Hi! I'm Siyu :)",zh:'你好！我是思予～'},click:{en:'Thanks for visiting ♡',zh:'感谢来访 ♡'}};
+let mState='idle',mHover=false,mScrollT=null;
+function goMascot(s,bk,dur){
+  mState=s;mimg.className='m-img';mimg.src=IMGS[s]||IMGS.idle;
+  if(s==='idle')mimg.classList.add('float');
+  if(s==='click')mimg.classList.add('jump');
+  if(bk){mbub.textContent=BUBBLE[bk][lang];mbub.classList.add('show');}else mbub.classList.remove('show');
+  if(dur)setTimeout(()=>resolve(),dur);
+}
+function resolve(){if(mHover)goMascot('hover','hover');else goMascot('idle',null);}
+mascot.addEventListener('mouseenter',()=>{if(mState==='click')return;mHover=true;goMascot('hover','hover');});
+mascot.addEventListener('mouseleave',()=>{mHover=false;if(mState!=='click')resolve();});
+mascot.addEventListener('click',e=>{e.stopPropagation();goMascot('click','click',1000);});
+window.addEventListener('scroll',()=>{
+  if(mState==='click')return;
+  mimg.className='m-img';mimg.src='步行.png';mbub.classList.remove('show');
+  clearTimeout(mScrollT);mScrollT=setTimeout(resolve,500);
+});
+
+function openLb(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('on');}
+function closeLb(){document.getElementById('lightbox').classList.remove('on');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+
+const revObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+// trigger axis bar animations when visible
+const axisObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.axis-bar').forEach(bar=>{bar.style.animation='none';void bar.offsetWidth;bar.style.animation='';});
+      axisObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.axis-grid').forEach(el=>axisObs.observe(el));
+</script>
+</body>
+</html>
