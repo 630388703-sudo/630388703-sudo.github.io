@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFTERIMAGE · Siyu Diao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   TOKENS
+============================================= */
+:root {
+  --lime:#C8E65A; --lime-l:#dff285; --lime-p:#eef9c0;
+  --bg:#F7F6F2; --card:rgba(255,255,255,0.75);
+  --text:#1F1F1F; --muted:#6B6B5E; --soft:#A8A896;
+  --nav-h:68px; --radius:28px;
+  --shadow:0 4px 32px rgba(0,0,0,0.07);
+  --shadow-h:0 16px 48px rgba(0,0,0,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);cursor:none;overflow-x:hidden;}
+
+/* =============================================
+   CURSOR
+============================================= */
+#cur{position:fixed;width:10px;height:10px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .2s,height .2s;}
+
+/* =============================================
+   BACKGROUND
+============================================= */
+#bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-img{position:absolute;inset:-30px;background:url('网页背景.png') center/cover no-repeat;opacity:.12;transition:transform .1s linear;will-change:transform;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.25;animation:orbFloat 9s ease-in-out infinite;}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,rgba(200,230,90,.5),transparent 70%);top:-100px;right:-100px;}
+.orb2{width:380px;height:380px;background:radial-gradient(circle,rgba(200,230,90,.4),transparent 70%);bottom:20%;left:-80px;animation-delay:-5s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+
+/* =============================================
+   NAV
+============================================= */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(247,246,242,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,230,90,.2);transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06);}
+.nav-logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--text);text-decoration:none;cursor:none;}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{display:flex;align-items:center;height:var(--nav-h);padding:0 18px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--lime);transition:left .22s,right .22s;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-links a:hover::after,.nav-links a.active::after{left:12px;right:12px;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;padding:6px 14px;border-radius:100px;background:rgba(200,230,90,.18);border:none;color:var(--muted);cursor:none;transition:all .2s;}
+.lang-btn:hover{background:var(--lime);color:var(--text);}
+.music-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;padding:6px 14px;border-radius:100px;background:transparent;border:1.5px solid rgba(31,31,31,.14);color:var(--muted);cursor:none;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.music-btn:hover{border-color:var(--lime);color:var(--text);}
+.music-btn.on{border-color:var(--lime);background:rgba(200,230,90,.12);}
+
+/* =============================================
+   MASCOT
+============================================= */
+#mascot{position:fixed;right:32px;bottom:32px;z-index:600;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none;}
+.m-bubble{background:white;border-radius:18px 18px 4px 18px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:var(--shadow);margin-bottom:10px;opacity:0;transform:translateY(6px) scale(.93);transition:all .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+.m-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+.m-img{width:92px;pointer-events:all;cursor:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12));}
+.m-img.float{animation:mfloat 3s ease-in-out infinite;}
+.m-img.jump{animation:mjump .44s ease-out;}
+@keyframes mfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes mjump{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-22px) scale(1.06)}65%{transform:translateY(-5px) scale(.97)}100%{transform:translateY(0) scale(1)}}
+
+/* =============================================
+   MUSIC MODAL
+============================================= */
+#music-modal{position:fixed;inset:0;z-index:9980;background:rgba(247,246,242,.82);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
+#music-modal.show{display:flex;}
+.mm-box{background:var(--card);border-radius:var(--radius);padding:44px 52px;box-shadow:var(--shadow-h);text-align:center;backdrop-filter:blur(12px);animation:mmIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes mmIn{from{opacity:0;transform:scale(.9) translateY(16px)}to{opacity:1;transform:none}}
+.mm-icon{font-size:36px;margin-bottom:16px;}
+.mm-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;}
+.mm-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.mm-btns{display:flex;gap:12px;justify-content:center;}
+.mm-btn{padding:12px 32px;border-radius:100px;font-size:14px;font-weight:500;cursor:none;border:none;transition:all .22s;font-family:'DM Sans',sans-serif;}
+.mm-yes{background:var(--lime);color:var(--text);}
+.mm-yes:hover{background:var(--lime-l);transform:translateY(-2px);}
+.mm-no{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.mm-no:hover{background:rgba(200,230,90,.15);transform:translateY(-2px);}
+
+/* =============================================
+   LAYOUT UTILS
+============================================= */
+.page-wrap{position:relative;z-index:1;padding-top:var(--nav-h);}
+.container{max-width:1000px;margin:0 auto;padding:0 52px;}
+.container-wide{max-width:1160px;margin:0 auto;padding:0 52px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;cursor:none;border:none;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.btn-lime{background:var(--lime);color:var(--text);}
+.btn-lime:hover{background:var(--lime-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,230,90,.4);}
+.btn-ghost{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.btn-ghost:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
+
+/* =============================================
+   BACK BREADCRUMB
+============================================= */
+.breadcrumb{padding:32px 0 0;}
+.breadcrumb a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;display:inline-flex;align-items:center;gap:8px;transition:color .2s;}
+.breadcrumb a:hover{color:var(--lime);}
+
+/* =============================================
+   HERO
+============================================= */
+#cs-hero{padding:40px 0 0;}
+.cs-hero-inner{}
+.cs-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);margin-bottom:16px;opacity:0;animation:fadeUp .5s .05s forwards;}
+.cs-num{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--soft);margin-bottom:10px;opacity:0;animation:fadeUp .5s .05s forwards;}
+.cs-title{font-family:'Playfair Display',serif;font-size:clamp(52px,8vw,96px);font-weight:700;line-height:.92;letter-spacing:-.03em;margin-bottom:16px;opacity:0;animation:fadeUp .6s .12s forwards;}
+.cs-title .acc{color:var(--lime);}
+.cs-subtitle{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:32px;opacity:0;animation:fadeUp .6s .2s forwards;}
+/* meta strip */
+.cs-meta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(200,230,90,.25);border-radius:18px;overflow:hidden;margin-bottom:52px;opacity:0;animation:fadeUp .6s .28s forwards;background:var(--card);backdrop-filter:blur(12px);}
+.cs-meta-item{padding:20px 24px;border-right:1px solid rgba(200,230,90,.2);}
+.cs-meta-item:last-child{border-right:none;}
+.cs-meta-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:6px;}
+.cs-meta-val{font-size:13px;font-weight:500;line-height:1.5;color:var(--text);}
+.cs-meta-val small{font-weight:400;color:var(--muted);font-size:12px;display:block;}
+/* cover image */
+.cs-cover{width:100%;aspect-ratio:21/9;border-radius:var(--radius);overflow:hidden;margin-bottom:80px;box-shadow:var(--shadow-h);opacity:0;animation:fadeUp .7s .35s forwards;}
+.cs-cover img{width:100%;height:100%;object-fit:cover;display:block;}
+.cs-cover-placeholder{width:100%;height:100%;background:var(--lime-p);display:flex;align-items:center;justify-content:center;}
+.cs-cover-placeholder span{font-family:'Playfair Display',serif;font-size:120px;font-weight:700;color:rgba(200,230,90,.4);}
+
+/* =============================================
+   PROGRESS / TOC
+============================================= */
+#progress-bar{position:fixed;top:var(--nav-h);left:0;right:0;height:3px;z-index:499;background:transparent;}
+#progress-fill{height:100%;width:0;background:var(--lime);transition:width .1s linear;box-shadow:0 0 8px rgba(200,230,90,.6);}
+
+/* =============================================
+   CASE STUDY BODY
+============================================= */
+.cs-body{padding-bottom:100px;}
+
+/* section */
+.cs-section{margin-bottom:80px;}
+.cs-section-label{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
+.cs-section-num{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--lime);}
+.cs-section-line{flex:1;height:1px;background:rgba(200,230,90,.3);}
+.cs-section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,40px);font-weight:700;margin-bottom:20px;line-height:1.15;}
+.cs-section-title .acc{color:var(--lime);}
+.cs-body-text{font-size:16px;color:var(--muted);line-height:1.85;margin-bottom:20px;}
+.cs-body-text strong{color:var(--text);font-weight:600;}
+.cs-body-text em{font-style:italic;color:var(--text);}
+
+/* quote / highlight */
+.cs-quote{border-left:3px solid var(--lime);padding:20px 28px;margin:28px 0;background:var(--lime-p);border-radius:0 16px 16px 0;}
+.cs-quote p{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;line-height:1.6;color:var(--text);}
+.cs-quote cite{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--muted);margin-top:10px;display:block;}
+
+/* 2-col text grid */
+.cs-2col{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:28px;}
+
+/* info cards */
+.cs-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px;}
+.cs-card{background:var(--card);border-radius:20px;padding:28px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;transition:all .25s;}
+.cs-card:hover{border-color:var(--lime);transform:translateY(-3px);}
+.cs-card-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
+.cs-card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:8px;}
+.cs-card-body{font-size:13px;color:var(--muted);line-height:1.75;}
+
+/* 3-col cards */
+.cs-cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+
+/* stat row */
+.cs-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.cs-stat{background:var(--lime-p);border-radius:18px;padding:24px;text-align:center;}
+.cs-stat-num{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--text);line-height:1;}
+.cs-stat-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+
+/* process steps inline */
+.cs-steps{display:flex;flex-direction:column;gap:0;margin-bottom:28px;}
+.cs-step{display:grid;grid-template-columns:48px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid rgba(200,230,90,.18);align-items:start;}
+.cs-step:last-child{border-bottom:none;}
+.cs-step-dot{width:48px;height:48px;border-radius:50%;background:var(--lime-p);border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--text);flex-shrink:0;margin-top:2px;}
+.cs-step-content{}
+.cs-step-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:6px;}
+.cs-step-body{font-size:14px;color:var(--muted);line-height:1.7;}
+.cs-step-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.cs-step-tag{font-size:11px;color:var(--muted);background:rgba(200,230,90,.2);padding:3px 10px;border-radius:100px;}
+
+/* image grid */
+.cs-img-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.cs-img-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;}
+.cs-img-wrap{border-radius:18px;overflow:hidden;box-shadow:var(--shadow);cursor:none;transition:transform .3s;}
+.cs-img-wrap:hover{transform:scale(1.02);}
+.cs-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.cs-img-full{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:28px;cursor:none;}
+.cs-img-full img{width:100%;display:block;}
+.cs-img-full video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;}
+.cs-img-caption{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);margin-top:10px;text-align:center;}
+
+/* video embed */
+.cs-video{width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-h);margin-bottom:28px;}
+.cs-video iframe,.cs-video video{width:100%;height:100%;border:none;display:block;}
+
+/* insight callout */
+.cs-insight{background:var(--lime-p);border-radius:20px;padding:32px 36px;margin-bottom:28px;display:flex;gap:18px;align-items:flex-start;}
+.cs-insight-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.cs-insight-body{}
+.cs-insight-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
+.cs-insight-text{font-size:15px;color:var(--text);line-height:1.75;}
+
+/* tag group */
+.cs-tag-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.cs-tag{padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;background:rgba(200,230,90,.2);border:1.5px solid transparent;cursor:default;transition:all .2s;}
+.cs-tag:hover{border-color:var(--lime);}
+
+/* reflection list */
+.cs-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.cs-list li{display:flex;align-items:baseline;gap:12px;font-size:15px;color:var(--muted);line-height:1.7;}
+.cs-list li::before{content:'◆';font-size:7px;color:var(--lime);flex-shrink:0;margin-top:5px;}
+
+/* =============================================
+   NEXT PROJECT STRIP
+============================================= */
+#next-project{padding:0 0 80px;}
+.next-inner{background:var(--card);border-radius:var(--radius);padding:44px 52px;display:flex;align-items:center;justify-content:space-between;gap:32px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;text-decoration:none;color:inherit;cursor:none;transition:all .3s;}
+.next-inner:hover{border-color:var(--lime);transform:translateY(-4px);box-shadow:var(--shadow-h);}
+.next-left{}
+.next-eyebrow{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.next-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);font-weight:700;}
+.next-type{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-top:6px;}
+.next-arrow{font-size:36px;color:var(--lime);transition:transform .25s;}
+.next-inner:hover .next-arrow{transform:translateX(8px);}
+
+/* =============================================
+   FOOTER
+============================================= */
+footer{border-top:1px solid rgba(200,230,90,.2);padding:36px 0;position:relative;z-index:1;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;}
+.footer-copy{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;}
+.footer-links a:hover{color:var(--lime);}
+
+/* =============================================
+   LIGHTBOX
+============================================= */
+#lightbox{position:fixed;inset:0;z-index:9990;background:rgba(31,31,31,.92);display:none;align-items:center;justify-content:center;cursor:none;backdrop-filter:blur(8px);}
+#lightbox.on{display:flex;}
+#lightbox img{max-width:88vw;max-height:88vh;object-fit:contain;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+#lightbox-close{position:absolute;top:24px;right:32px;font-size:32px;color:rgba(255,255,255,.6);cursor:none;background:none;border:none;transition:color .2s;line-height:1;}
+#lightbox-close:hover{color:white;}
+
+/* =============================================
+   REVEAL
+============================================= */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.1s;}.reveal-d2{transition-delay:.2s;}.reveal-d3{transition-delay:.3s;}.reveal-d4{transition-delay:.4s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media(max-width:1024px){
+  .cs-meta-strip{grid-template-columns:1fr 1fr;}
+  .cs-cards,.cs-2col{grid-template-columns:1fr;}
+  .cs-cards-3{grid-template-columns:1fr 1fr;}
+  .cs-stats{grid-template-columns:1fr 1fr;}
+  .cs-img-2{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  nav{padding:0 20px;}.container,.container-wide{padding:0 20px;}
+  .nav-links{display:none;}
+  .cs-meta-strip{grid-template-columns:1fr 1fr;}
+  .cs-cards-3{grid-template-columns:1fr;}
+  .cs-stats{grid-template-columns:1fr 1fr;}
+  .cs-img-3{grid-template-columns:1fr 1fr;}
+  .next-inner{flex-direction:column;gap:20px;}
+  .footer-inner{flex-direction:column;gap:16px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── BACKGROUND ── -->
+<div id="bg-layer">
+  <div id="bg-img"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+</div>
+
+<!-- ── CURSOR ── -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- ── PROGRESS BAR ── -->
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<!-- ── MUSIC MODAL ── -->
+<div id="music-modal">
+  <div class="mm-box">
+    <div class="mm-icon">🎵</div>
+    <div class="mm-title" data-en="Enable Background Music?" data-zh="开启背景音乐？">Enable Background Music?</div>
+    <div class="mm-sub" data-en="A light ambient track to accompany your visit." data-zh="一段轻柔的背景音乐陪你浏览。">A light ambient track to accompany your visit.</div>
+    <div class="mm-btns">
+      <button class="mm-btn mm-yes" onclick="enableMusic()" data-en="Yes, play it ♪" data-zh="好的，开启 ♪">Yes, play it ♪</button>
+      <button class="mm-btn mm-no" onclick="skipMusic()" data-en="No thanks" data-zh="不了，谢谢">No thanks</button>
+    </div>
+  </div>
+</div>
+<audio id="bgm" src="bgm.mp3" loop></audio>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">SIYU DIAO</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home" data-zh="首页">Home</a></li>
+    <li><a href="projects.html" class="active" data-en="Projects" data-zh="项目">Projects</a></li>
+    <li><a href="about.html" data-en="About" data-zh="关于">About</a></li>
+    <li><a href="resume.html" data-en="Resume" data-zh="简历">Resume</a></li>
+    <li><a href="contact.html" data-en="Contact" data-zh="联系">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">中文</button>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+      <span id="musicIcon">♪</span>
+      <span id="musicLbl">Music</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── MASCOT ── -->
+<div id="mascot">
+  <div class="m-bubble" id="mbubble"></div>
+  <img src="默认.png" alt="Siyu" class="m-img float" id="mimg">
+</div>
+
+<!-- ── LIGHTBOX ── -->
+<div id="lightbox" onclick="closeLb()">
+  <button id="lightbox-close" onclick="closeLb()">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<div class="page-wrap">
+
+<!-- ── BREADCRUMB ── -->
+<div class="breadcrumb">
+  <div class="container">
+    <a href="projects.html" data-en="← All Projects" data-zh="← 所有项目">← All Projects</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="cs-hero">
+  <div class="container">
+    <div class="cs-eyebrow" data-en="Case Study · 001 · Game UX · 2026" data-zh="案例研究 · 001 · 游戏 UX · 2026">Case Study · 001 · Game UX · 2026</div>
+    <h1 class="cs-title">AFTER<span class="acc">IMAGE</span></h1>
+    <div class="cs-subtitle" data-en="Unity 2D Cyberpunk Narrative Puzzle Game" data-zh="Unity 2D 赛博朋克叙事解谜游戏">Unity 2D Cyberpunk Narrative Puzzle Game</div>
+
+    <div class="cs-meta-strip">
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Role" data-zh="角色">Role</div>
+        <div class="cs-meta-val" data-en="Independent Developer<small>Game UX · Narrative Design · C#</small>" data-zh="独立开发<small>游戏 UX · 叙事设计 · C#</small>">Independent Developer<small>Game UX · Narrative Design · C#</small></div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Type" data-zh="类型">Type</div>
+        <div class="cs-meta-val" data-en="Narrative Puzzle Game<small>Unity 2D · AI Companion</small>" data-zh="叙事解谜游戏<small>Unity 2D · AI 伴侣系统</small>">Narrative Puzzle Game<small>Unity 2D · AI Companion</small></div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Context" data-zh="背景">Context</div>
+        <div class="cs-meta-val" data-en="Lilith Game Jam<small>「My AI Teammate」Track</small>" data-zh="莉莉丝游戏大赛<small>「我的 AI 队友」赛道</small>">Lilith Game Jam<small>「My AI Teammate」Track</small></div>
+      </div>
+      <div class="cs-meta-item">
+        <div class="cs-meta-lbl" data-en="Timeline" data-zh="周期">Timeline</div>
+        <div class="cs-meta-val">Mar – Apr 2026<small>~2 months</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cover image -->
+<div class="cs-cover" style="max-width:1160px;margin:0 auto;padding:0 52px;margin-bottom:80px;">
+  <div style="width:100%;aspect-ratio:21/9;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-h);">
+    <img src="像残预览图.png" alt="AFTERIMAGE cover" style="width:100%;height:100%;object-fit:cover;">
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CASE STUDY BODY
+═══════════════════════════════════════════ -->
+<div class="cs-body">
+  <div class="container">
+
+    <!-- ── 01 OVERVIEW ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">01</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Project <span class='acc'>Overview</span>" data-zh="项目<span class='acc'>概述</span>">Project <span class="acc">Overview</span></h2>
+      <p class="cs-body-text" data-en="<strong>AFTERIMAGE / 残像</strong> is a Unity 2D cyberpunk narrative puzzle game built for the Lilith Game Jam's &ldquo;My AI Teammate&rdquo; track. The player takes on the role of ECHO — a detective in a dual-layer city — whose AI companion &ldquo;Shadow&rdquo; mirrors the player's own behavioural data in real time." data-zh="<strong>《残像》</strong>是一款为莉莉丝游戏大赛「我的 AI 队友」赛道开发的 Unity 2D 赛博朋克叙事解谜游戏。玩家扮演 ECHO —— 一个生活在双层城市中的侦探 —— 其 AI 伴侣「影」会实时镜像玩家自身的行为数据。"><strong>AFTERIMAGE / 残像</strong> is a Unity 2D cyberpunk narrative puzzle game built for the Lilith Game Jam's "My AI Teammate" track. The player takes on the role of ECHO — a detective in a dual-layer city — whose AI companion "Shadow" mirrors the player's own behavioural data in real time.</p>
+      <p class="cs-body-text" data-en="The core twist: <strong>Shadow is not a separate entity. It is a reflection of you.</strong> Every choice the player makes shapes Shadow's behaviour — and Shadow's behaviour reshapes the player's understanding of themselves." data-zh="核心扭转：<strong>「影」不是一个独立存在。它是你自己的镜像。</strong>玩家的每一个选择都塑造着「影」的行为 —— 而「影」的行为反过来重构玩家对自身的认知。">The core twist: <strong>Shadow is not a separate entity. It is a reflection of you.</strong> Every choice the player makes shapes Shadow's behaviour — and Shadow's behaviour reshapes the player's understanding of themselves.</p>
+
+      <div class="cs-quote">
+        <p data-en="&ldquo;你一直在和自己对话。&rdquo;&nbsp; You have always been talking to yourself." data-zh="「你一直在和自己对话。」">"你一直在和自己对话。"&nbsp; You have always been talking to yourself.</p>
+        <cite data-en="— Core narrative reveal, AFTERIMAGE" data-zh="—《残像》核心叙事揭示">— Core narrative reveal, AFTERIMAGE</cite>
+      </div>
+
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-num">10+</div>
+          <div class="cs-stat-lbl" data-en="Scenes Built" data-zh="场景数量">Scenes Built</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">3</div>
+          <div class="cs-stat-lbl" data-en="NPC Characters" data-zh="NPC 角色">NPC Characters</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">2</div>
+          <div class="cs-stat-lbl" data-en="World Layers" data-zh="世界层级">World Layers</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">2m</div>
+          <div class="cs-stat-lbl" data-en="Dev Timeline" data-zh="开发周期">Dev Timeline</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 02 PROBLEM ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">02</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Design <span class='acc'>Problem</span>" data-zh="设计<span class='acc'>问题</span>">Design <span class="acc">Problem</span></h2>
+      <p class="cs-body-text" data-en="As AI companions become more present in games — from voiced NPCs to adaptive behaviour systems — a critical UX question emerges:" data-zh="随着 AI 伴侣在游戏中越来越普遍 —— 从配音 NPC 到自适应行为系统 —— 一个关键的 UX 问题浮现了：">As AI companions become more present in games — from voiced NPCs to adaptive behaviour systems — a critical UX question emerges:</p>
+
+      <div class="cs-insight">
+        <div class="cs-insight-icon">❓</div>
+        <div class="cs-insight-body">
+          <div class="cs-insight-label" data-en="Design Question" data-zh="设计问题">Design Question</div>
+          <div class="cs-insight-text" data-en="How might an AI teammate influence player trust and decision-making — and what happens when that AI is a mirror of the player themselves?" data-zh="AI 队友如何影响玩家的信任与决策 —— 当这个 AI 是玩家自身的镜像时，又会发生什么？">How might an AI teammate influence player trust and decision-making — and what happens when that AI is a mirror of the player themselves?</div>
+        </div>
+      </div>
+
+      <div class="cs-cards">
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Player Challenge" data-zh="玩家挑战">Player Challenge</div>
+          <div class="cs-card-title" data-en="Trust vs. Suspicion" data-zh="信任与怀疑">Trust vs. Suspicion</div>
+          <p class="cs-card-body" data-en="Players must decide how much to trust Shadow's guidance — not knowing that Shadow's behaviour directly reflects their own past choices. This creates a loop of self-doubt and revelation." data-zh="玩家必须决定对「影」的引导给予多少信任 —— 却不知道「影」的行为直接反映了他们自己过去的选择。这形成了一个自我怀疑与揭示的循环。">Players must decide how much to trust Shadow's guidance — not knowing that Shadow's behaviour directly reflects their own past choices. This creates a loop of self-doubt and revelation.</p>
+        </div>
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Design Challenge" data-zh="设计挑战">Design Challenge</div>
+          <div class="cs-card-title" data-en="Invisible Feedback" data-zh="隐形反馈">Invisible Feedback</div>
+          <p class="cs-card-body" data-en="The feedback loop between player action and AI response needed to be felt — not explained. The UI and narrative had to carry this without breaking immersion or over-signalling." data-zh="玩家行为与 AI 响应之间的反馈循环需要被感受到 —— 而非被解释。UI 和叙事必须在不打破沉浸感、不过度暗示的情况下传达这一点。">The feedback loop between player action and AI response needed to be felt — not explained. The UI and narrative had to carry this without breaking immersion or over-signalling.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 03 RESEARCH ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">03</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Research &amp; <span class='acc'>References</span>" data-zh="研究与<span class='acc'>参考</span>">Research &amp; <span class="acc">References</span></h2>
+      <p class="cs-body-text" data-en="I drew on both game design references and psychological theory to ground the AI companion system." data-zh="我结合游戏设计参考与心理学理论，为 AI 伴侣系统建立了扎实的基础。">I drew on both game design references and psychological theory to ground the AI companion system.</p>
+
+      <div class="cs-cards-3">
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Game Reference" data-zh="游戏参考">Game Reference</div>
+          <div class="cs-card-title">Disco Elysium</div>
+          <p class="cs-card-body" data-en="Internalized voices as dialogue partners. Fragmented identity as a gameplay mechanic. The player's psyche as the battleground." data-zh="内化的声音作为对话伙伴。碎片化身份作为游戏机制。玩家的心理作为战场。">Internalized voices as dialogue partners. Fragmented identity as a gameplay mechanic. The player's psyche as the battleground.</p>
+        </div>
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Game Reference" data-zh="游戏参考">Game Reference</div>
+          <div class="cs-card-title">Hellblade</div>
+          <p class="cs-card-body" data-en="Psychosis as narrative form. Voices that blur the line between guidance and threat. Audio design as psychological UX." data-zh="精神病症作为叙事形式。模糊引导与威胁界限的声音。音效设计作为心理 UX。">Psychosis as narrative form. Voices that blur the line between guidance and threat. Audio design as psychological UX.</p>
+        </div>
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Theory" data-zh="理论">Theory</div>
+          <div class="cs-card-title" data-en="Mirror Stage" data-zh="镜像阶段">Mirror Stage</div>
+          <p class="cs-card-body" data-en="Lacan's theory of the mirror stage — identity formed through recognition of a reflected image — directly inspired Shadow's core mechanic." data-zh="拉康的镜像阶段理论 —— 身份通过识别反射图像而形成 —— 直接启发了「影」的核心机制。">Lacan's theory of the mirror stage — identity formed through recognition of a reflected image — directly inspired Shadow's core mechanic.</p>
+        </div>
+      </div>
+
+      <div class="cs-insight">
+        <div class="cs-insight-icon">💡</div>
+        <div class="cs-insight-body">
+          <div class="cs-insight-label" data-en="Key Insight" data-zh="关键洞察">Key Insight</div>
+          <div class="cs-insight-text" data-en="The most effective AI companions in games are not the ones with the most capabilities — they are the ones that make players feel something about themselves." data-zh="游戏中最有效的 AI 伴侣，不是能力最强的那个 —— 而是能让玩家对自身产生感受的那个。">The most effective AI companions in games are not the ones with the most capabilities — they are the ones that make players feel something about themselves.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 04 DESIGN ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">04</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Interaction <span class='acc'>Design</span>" data-zh="交互<span class='acc'>设计</span>">Interaction <span class="acc">Design</span></h2>
+
+      <p class="cs-body-text" data-en="The game is built around three interlocking interaction systems, each designed to deepen the player's emotional and cognitive investment in Shadow." data-zh="游戏围绕三个相互关联的交互系统构建，每个系统都旨在加深玩家对「影」的情感与认知投入。">The game is built around three interlocking interaction systems, each designed to deepen the player's emotional and cognitive investment in Shadow.</p>
+
+      <div class="cs-steps">
+        <div class="cs-step">
+          <div class="cs-step-dot">01</div>
+          <div class="cs-step-content">
+            <div class="cs-step-title" data-en="Dual-Layer World — Tab Switch System" data-zh="双层世界 —— Tab 切换系统">Dual-Layer World — Tab Switch System</div>
+            <p class="cs-step-body" data-en="The city has two layers — the polished surface and the hidden underside. Players switch between them using a Tab key system, each layer revealing different information and different facets of Shadow's personality. The same space reads entirely differently depending on which layer you inhabit." data-zh="城市分为两层 —— 光鲜的表面与隐藏的底层。玩家通过 Tab 键系统在两层之间切换，每一层都揭示不同的信息和「影」性格的不同面向。同一空间在不同层级中呈现出完全不同的面貌。">The city has two layers — the polished surface and the hidden underside. Players switch between them using a Tab key system, each layer revealing different information and different facets of Shadow's personality. The same space reads entirely differently depending on which layer you inhabit.</p>
+            <div class="cs-step-tags">
+              <span class="cs-step-tag" data-en="Spatial UX" data-zh="空间 UX">Spatial UX</span>
+              <span class="cs-step-tag" data-en="Information Architecture" data-zh="信息架构">Information Architecture</span>
+              <span class="cs-step-tag">C# / Unity</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cs-step">
+          <div class="cs-step-dot">02</div>
+          <div class="cs-step-content">
+            <div class="cs-step-title" data-en="NPC Dialogue System — Branching + Behaviour Tracking" data-zh="NPC 对话系统 —— 分支 + 行为追踪">NPC Dialogue System — Branching + Behaviour Tracking</div>
+            <p class="cs-step-body" data-en="Three fully scripted NPCs with JSON-driven dialogue trees — each with conditional triggers based on the player's prior choices. Every dialogue selection is logged to a behaviour profile that Shadow reads from. The system was designed so that players rarely notice they are being tracked." data-zh="三个完整脚本 NPC 配备 JSON 驱动的对话树 —— 每个都有基于玩家先前选择的条件触发。每次对话选择都被记录到「影」可以读取的行为档案中。该系统设计的关键是让玩家很少意识到自己正在被追踪。">Three fully scripted NPCs with JSON-driven dialogue trees — each with conditional triggers based on the player's prior choices. Every dialogue selection is logged to a behaviour profile that Shadow reads from. The system was designed so that players rarely notice they are being tracked.</p>
+            <div class="cs-step-tags">
+              <span class="cs-step-tag" data-en="Dialogue Design" data-zh="对话设计">Dialogue Design</span>
+              <span class="cs-step-tag" data-en="Behaviour Tracking" data-zh="行为追踪">Behaviour Tracking</span>
+              <span class="cs-step-tag">JSON / C#</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cs-step">
+          <div class="cs-step-dot">03</div>
+          <div class="cs-step-content">
+            <div class="cs-step-title" data-en="AI Mirror — Shadow's Adaptive Response" data-zh="AI 镜像 —— 「影」的自适应响应">AI Mirror — Shadow's Adaptive Response</div>
+            <p class="cs-step-body" data-en="Shadow's personality, tone, and even visual glitch effects shift based on the player's accumulated behavioural data. A player who makes cold, analytical choices sees a more detached Shadow. A player who shows empathy sees Shadow become warmer. The player is, in effect, writing Shadow's character with every action." data-zh="「影」的性格、语调，甚至视觉故障效果都会根据玩家积累的行为数据而变化。做出冷静、分析性选择的玩家会看到更超然的「影」。表现出同理心的玩家会看到「影」变得更温暖。实际上，玩家是在用每个行动书写「影」的性格。">Shadow's personality, tone, and even visual glitch effects shift based on the player's accumulated behavioural data. A player who makes cold, analytical choices sees a more detached Shadow. A player who shows empathy sees Shadow become warmer. The player is, in effect, writing Shadow's character with every action.</p>
+            <div class="cs-step-tags">
+              <span class="cs-step-tag" data-en="AI Companion Design" data-zh="AI 伴侣设计">AI Companion Design</span>
+              <span class="cs-step-tag" data-en="Adaptive Narrative" data-zh="自适应叙事">Adaptive Narrative</span>
+              <span class="cs-step-tag" data-en="Visual Feedback" data-zh="视觉反馈">Visual Feedback</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 05 VISUAL DESIGN ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">05</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Visual <span class='acc'>Design</span>" data-zh="视觉<span class='acc'>设计</span>">Visual <span class="acc">Design</span></h2>
+      <p class="cs-body-text" data-en="Scene backgrounds and video assets were generated using Gemini, Kling, and Runway — then composited in Unity. The visual language pairs a warm cyberpunk palette (deep teal, amber neon) with deliberate glitch effects that signal Shadow's mirror state." data-zh="场景背景和视频素材通过 Gemini、Kling 和 Runway 生成 —— 然后在 Unity 中合成。视觉语言将温暖的赛博朋克配色（深青色、琥珀霓虹）与刻意的故障效果相结合，以此标示「影」的镜像状态。">Scene backgrounds and video assets were generated using Gemini, Kling, and Runway — then composited in Unity. The visual language pairs a warm cyberpunk palette (deep teal, amber neon) with deliberate glitch effects that signal Shadow's mirror state.</p>
+
+      <div class="cs-img-2">
+        <div class="cs-img-wrap" style="aspect-ratio:16/9;" onclick="openLb('有色场景.png')">
+          <img src="有色场景.png" alt="AFTERIMAGE scene — coloured environment">
+        </div>
+        <div class="cs-img-wrap" style="aspect-ratio:16/9;" onclick="openLb('奶茶店png.png')">
+          <img src="奶茶店png.png" alt="AFTERIMAGE scene — milk tea shop">
+        </div>
+      </div>
+      <p class="cs-img-caption" data-en="In-game environment renders — generated with Gemini + Kling, composited in Unity" data-zh="游戏内环境渲染 —— 使用 Gemini + Kling 生成，在 Unity 中合成">In-game environment renders — generated with Gemini + Kling, composited in Unity</p>
+
+      <div class="cs-tag-group" style="margin-top:20px;">
+        <span class="cs-tag">Gemini</span>
+        <span class="cs-tag">Kling</span>
+        <span class="cs-tag">Runway</span>
+        <span class="cs-tag" data-en="Unity Compositing" data-zh="Unity 合成">Unity Compositing</span>
+        <span class="cs-tag" data-en="Glitch Effects" data-zh="故障效果">Glitch Effects</span>
+        <span class="cs-tag" data-en="Cyberpunk Palette" data-zh="赛博朋克配色">Cyberpunk Palette</span>
+      </div>
+    </div>
+
+    <!-- ── 06 PROTOTYPE ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">06</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Prototype &amp; <span class='acc'>Demo</span>" data-zh="原型与<span class='acc'>演示</span>">Prototype &amp; <span class="acc">Demo</span></h2>
+      <p class="cs-body-text" data-en="The game was built and tested across two distribution targets — a PC standalone build and a WebGL version for itch.io. The gameplay recording below demonstrates the core loop across Scenes 1–4." data-zh="游戏针对两个发行目标进行了构建和测试 —— PC 独立版本和用于 itch.io 的 WebGL 版本。下面的游戏录屏展示了第 1–4 场景的核心循环。">The game was built and tested across two distribution targets — a PC standalone build and a WebGL version for itch.io. The gameplay recording below demonstrates the core loop across Scenes 1–4.</p>
+
+      <div class="cs-video">
+        <video controls poster="像残预览图.png">
+          <source src="残像录屏" type="video/mp4">
+          <source src="pv.mp4" type="video/mp4">
+        </video>
+      </div>
+      <p class="cs-img-caption" data-en="Gameplay recording — AFTERIMAGE, Scenes 1–4" data-zh="游戏录屏 —— 《残像》第 1–4 场景">Gameplay recording — AFTERIMAGE, Scenes 1–4</p>
+    </div>
+
+    <!-- ── 07 TECHNICAL ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">07</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Technical <span class='acc'>Implementation</span>" data-zh="技术<span class='acc'>实现</span>">Technical <span class="acc">Implementation</span></h2>
+      <p class="cs-body-text" data-en="Building a multi-scene Unity 2D project independently required careful architecture decisions — especially around state management, scene transitions, and the custom tooling that enabled rapid iteration." data-zh="独立构建一个多场景 Unity 2D 项目需要谨慎的架构决策 —— 尤其是在状态管理、场景过渡，以及支持快速迭代的自定义工具方面。">Building a multi-scene Unity 2D project independently required careful architecture decisions — especially around state management, scene transitions, and the custom tooling that enabled rapid iteration.</p>
+
+      <div class="cs-cards">
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Architecture" data-zh="架构">Architecture</div>
+          <div class="cs-card-title" data-en="Singleton + DontDestroyOnLoad" data-zh="单例 + DontDestroyOnLoad">Singleton + DontDestroyOnLoad</div>
+          <p class="cs-card-body" data-en="Core managers (GameState, DialogueManager, BehaviourLog) persist across scenes via DontDestroyOnLoad. Singleton pattern ensures a single source of truth for player data throughout the game session." data-zh="核心管理器（GameState、DialogueManager、BehaviourLog）通过 DontDestroyOnLoad 跨场景持久化。单例模式确保整个游戏会话中玩家数据有唯一的数据源。">Core managers (GameState, DialogueManager, BehaviourLog) persist across scenes via DontDestroyOnLoad. Singleton pattern ensures a single source of truth for player data throughout the game session.</p>
+        </div>
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Custom Tooling" data-zh="自定义工具">Custom Tooling</div>
+          <div class="cs-card-title">AfterimageSetupTool.cs</div>
+          <p class="cs-card-body" data-en="A custom Unity Editor tool built to automate repetitive scene setup tasks — wiring managers, assigning prefabs, configuring CanvasGroup states. Reduced per-scene setup time by ~60%." data-zh="一个自定义 Unity 编辑器工具，用于自动化重复的场景配置任务 —— 连接管理器、分配预制体、配置 CanvasGroup 状态。将每个场景的配置时间减少了约 60%。">A custom Unity Editor tool built to automate repetitive scene setup tasks — wiring managers, assigning prefabs, configuring CanvasGroup states. Reduced per-scene setup time by ~60%.</p>
+        </div>
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Solved Challenges" data-zh="解决的技术挑战">Solved Challenges</div>
+          <div class="cs-card-title" data-en="Key Engineering Problems" data-zh="关键工程问题">Key Engineering Problems</div>
+          <p class="cs-card-body" data-en="Resolved: recursive LoadScene conflicts, coroutine race conditions in dialogue transitions, CanvasGroup visibility management across async operations, and duplicate Singleton instantiation on scene reload." data-zh="解决：递归 LoadScene 冲突、对话过渡中的协程竞争条件、异步操作中的 CanvasGroup 可见性管理，以及场景重载时的重复单例实例化。">Resolved: recursive LoadScene conflicts, coroutine race conditions in dialogue transitions, CanvasGroup visibility management across async operations, and duplicate Singleton instantiation on scene reload.</p>
+        </div>
+        <div class="cs-card">
+          <div class="cs-card-label" data-en="Distribution" data-zh="发行">Distribution</div>
+          <div class="cs-card-title" data-en="PC + WebGL Build" data-zh="PC + WebGL 版本">PC + WebGL Build</div>
+          <p class="cs-card-body" data-en="Optimised for both PC standalone and WebGL (itch.io). WebGL build required texture compression adjustments and memory management rewrites to stay within browser constraints." data-zh="针对 PC 独立版本和 WebGL（itch.io）进行了优化。WebGL 版本需要调整纹理压缩和重写内存管理，以保持在浏览器限制范围内。">Optimised for both PC standalone and WebGL (itch.io). WebGL build required texture compression adjustments and memory management rewrites to stay within browser constraints.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 08 OUTCOME ── -->
+    <div class="cs-section reveal">
+      <div class="cs-section-label">
+        <span class="cs-section-num">08</span>
+        <span class="cs-section-line"></span>
+      </div>
+      <h2 class="cs-section-title" data-en="Outcome &amp; <span class='acc'>Reflection</span>" data-zh="成果与<span class='acc'>反思</span>">Outcome &amp; <span class="acc">Reflection</span></h2>
+
+      <div class="cs-2col">
+        <div>
+          <p class="cs-body-text" data-en="AFTERIMAGE was submitted to the Lilith Game Jam and distributed as both a PC build and WebGL version. The project represents my most technically complex independent work to date." data-zh="《残像》提交至莉莉丝游戏大赛，并作为 PC 版本和 WebGL 版本发布。这个项目是我迄今为止最具技术复杂度的独立作品。">AFTERIMAGE was submitted to the Lilith Game Jam and distributed as both a PC build and WebGL version. The project represents my most technically complex independent work to date.</p>
+          <p class="cs-body-text" data-en="Beyond technical execution, the project taught me how to design <em>felt experience</em> — emotion that isn't stated but implied through system design, environmental storytelling, and the gap between what the player expects and what they discover." data-zh="除了技术执行，这个项目教会了我如何设计<em>可感受的体验</em> —— 不是通过文字陈述而是通过系统设计、环境叙事，以及玩家期望与实际发现之间的落差来隐含情感。">Beyond technical execution, the project taught me how to design <em>felt experience</em> — emotion that isn't stated but implied through system design, environmental storytelling, and the gap between what the player expects and what they discover.</p>
+        </div>
+        <div>
+          <ul class="cs-list">
+            <li data-en="Designed and implemented 10+ fully playable scenes as solo developer" data-zh="作为独立开发者设计并实现 10+ 个完整可玩场景">Designed and implemented 10+ fully playable scenes as solo developer</li>
+            <li data-en="Built custom Editor tooling that reduced iteration time significantly" data-zh="构建了显著减少迭代时间的自定义编辑器工具">Built custom Editor tooling that reduced iteration time significantly</li>
+            <li data-en="Created an AI companion system that responds to invisible player data" data-zh="创建了响应玩家隐形数据的 AI 伴侣系统">Created an AI companion system that responds to invisible player data</li>
+            <li data-en="Shipped dual distribution targets: PC standalone + WebGL" data-zh="完成双平台发行：PC 独立版 + WebGL">Shipped dual distribution targets: PC standalone + WebGL</li>
+            <li data-en="Integrated AIGC assets (Gemini, Kling, Runway) into production pipeline" data-zh="将 AIGC 素材（Gemini、Kling、Runway）集成至生产流程">Integrated AIGC assets (Gemini, Kling, Runway) into production pipeline</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cs-insight">
+        <div class="cs-insight-icon">🔮</div>
+        <div class="cs-insight-body">
+          <div class="cs-insight-label" data-en="What I'd Do Differently" data-zh="如果重做我会改变什么">What I'd Do Differently</div>
+          <div class="cs-insight-text" data-en="Earlier playtesting — ideally from Scene 3 onwards, not just at the end. The mirror mechanic needed external eyes earlier to validate that the reveal felt earned rather than arbitrary. I'd also invest more time in audio design: the emotional weight of the twist lived or died on sound." data-zh="更早进行用户测试 —— 理想情况下从第 3 场景开始，而不是只在最后。镜像机制需要更早引入外部视角来验证揭示感觉是水到渠成而非随意的。我也会在音效设计上投入更多时间：转折的情感重量很大程度上依赖于声音。">Earlier playtesting — ideally from Scene 3 onwards, not just at the end. The mirror mechanic needed external eyes earlier to validate that the reveal felt earned rather than arbitrary. I'd also invest more time in audio design: the emotional weight of the twist lived or died on sound.</div>
+        </div>
+      </div>
+
+      <div class="cs-tag-group">
+        <span class="cs-tag">Unity 2D</span>
+        <span class="cs-tag">C#</span>
+        <span class="cs-tag" data-en="Game UX" data-zh="游戏 UX">Game UX</span>
+        <span class="cs-tag" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
+        <span class="cs-tag" data-en="AI Companion" data-zh="AI 伴侣">AI Companion</span>
+        <span class="cs-tag">Gemini · Kling · Runway</span>
+        <span class="cs-tag" data-en="Lilith Game Jam" data-zh="莉莉丝游戏大赛">Lilith Game Jam</span>
+        <span class="cs-tag">WebGL</span>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /cs-body -->
+
+<!-- ══════════════════════════════════════════
+     NEXT PROJECT
+═══════════════════════════════════════════ -->
+<section id="next-project">
+  <div class="container">
+    <a href="project-growthpain.html" class="next-inner reveal">
+      <div class="next-left">
+        <div class="next-eyebrow" data-en="Next Case Study" data-zh="下一个案例">Next Case Study</div>
+        <div class="next-title" data-en="Growth Pain / 生长痛" data-zh="生长痛 / Growth Pain">Growth Pain / 生长痛</div>
+        <div class="next-type" data-en="Visual Novel · Emotional Narrative" data-zh="视觉小说 · 情感叙事">Visual Novel · Emotional Narrative</div>
+      </div>
+      <div class="next-arrow">→</div>
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 Siyu Diao · <span data-en="Designed &amp; Developed by Siyu" data-zh="由思予设计与开发">Designed &amp; Developed by Siyu</span></div>
+      <div class="footer-links">
+        <a href="projects.html" data-en="All Projects" data-zh="所有项目">All Projects</a>
+        <a href="about.html" data-en="About" data-zh="关于">About</a>
+        <a href="mailto:630388703@qq.com">630388703@qq.com</a>
+        <a href="刁思予_简历.pdf" target="_blank" data-en="Resume" data-zh="简历">Resume</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page-wrap -->
+
+<script>
+/* ── Cursor ── */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function raf(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(raf);})();
+document.querySelectorAll('a,button,.cs-card,.next-inner').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='44px';ring.style.height='44px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
+});
+
+/* ── Parallax ── */
+document.addEventListener('mousemove',e=>{
+  const xp=(e.clientX/window.innerWidth-.5)*10,yp=(e.clientY/window.innerHeight-.5)*8;
+  document.getElementById('bg-img').style.transform=`translate(${xp}px,${yp}px)`;
+});
+
+/* ── Progress bar ── */
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement;
+  const pct=(s.scrollTop)/(s.scrollHeight-s.clientHeight)*100;
+  document.getElementById('progress-fill').style.width=pct+'%';
+});
+
+/* ── Lang ── */
+let lang=localStorage.getItem('sd-lang')||'en';
+const langBtn=document.getElementById('langBtn');
+function applyLang(){
+  document.querySelectorAll('[data-en][data-zh]').forEach(el=>{
+    const v=el.getAttribute('data-'+lang);
+    if(v!==null)el.innerHTML=v;
+  });
+  langBtn.textContent=lang==='en'?'中文':'EN';
+  document.documentElement.lang=lang==='zh'?'zh':'en';
+  if(mState==='hover'&&mHover)mbub.textContent=BUBBLE.hover[lang];
+}
+function toggleLang(){lang=lang==='en'?'zh':'en';localStorage.setItem('sd-lang',lang);applyLang();}
+applyLang();
+
+/* ── Music ── */
+const bgm=document.getElementById('bgm'),musicBtn=document.getElementById('musicBtn'),musicIcon=document.getElementById('musicIcon');
+let musicOn=false;bgm.volume=0.3;
+function checkMusic(){
+  const p=localStorage.getItem('sd-music');
+  if(p==='yes')enableMusic();else if(p==='no')skipMusic();
+  else document.getElementById('music-modal').classList.add('show');
+}
+function enableMusic(){document.getElementById('music-modal').classList.remove('show');bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');localStorage.setItem('sd-music','yes');}
+function skipMusic(){document.getElementById('music-modal').classList.remove('show');musicOn=false;musicIcon.textContent='♪';localStorage.setItem('sd-music','no');}
+function toggleMusic(){if(!musicOn){bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');}else{bgm.pause();musicOn=false;musicIcon.textContent='♪';musicBtn.classList.remove('on');}}
+checkMusic();
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+
+/* ── Mascot ── */
+const mimg=document.getElementById('mimg'),mbub=document.getElementById('mbubble'),mascot=document.getElementById('mascot');
+const IMGS={idle:'默认.png',hover:'HOVER 打招呼.png',click:'点击爱心跳一下.png',walk:'步行.png',type:'打字（坐在电脑前设计）.png'};
+const BUBBLE={hover:{en:"Hi! I'm Siyu :)",zh:'你好！我是思予～'},click:{en:'Thanks for visiting ♡',zh:'感谢来访 ♡'}};
+let mState='idle',mHover=false,mScrollT=null;
+function goMascot(s,bk,dur){
+  mState=s;mimg.className='m-img';mimg.src=IMGS[s]||IMGS.idle;
+  if(s==='idle')mimg.classList.add('float');
+  if(s==='click')mimg.classList.add('jump');
+  if(bk){mbub.textContent=BUBBLE[bk][lang];mbub.classList.add('show');}else mbub.classList.remove('show');
+  if(dur)setTimeout(()=>resolve(),dur);
+}
+function resolve(){if(mHover)goMascot('hover','hover');else goMascot('idle',null);}
+mascot.addEventListener('mouseenter',()=>{if(mState==='click')return;mHover=true;goMascot('hover','hover');});
+mascot.addEventListener('mouseleave',()=>{mHover=false;if(mState!=='click')resolve();});
+mascot.addEventListener('click',e=>{e.stopPropagation();goMascot('click','click',1000);});
+window.addEventListener('scroll',()=>{
+  if(mState==='click')return;
+  mimg.className='m-img';mimg.src=IMGS.walk;mbub.classList.remove('show');
+  clearTimeout(mScrollT);mScrollT=setTimeout(resolve,500);
+});
+
+/* ── Lightbox ── */
+function openLb(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('on');}
+function closeLb(){document.getElementById('lightbox').classList.remove('on');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+
+/* ── Scroll Reveal ── */
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+</script>
+</body>
+</html>
