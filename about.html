@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About · Siyu Diao</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   TOKENS
+============================================= */
+:root {
+  --lime:#C8E65A; --lime-l:#dff285; --lime-p:#eef9c0;
+  --bg:#F7F6F2; --card:rgba(255,255,255,0.75);
+  --text:#1F1F1F; --muted:#6B6B5E; --soft:#A8A896;
+  --nav-h:68px; --radius:28px;
+  --shadow:0 4px 32px rgba(0,0,0,0.07);
+  --shadow-h:0 16px 48px rgba(0,0,0,0.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);cursor:none;overflow-x:hidden;}
+
+/* =============================================
+   CURSOR
+============================================= */
+#cur{position:fixed;width:10px;height:10px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .2s,height .2s;}
+
+/* =============================================
+   BACKGROUND
+============================================= */
+#bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#bg-img{position:absolute;inset:-30px;background:url('网页背景.png') center/cover no-repeat;opacity:.16;transition:transform .1s linear;will-change:transform;}
+.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;animation:orbFloat 8s ease-in-out infinite;}
+.orb1{width:420px;height:420px;background:radial-gradient(circle,rgba(200,230,90,.55),transparent 70%);top:-80px;left:-60px;}
+.orb2{width:340px;height:340px;background:radial-gradient(circle,rgba(200,230,90,.4),transparent 70%);bottom:10%;right:-40px;animation-delay:-3s;}
+.orb3{width:260px;height:260px;background:radial-gradient(circle,rgba(200,230,90,.3),transparent 70%);top:40%;left:60%;animation-delay:-5s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-28px) scale(1.04)}}
+
+/* =============================================
+   NAV
+============================================= */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(247,246,242,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,230,90,.2);transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06);}
+.nav-logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--text);text-decoration:none;cursor:none;}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{display:flex;align-items:center;height:var(--nav-h);padding:0 18px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--lime);transition:left .22s,right .22s;}
+.nav-links a:hover,.nav-links a.active{color:var(--text);}
+.nav-links a:hover::after,.nav-links a.active::after{left:12px;right:12px;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.lang-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;padding:6px 14px;border-radius:100px;background:rgba(200,230,90,.18);border:none;color:var(--muted);cursor:none;transition:all .2s;}
+.lang-btn:hover{background:var(--lime);color:var(--text);}
+.music-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;padding:6px 14px;border-radius:100px;background:transparent;border:1.5px solid rgba(31,31,31,.14);color:var(--muted);cursor:none;transition:all .2s;display:flex;align-items:center;gap:6px;}
+.music-btn:hover{border-color:var(--lime);color:var(--text);}
+.music-btn.on{border-color:var(--lime);background:rgba(200,230,90,.12);}
+
+/* =============================================
+   MASCOT
+============================================= */
+#mascot{position:fixed;right:32px;bottom:32px;z-index:600;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none;}
+.m-bubble{background:white;border-radius:18px 18px 4px 18px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:var(--shadow);margin-bottom:10px;opacity:0;transform:translateY(6px) scale(.93);transition:all .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
+.m-bubble.show{opacity:1;transform:translateY(0) scale(1);}
+.m-img{width:92px;pointer-events:all;cursor:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12));}
+.m-img.float{animation:mfloat 3s ease-in-out infinite;}
+.m-img.jump{animation:mjump .44s ease-out;}
+@keyframes mfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes mjump{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-22px) scale(1.06)}65%{transform:translateY(-5px) scale(.97)}100%{transform:translateY(0) scale(1)}}
+
+/* =============================================
+   MUSIC MODAL
+============================================= */
+#music-modal{position:fixed;inset:0;z-index:9980;background:rgba(247,246,242,.82);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
+#music-modal.show{display:flex;}
+.mm-box{background:var(--card);border-radius:var(--radius);padding:44px 52px;box-shadow:var(--shadow-h);text-align:center;backdrop-filter:blur(12px);animation:mmIn .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes mmIn{from{opacity:0;transform:scale(.9) translateY(16px)}to{opacity:1;transform:none}}
+.mm-icon{font-size:36px;margin-bottom:16px;}
+.mm-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;}
+.mm-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.mm-btns{display:flex;gap:12px;justify-content:center;}
+.mm-btn{padding:12px 32px;border-radius:100px;font-size:14px;font-weight:500;cursor:none;border:none;transition:all .22s;font-family:'DM Sans',sans-serif;}
+.mm-yes{background:var(--lime);color:var(--text);}
+.mm-yes:hover{background:var(--lime-l);transform:translateY(-2px);}
+.mm-no{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.mm-no:hover{background:rgba(200,230,90,.15);transform:translateY(-2px);}
+
+/* =============================================
+   LAYOUT
+============================================= */
+.page-wrap{position:relative;z-index:1;padding-top:var(--nav-h);}
+.container{max-width:1160px;margin:0 auto;padding:0 52px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;cursor:none;border:none;font-family:'DM Sans',sans-serif;transition:all .25s;}
+.btn-lime{background:var(--lime);color:var(--text);}
+.btn-lime:hover{background:var(--lime-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,230,90,.4);}
+.btn-ghost{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
+.btn-ghost:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
+
+/* =============================================
+   HERO — ABOUT
+============================================= */
+#about-hero{min-height:100vh;display:flex;align-items:center;padding:80px 0;}
+.ah-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;width:100%;}
+
+/* left — character */
+.ah-char-col{display:flex;justify-content:center;}
+.ah-char-wrap{position:relative;width:340px;}
+.ah-char-bg{width:100%;aspect-ratio:3/4;border-radius:var(--radius);background:var(--lime-p);box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.ah-char-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(200,230,90,.25) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.ah-char{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:88%;filter:drop-shadow(0 6px 18px rgba(0,0,0,.1));animation:charIn .9s .2s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes charIn{from{transform:translateX(-50%) translateY(40px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+.ah-char-label{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.8);padding:6px 14px;border-radius:100px;backdrop-filter:blur(8px);}
+
+/* right — text */
+.ah-text-col{}
+.ah-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--lime);margin-bottom:16px;opacity:0;animation:fadeUp .6s .1s forwards;}
+.ah-name{font-family:'Playfair Display',serif;font-size:clamp(44px,6vw,72px);font-weight:700;line-height:.95;letter-spacing:-.025em;margin-bottom:16px;opacity:0;animation:fadeUp .6s .2s forwards;}
+.ah-name .acc{color:var(--lime);}
+.ah-name em{display:block;font-weight:400;font-style:italic;font-size:.45em;color:var(--muted);letter-spacing:.02em;margin-top:8px;}
+.ah-roles{display:flex;flex-direction:column;gap:4px;margin-bottom:28px;opacity:0;animation:fadeUp .6s .3s forwards;}
+.ah-role{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px;line-height:2;}
+.ah-role::before{content:'◆';font-size:5px;color:var(--lime);}
+.ah-body{font-size:16px;color:var(--muted);line-height:1.8;max-width:420px;margin-bottom:36px;opacity:0;animation:fadeUp .6s .4s forwards;}
+.ah-cta{display:flex;gap:14px;opacity:0;animation:fadeUp .6s .5s forwards;}
+
+/* =============================================
+   IDENTITY CARDS
+============================================= */
+#identity{padding:80px 0;}
+.id-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.id-card{background:var(--card);border-radius:var(--radius);padding:36px 32px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;transition:all .3s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;}
+.id-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .35s;}
+.id-card:hover{transform:translateY(-6px);border-color:var(--lime);box-shadow:var(--shadow-h);}
+.id-card:hover::before{transform:scaleX(1);}
+.id-card-icon{font-size:32px;margin-bottom:20px;}
+.id-card-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:14px;}
+.id-card-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:20px;}
+.id-pills{display:flex;flex-wrap:wrap;gap:8px;}
+.id-pill{font-size:12px;color:var(--muted);background:rgba(200,230,90,.18);padding:5px 14px;border-radius:100px;}
+
+/* =============================================
+   SKILLS SECTION
+============================================= */
+#skills-section{padding:80px 0;}
+.sec-header{margin-bottom:52px;}
+.sec-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:700;line-height:1.1;}
+.sec-title span{color:var(--lime);}
+.skills-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.skill-group{background:var(--card);border-radius:20px;padding:28px 26px;box-shadow:var(--shadow);backdrop-filter:blur(12px);}
+.sg-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid rgba(200,230,90,.3);}
+.sg-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.s-tag{padding:7px 16px;border-radius:100px;font-size:12px;font-weight:500;background:var(--lime-p);border:1.5px solid transparent;transition:all .2s;cursor:default;}
+.s-tag:hover{border-color:var(--lime);transform:translateY(-2px);}
+.s-tag.dim{background:rgba(247,246,242,.8);color:var(--muted);}
+
+/* =============================================
+   EDUCATION & TIMELINE
+============================================= */
+#edu-section{padding:80px 0;}
+.edu-timeline{display:flex;flex-direction:column;gap:0;max-width:760px;margin:0 auto;}
+.tl-item{display:grid;grid-template-columns:120px 1fr;gap:32px;position:relative;padding-bottom:48px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::after{content:'';position:absolute;top:14px;left:110px;bottom:0;width:1px;background:rgba(200,230,90,.4);}
+.tl-item:last-child::after{display:none;}
+.tl-year{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--lime);padding-top:2px;text-align:right;}
+.tl-dot{position:absolute;top:6px;left:106px;width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px rgba(200,230,90,.25);z-index:1;}
+.tl-content{}
+.tl-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.tl-sub{font-size:14px;color:var(--muted);margin-bottom:10px;}
+.tl-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.tl-tag{font-size:11px;color:var(--muted);background:rgba(200,230,90,.18);padding:3px 12px;border-radius:100px;}
+
+/* =============================================
+   UX PROCESS TIMELINE
+============================================= */
+#process-section{padding:80px 0 60px;}
+.proc-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;margin-top:52px;}
+.proc-flow::before{content:'';position:absolute;top:24px;left:10%;right:10%;height:1.5px;background:linear-gradient(90deg,var(--lime),rgba(200,230,90,.3));z-index:0;}
+.proc-step{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;}
+.ps-dot{width:48px;height:48px;border-radius:50%;background:var(--lime-p);border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--text);transition:all .25s;cursor:default;}
+.proc-step:hover .ps-dot{background:var(--lime);transform:scale(1.1);}
+.ps-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.ps-items{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--muted);line-height:1.9;text-transform:uppercase;}
+
+/* =============================================
+   ASPIRATIONS
+============================================= */
+#aspirations{padding:60px 0 100px;}
+.asp-inner{background:var(--lime-p);border-radius:var(--radius);padding:52px 60px;}
+.asp-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.asp-left{}
+.asp-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.asp-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,42px);font-weight:700;line-height:1.1;margin-bottom:20px;}
+.asp-body{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px;}
+.asp-avail{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:28px;}
+.avail-dot{width:8px;height:8px;border-radius:50%;background:#3cb043;box-shadow:0 0 0 3px rgba(60,176,67,.22);animation:avpulse 2s infinite;flex-shrink:0;}
+@keyframes avpulse{0%,100%{box-shadow:0 0 0 3px rgba(60,176,67,.22)}50%{box-shadow:0 0 0 7px rgba(60,176,67,.06)}}
+.asp-right{display:flex;flex-direction:column;gap:14px;}
+.asp-card{background:rgba(255,255,255,.75);border-radius:18px;padding:22px 24px;box-shadow:var(--shadow);backdrop-filter:blur(8px);transition:transform .22s;}
+.asp-card:hover{transform:translateY(-3px);}
+.asp-card-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
+.asp-card-val{font-size:14px;font-weight:500;line-height:1.5;}
+.asp-card-val small{font-weight:400;color:var(--muted);font-size:12px;}
+
+/* =============================================
+   FOOTER
+============================================= */
+footer{border-top:1px solid rgba(200,230,90,.2);padding:36px 0;position:relative;z-index:1;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;}
+.footer-copy{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;}
+.footer-links a:hover{color:var(--lime);}
+
+/* =============================================
+   SCROLL REVEAL
+============================================= */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-d1{transition-delay:.1s;}.reveal-d2{transition-delay:.2s;}.reveal-d3{transition-delay:.3s;}.reveal-d4{transition-delay:.4s;}.reveal-d5{transition-delay:.5s;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media(max-width:1024px){
+  .ah-inner{grid-template-columns:1fr;gap:48px;}
+  .ah-char-col{order:-1;}
+  .ah-char-wrap{width:260px;}
+  .id-grid{grid-template-columns:1fr 1fr;}
+  .skills-groups{grid-template-columns:1fr 1fr;}
+  .proc-flow{grid-template-columns:1fr;gap:32px;}
+  .proc-flow::before{display:none;}
+  .proc-step{flex-direction:row;text-align:left;gap:18px;align-items:flex-start;}
+  .asp-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  nav{padding:0 20px;}.container{padding:0 20px;}
+  .nav-links{display:none;}
+  .id-grid,.skills-groups{grid-template-columns:1fr;}
+  .tl-item{grid-template-columns:80px 1fr;gap:16px;}
+  .tl-item::after{left:78px;}
+  .tl-dot{left:74px;}
+  .footer-inner{flex-direction:column;gap:16px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── BACKGROUND ── -->
+<div id="bg-layer">
+  <div id="bg-img"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- ── CURSOR ── -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- ── MUSIC MODAL ── -->
+<div id="music-modal">
+  <div class="mm-box">
+    <div class="mm-icon">🎵</div>
+    <div class="mm-title" data-en="Enable Background Music?" data-zh="开启背景音乐？">Enable Background Music?</div>
+    <div class="mm-sub" data-en="A light ambient track to accompany your visit." data-zh="一段轻柔的背景音乐陪你浏览。">A light ambient track to accompany your visit.</div>
+    <div class="mm-btns">
+      <button class="mm-btn mm-yes" onclick="enableMusic()" data-en="Yes, play it ♪" data-zh="好的，开启 ♪">Yes, play it ♪</button>
+      <button class="mm-btn mm-no" onclick="skipMusic()" data-en="No thanks" data-zh="不了，谢谢">No thanks</button>
+    </div>
+  </div>
+</div>
+<audio id="bgm" src="bgm.mp3" loop></audio>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">SIYU DIAO</a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home" data-zh="首页">Home</a></li>
+    <li><a href="projects.html" data-en="Projects" data-zh="项目">Projects</a></li>
+    <li><a href="about.html" class="active" data-en="About" data-zh="关于">About</a></li>
+    <li><a href="resume.html" data-en="Resume" data-zh="简历">Resume</a></li>
+    <li><a href="contact.html" data-en="Contact" data-zh="联系">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">中文</button>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+      <span id="musicIcon">♪</span>
+      <span id="musicLbl">Music</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── MASCOT ── -->
+<div id="mascot">
+  <div class="m-bubble" id="mbubble"></div>
+  <img src="打字（坐在电脑前设计）.png" alt="Siyu typing" class="m-img float" id="mimg">
+</div>
+
+<div class="page-wrap">
+
+<!-- ══════════════════════════════════════════
+     HERO — ABOUT
+═══════════════════════════════════════════ -->
+<section id="about-hero">
+  <div class="container">
+    <div class="ah-inner">
+
+      <!-- Character -->
+      <div class="ah-char-col">
+        <div class="ah-char-wrap">
+          <div class="ah-char-bg">
+            <img src="打字（坐在电脑前设计）.png" alt="Siyu designing" class="ah-char" id="ahChar">
+            <div class="ah-char-label" data-en="@ designing something ✦" data-zh="@ 设计中 ✦">@ designing something ✦</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div class="ah-text-col">
+        <div class="ah-eyebrow" data-en="Who I Am" data-zh="关于我">Who I Am</div>
+        <h1 class="ah-name">
+          SIYU<br><span class="acc">DIAO</span>
+          <em data-en="刁思予" data-zh="Siyu Diao">刁思予</em>
+        </h1>
+        <div class="ah-roles">
+          <div class="ah-role" data-en="Digital Media Art Student" data-zh="数字媒体艺术专业学生">Digital Media Art Student</div>
+          <div class="ah-role" data-en="UX Designer" data-zh="用户体验设计师">UX Designer</div>
+          <div class="ah-role" data-en="Game Experience Designer" data-zh="游戏体验设计师">Game Experience Designer</div>
+          <div class="ah-role" data-en="Interactive Narrative Designer" data-zh="互动叙事设计师">Interactive Narrative Designer</div>
+          <div class="ah-role" data-en="AIGC Creator" data-zh="AIGC 创作者">AIGC Creator</div>
+        </div>
+        <p class="ah-body"
+          data-en="I focus on UX design, game experience, interactive narrative and AI-assisted creation. My work explores how narrative, space and interaction can shape human emotions and behaviour — turning abstract ideas and social issues into playable, viewable, and feelable experiences."
+          data-zh="我专注于用户体验设计、游戏体验、互动叙事与 AIGC 创作。我的作品探索叙事、空间与互动如何塑造人的情感与行为 —— 将抽象的想法与社会议题转化为可玩、可看、可感受的体验。">
+          I focus on UX design, game experience, interactive narrative and AI-assisted creation. My work explores how narrative, space and interaction can shape human emotions and behaviour — turning abstract ideas and social issues into playable, viewable, and feelable experiences.
+        </p>
+        <div class="ah-cta">
+          <a href="projects.html" class="btn btn-lime" data-en="View Projects →" data-zh="查看项目 →">View Projects →</a>
+          <a href="contact.html" class="btn btn-ghost" data-en="Get in Touch" data-zh="联系我">Get in Touch</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     IDENTITY CARDS
+═══════════════════════════════════════════ -->
+<section id="identity">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow" data-en="What I Do" data-zh="我的方向">What I Do</div>
+      <h2 class="sec-title" data-en="Three <span>Focus Areas</span>" data-zh="三个<span>专注方向</span>">Three <span>Focus Areas</span></h2>
+    </div>
+    <div class="id-grid">
+
+      <div class="id-card reveal reveal-d1">
+        <div class="id-card-icon">🎨</div>
+        <div class="id-card-title" data-en="UX DESIGN" data-zh="用户体验设计">UX DESIGN</div>
+        <p class="id-card-desc"
+          data-en="Designing intuitive, emotionally resonant interfaces. I care about the experience before, during, and after the interaction — not just the screen."
+          data-zh="设计直觉友好、情感共鸣的界面。我关注交互前、中、后的完整体验 —— 而不只是屏幕本身。">
+          Designing intuitive, emotionally resonant interfaces. I care about the experience before, during, and after the interaction — not just the screen.
+        </p>
+        <div class="id-pills">
+          <span class="id-pill" data-en="User Research" data-zh="用户研究">User Research</span>
+          <span class="id-pill" data-en="User Flow" data-zh="用户流程">User Flow</span>
+          <span class="id-pill" data-en="Interaction Design" data-zh="交互设计">Interaction Design</span>
+          <span class="id-pill">Figma</span>
+          <span class="id-pill" data-en="Prototyping" data-zh="原型设计">Prototyping</span>
+        </div>
+      </div>
+
+      <div class="id-card reveal reveal-d2">
+        <div class="id-card-icon">🎮</div>
+        <div class="id-card-title" data-en="GAME EXPERIENCE" data-zh="游戏体验">GAME EXPERIENCE</div>
+        <p class="id-card-desc"
+          data-en="Building games that feel, not just games that work. I design NPC behaviour, feedback loops, narrative branches and player emotional arcs from scratch."
+          data-zh="构建让人有感觉的游戏，而不只是能运行的游戏。我从零设计 NPC 行为、反馈循环、叙事分支和玩家情感弧线。">
+          Building games that feel, not just games that work. I design NPC behaviour, feedback loops, narrative branches and player emotional arcs from scratch.
+        </p>
+        <div class="id-pills">
+          <span class="id-pill">Unity 2D/3D</span>
+          <span class="id-pill">C#</span>
+          <span class="id-pill" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
+          <span class="id-pill" data-en="Player Experience" data-zh="玩家体验">Player Experience</span>
+          <span class="id-pill">UE5</span>
+        </div>
+      </div>
+
+      <div class="id-card reveal reveal-d3">
+        <div class="id-card-icon">✨</div>
+        <div class="id-card-title" data-en="AIGC CREATION" data-zh="AIGC 创作">AIGC CREATION</div>
+        <p class="id-card-desc"
+          data-en="Using AI tools not as shortcuts, but as creative collaborators. From Stable Diffusion pipelines to AI video direction — building a complete AIGC workflow."
+          data-zh="将 AI 工具视为创作协作者，而非捷径。从 Stable Diffusion 工作流到 AI 视频导演 —— 构建完整的 AIGC 创作流程。">
+          Using AI tools not as shortcuts, but as creative collaborators. From Stable Diffusion pipelines to AI video direction — building a complete AIGC workflow.
+        </p>
+        <div class="id-pills">
+          <span class="id-pill">Stable Diffusion</span>
+          <span class="id-pill">ControlNet</span>
+          <span class="id-pill">Kling</span>
+          <span class="id-pill">Runway</span>
+          <span class="id-pill">Gemini</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SKILLS
+═══════════════════════════════════════════ -->
+<section id="skills-section">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow" data-en="Tools & Methods" data-zh="工具与方法">Tools & Methods</div>
+      <h2 class="sec-title" data-en="Skills &amp; <span>Toolbox</span>" data-zh="技能 &amp; <span>工具箱</span>">Skills &amp; <span>Toolbox</span></h2>
+    </div>
+    <div class="skills-groups">
+
+      <div class="skill-group reveal reveal-d1">
+        <div class="sg-title" data-en="Game Development" data-zh="游戏开发">Game Development</div>
+        <div class="sg-tags">
+          <span class="s-tag">Unity 2D/3D</span>
+          <span class="s-tag">C#</span>
+          <span class="s-tag">Unreal Engine 5</span>
+          <span class="s-tag dim" data-en="Narrative Systems" data-zh="叙事系统">Narrative Systems</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal reveal-d2">
+        <div class="sg-title" data-en="UX & Visual Design" data-zh="UX 与视觉设计">UX & Visual Design</div>
+        <div class="sg-tags">
+          <span class="s-tag">Figma</span>
+          <span class="s-tag">Photoshop</span>
+          <span class="s-tag">Illustrator</span>
+          <span class="s-tag dim" data-en="UI Prototyping" data-zh="UI 原型">UI Prototyping</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal reveal-d3">
+        <div class="sg-title" data-en="Motion & Video" data-zh="动效与视频">Motion & Video</div>
+        <div class="sg-tags">
+          <span class="s-tag">After Effects</span>
+          <span class="s-tag">Premiere Pro</span>
+          <span class="s-tag dim" data-en="Motion Graphics" data-zh="动态图形">Motion Graphics</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal reveal-d1">
+        <div class="sg-title" data-en="3D & Spatial" data-zh="三维与空间">3D & Spatial</div>
+        <div class="sg-tags">
+          <span class="s-tag">Blender</span>
+          <span class="s-tag">3ds Max</span>
+          <span class="s-tag dim" data-en="Scene Design" data-zh="场景设计">Scene Design</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal reveal-d2">
+        <div class="sg-title" data-en="AIGC Workflow" data-zh="AIGC 工作流">AIGC Workflow</div>
+        <div class="sg-tags">
+          <span class="s-tag">Stable Diffusion</span>
+          <span class="s-tag">ControlNet</span>
+          <span class="s-tag">Kling</span>
+          <span class="s-tag">Runway</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal reveal-d3">
+        <div class="sg-title" data-en="Code & Web" data-zh="代码与网页">Code & Web</div>
+        <div class="sg-tags">
+          <span class="s-tag">HTML / CSS</span>
+          <span class="s-tag">JavaScript</span>
+          <span class="s-tag">Python</span>
+          <span class="s-tag dim">GitHub Pages</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     EDUCATION TIMELINE
+═══════════════════════════════════════════ -->
+<section id="edu-section">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow" data-en="Background" data-zh="教育背景">Background</div>
+      <h2 class="sec-title" data-en="Education &amp; <span>Experience</span>" data-zh="教育 &amp; <span>经历</span>">Education &amp; <span>Experience</span></h2>
+    </div>
+    <div class="edu-timeline">
+
+      <div class="tl-item reveal">
+        <div class="tl-year">2024 —<br>2028</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title" data-en="Kunming University of Science and Technology" data-zh="昆明理工大学">Kunming University of Science and Technology</div>
+          <div class="tl-sub" data-en="Digital Media Art · BFA · Expected 2028" data-zh="数字媒体艺术 · 本科 · 预计2028年毕业">Digital Media Art · BFA · Expected 2028</div>
+          <div class="tl-tags">
+            <span class="tl-tag" data-en="Interaction Design" data-zh="交互设计">Interaction Design</span>
+            <span class="tl-tag" data-en="Film & Animation" data-zh="影视动画">Film & Animation</span>
+            <span class="tl-tag" data-en="Game Development" data-zh="游戏开发">Game Development</span>
+            <span class="tl-tag" data-en="AI Art Creation" data-zh="AI 艺术创作">AI Art Creation</span>
+            <span class="tl-tag" data-en="Class Secretary" data-zh="团支书">Class Secretary</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-d1">
+        <div class="tl-year">2025</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title" data-en="Perfect World Training Camp" data-zh="完美世界训练营">Perfect World Training Camp</div>
+          <div class="tl-sub" data-en="Game Jam · MAZE / 迷 · AI Video Narrative" data-zh="游戏创作营 · 《迷》· AI 影像叙事">Game Jam · MAZE / 迷 · AI Video Narrative</div>
+          <div class="tl-tags">
+            <span class="tl-tag">AIGC</span>
+            <span class="tl-tag" data-en="Game Concept" data-zh="游戏策划">Game Concept</span>
+            <span class="tl-tag" data-en="Video Direction" data-zh="影像导演">Video Direction</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item reveal reveal-d2">
+        <div class="tl-year">2024–<br>2025</div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title" data-en="Lilith Game Jam — AFTERIMAGE" data-zh="莉莉丝游戏创意大赛 ——《残像》">Lilith Game Jam — AFTERIMAGE</div>
+          <div class="tl-sub" data-en="Independent Developer · Unity 2D · Cyberpunk Narrative Puzzle" data-zh="独立开发 · Unity 2D · 赛博朋克叙事解谜">Independent Developer · Unity 2D · Cyberpunk Narrative Puzzle</div>
+          <div class="tl-tags">
+            <span class="tl-tag">Unity 2D</span>
+            <span class="tl-tag">C#</span>
+            <span class="tl-tag" data-en="10+ Scenes" data-zh="10+ 场景">10+ Scenes</span>
+            <span class="tl-tag" data-en="NPC Dialogue System" data-zh="NPC 对话系统">NPC Dialogue System</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     UX PROCESS
+═══════════════════════════════════════════ -->
+<section id="process-section">
+  <div class="container">
+    <div class="sec-header reveal">
+      <div class="sec-eyebrow" data-en="How I Work" data-zh="我的工作方式">How I Work</div>
+      <h2 class="sec-title" data-en="UX Design <span>Process</span>" data-zh="用户体验设计<span>流程</span>">UX Design <span>Process</span></h2>
+    </div>
+    <div class="proc-flow">
+      <div class="proc-step reveal reveal-d1">
+        <div class="ps-dot">01</div>
+        <div>
+          <div class="ps-name" data-en="Research" data-zh="研究">Research</div>
+          <div class="ps-items" data-en="Interview&#10;Survey&#10;Observation" data-zh="访谈&#10;问卷&#10;田野观察">Interview<br>Survey<br>Observation</div>
+        </div>
+      </div>
+      <div class="proc-step reveal reveal-d2">
+        <div class="ps-dot">02</div>
+        <div>
+          <div class="ps-name" data-en="Define" data-zh="定义">Define</div>
+          <div class="ps-items" data-en="Problem Statement&#10;User Needs&#10;HMW" data-zh="问题陈述&#10;用户需求&#10;HMW">Problem Statement<br>User Needs<br>HMW</div>
+        </div>
+      </div>
+      <div class="proc-step reveal reveal-d3">
+        <div class="ps-dot">03</div>
+        <div>
+          <div class="ps-name" data-en="Ideate" data-zh="构思">Ideate</div>
+          <div class="ps-items" data-en="Storyboard&#10;User Flow&#10;Interaction Concept" data-zh="故事板&#10;用户流程&#10;交互概念">Storyboard<br>User Flow<br>Interaction Concept</div>
+        </div>
+      </div>
+      <div class="proc-step reveal reveal-d4">
+        <div class="ps-dot">04</div>
+        <div>
+          <div class="ps-name" data-en="Prototype" data-zh="原型">Prototype</div>
+          <div class="ps-items" data-en="Figma&#10;HTML / CSS&#10;Blender · Unity" data-zh="Figma&#10;HTML / CSS&#10;Blender · Unity">Figma<br>HTML / CSS<br>Blender · Unity</div>
+        </div>
+      </div>
+      <div class="proc-step reveal reveal-d5">
+        <div class="ps-dot">05</div>
+        <div>
+          <div class="ps-name" data-en="Test" data-zh="测试">Test</div>
+          <div class="ps-items" data-en="Feedback&#10;Iteration&#10;Presentation" data-zh="用户反馈&#10;迭代优化&#10;汇报展示">Feedback<br>Iteration<br>Presentation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ASPIRATIONS
+═══════════════════════════════════════════ -->
+<section id="aspirations">
+  <div class="container">
+    <div class="asp-inner reveal">
+      <div class="asp-grid">
+        <div class="asp-left">
+          <div class="asp-eyebrow" data-en="What's Next" data-zh="下一步">What's Next</div>
+          <h2 class="asp-title" data-en="Open to Internship &amp; Graduate School" data-zh="寻求实习 &amp; 研究生申请">Open to Internship &amp; Graduate School</h2>
+          <p class="asp-body"
+            data-en="I'm actively looking for internship opportunities in game UX, interaction design, and AIGC-related roles. Simultaneously preparing graduate school applications for Interactive Media and Game Design programmes abroad."
+            data-zh="我正在积极寻找游戏 UX、交互设计及 AIGC 相关实习机会，同时准备申请海外互动媒体与游戏设计方向的研究生项目。">
+            I'm actively looking for internship opportunities in game UX, interaction design, and AIGC-related roles. Simultaneously preparing graduate school applications for Interactive Media and Game Design programmes abroad.
+          </p>
+          <div class="asp-avail">
+            <span class="avail-dot"></span>
+            <span data-en="Available Jun 26 – Early Sep 2025 · ~10 weeks" data-zh="2025年6月26日 – 9月初 · 约10周">Available Jun 26 – Early Sep 2025 · ~10 weeks</span>
+          </div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;">
+            <a href="contact.html" class="btn btn-lime" data-en="Get in Touch →" data-zh="联系我 →">Get in Touch →</a>
+            <a href="刁思予_简历.pdf" target="_blank" class="btn btn-ghost" data-en="View Resume ↗" data-zh="查看简历 ↗">View Resume ↗</a>
+          </div>
+        </div>
+        <div class="asp-right">
+          <div class="asp-card">
+            <div class="asp-card-lbl" data-en="Internship Target" data-zh="目标实习">Internship Target</div>
+            <div class="asp-card-val" data-en="Game UX · miHoYo<br><small>Interaction Design · AIGC-related roles</small>" data-zh="游戏 UX · 米哈游<br><small>交互设计 · AIGC 相关岗位</small>">Game UX · miHoYo<br><small>Interaction Design · AIGC-related roles</small></div>
+          </div>
+          <div class="asp-card">
+            <div class="asp-card-lbl" data-en="Graduate School" data-zh="目标院校">Graduate School</div>
+            <div class="asp-card-val">PolyU IME · CityU<br><small>University of Bristol · Interactive Media</small></div>
+          </div>
+          <div class="asp-card">
+            <div class="asp-card-lbl" data-en="Contact" data-zh="联系方式">Contact</div>
+            <div class="asp-card-val"><a href="mailto:630388703@qq.com" style="color:var(--lime);text-decoration:none;">630388703@qq.com</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 Siyu Diao · <span data-en="Designed &amp; Developed by Siyu" data-zh="由思予设计与开发">Designed &amp; Developed by Siyu</span></div>
+      <div class="footer-links">
+        <a href="index.html" data-en="Home" data-zh="首页">Home</a>
+        <a href="projects.html" data-en="Projects" data-zh="项目">Projects</a>
+        <a href="mailto:630388703@qq.com">630388703@qq.com</a>
+        <a href="刁思予_简历.pdf" target="_blank" data-en="Resume" data-zh="简历">Resume</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page-wrap -->
+
+<script>
+/* ── Cursor ── */
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function raf(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(raf);})();
+document.querySelectorAll('a,button,.id-card,.skill-group,.asp-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='44px';ring.style.height='44px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
+});
+
+/* ── Parallax ── */
+document.addEventListener('mousemove',e=>{
+  const xp=(e.clientX/window.innerWidth-.5)*12,yp=(e.clientY/window.innerHeight-.5)*10;
+  document.getElementById('bg-img').style.transform=`translate(${xp}px,${yp}px)`;
+});
+
+/* ── Lang ── */
+let lang=localStorage.getItem('sd-lang')||'en';
+const langBtn=document.getElementById('langBtn');
+function applyLang(){
+  document.querySelectorAll('[data-en][data-zh]').forEach(el=>{
+    const v=el.getAttribute('data-'+lang);
+    if(v!==null)el.innerHTML=v;
+  });
+  langBtn.textContent=lang==='en'?'中文':'EN';
+  document.documentElement.lang=lang==='zh'?'zh':'en';
+  // update bubble if showing
+  if(mState==='hover'&&mHover)mbub.textContent=BUBBLE.hover[lang];
+}
+function toggleLang(){lang=lang==='en'?'zh':'en';localStorage.setItem('sd-lang',lang);applyLang();}
+applyLang();
+
+/* ── Music ── */
+const bgm=document.getElementById('bgm');
+const musicBtn=document.getElementById('musicBtn');
+const musicIcon=document.getElementById('musicIcon');
+let musicOn=false;
+bgm.volume=0.3;
+function checkMusic(){
+  const p=localStorage.getItem('sd-music');
+  if(p==='yes'){enableMusic();}else if(p==='no'){skipMusic();}
+  else{document.getElementById('music-modal').classList.add('show');}
+}
+function enableMusic(){
+  document.getElementById('music-modal').classList.remove('show');
+  bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');
+  localStorage.setItem('sd-music','yes');
+}
+function skipMusic(){
+  document.getElementById('music-modal').classList.remove('show');
+  musicOn=false;musicIcon.textContent='♪';localStorage.setItem('sd-music','no');
+}
+function toggleMusic(){
+  if(!musicOn){bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');}
+  else{bgm.pause();musicOn=false;musicIcon.textContent='♪';musicBtn.classList.remove('on');}
+}
+checkMusic();
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+
+/* ── Mascot ── */
+const mimg=document.getElementById('mimg');
+const mbub=document.getElementById('mbubble');
+const mascot=document.getElementById('mascot');
+const IMGS={idle:'默认.png',hover:'HOVER 打招呼.png',click:'点击爱心跳一下.png',walk:'步行.png',type:'打字（坐在电脑前设计）.png'};
+const BUBBLE={hover:{en:"Hi! I'm Siyu :)",zh:'你好！我是思予～'},click:{en:'Thanks for visiting ♡',zh:'感谢来访 ♡'}};
+let mState='type',mHover=false,mScrollT=null;
+
+// On about page: default is typing
+function goMascot(s,bubbleKey,dur){
+  mState=s;
+  mimg.className='m-img';
+  mimg.src=IMGS[s]||IMGS.type;
+  if(s==='click')mimg.classList.add('jump');
+  if(s==='type'||s==='idle')mimg.classList.add('float');
+  if(bubbleKey){mbub.textContent=BUBBLE[bubbleKey][lang]||BUBBLE[bubbleKey].en;mbub.classList.add('show');}
+  else mbub.classList.remove('show');
+  if(dur)setTimeout(()=>resolve(),dur);
+}
+function resolve(){
+  if(mHover)goMascot('hover','hover');
+  else goMascot('type',null); // about page always returns to typing
+}
+goMascot('type',null);
+
+mascot.addEventListener('mouseenter',()=>{if(mState==='click')return;mHover=true;goMascot('hover','hover');});
+mascot.addEventListener('mouseleave',()=>{mHover=false;if(mState!=='click')resolve();});
+mascot.addEventListener('click',e=>{e.stopPropagation();goMascot('click','click',1000);});
+window.addEventListener('scroll',()=>{
+  if(mState==='click')return;
+  mimg.className='m-img';mimg.src=IMGS.walk;mbub.classList.remove('show');
+  clearTimeout(mScrollT);mScrollT=setTimeout(resolve,500);
+});
+
+/* ── Scroll Reveal ── */
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+</script>
+</body>
+</html>
