@@ -1,762 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Siyu Diao · Portfolio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-/* =============================================
-   TOKENS
-============================================= */
-:root {
-  --lime:#C8E65A; --lime-l:#dff285; --lime-p:#eef9c0;
-  --bg:#F7F6F2; --card:rgba(255,255,255,0.75);
-  --text:#1F1F1F; --muted:#6B6B5E; --soft:#A8A896;
-  --nav-h:68px; --radius:28px;
-  --shadow:0 4px 32px rgba(0,0,0,0.07);
-  --shadow-h:0 16px 48px rgba(0,0,0,0.12);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);cursor:none;overflow-x:hidden;}
-
-/* =============================================
-   CURSOR
-============================================= */
-#cur{position:fixed;width:10px;height:10px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s,opacity .15s;}
-#cur-r{position:fixed;width:34px;height:34px;border:1.5px solid var(--lime);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.5;transition:width .2s,height .2s;}
-body:hover #cur{opacity:1;}
-
-/* =============================================
-   BACKGROUND
-============================================= */
-#bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-#bg-img{position:absolute;inset:-30px;background:url('网页背景.png') center/cover no-repeat;opacity:.16;transition:transform .1s linear;will-change:transform;}
-.orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.35;animation:orbFloat 8s ease-in-out infinite;}
-.orb1{width:420px;height:420px;background:radial-gradient(circle,rgba(200,230,90,.55),transparent 70%);top:-80px;left:-60px;animation-delay:0s;}
-.orb2{width:340px;height:340px;background:radial-gradient(circle,rgba(200,230,90,.4),transparent 70%);bottom:10%;right:-40px;animation-delay:-3s;}
-.orb3{width:260px;height:260px;background:radial-gradient(circle,rgba(200,230,90,.3),transparent 70%);top:50%;left:55%;animation-delay:-6s;}
-@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-28px) scale(1.04)}}
-
-/* =============================================
-   LOADING
-============================================= */
-#ld{position:fixed;inset:0;z-index:9990;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity .8s;}
-#ld.out{opacity:0;pointer-events:none;}
-.ld-peek{position:absolute;bottom:0;right:80px;width:140px;animation:peekUp .7s .3s cubic-bezier(.34,1.56,.64,1) both;}
-@keyframes peekUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-.ld-name{font-family:'Playfair Display',serif;font-size:clamp(40px,8vw,80px);font-weight:700;letter-spacing:-.02em;line-height:.95;text-align:center;}
-.ld-name span{color:var(--lime);}
-.ld-sub{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;}
-.ld-bar-wrap{width:240px;height:2px;background:rgba(200,230,90,.22);border-radius:2px;overflow:hidden;}
-.ld-bar{height:100%;width:0;background:var(--lime);box-shadow:0 0 8px rgba(200,230,90,.6);transition:width .4s cubic-bezier(.4,0,.2,1);}
-.ld-pct{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--soft);}
-
-/* =============================================
-   MUSIC MODAL
-============================================= */
-#music-modal{position:fixed;inset:0;z-index:9980;background:rgba(247,246,242,.82);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
-#music-modal.show{display:flex;}
-.mm-box{background:var(--card);border-radius:var(--radius);padding:44px 52px;box-shadow:var(--shadow-h);text-align:center;backdrop-filter:blur(12px);animation:mmIn .4s cubic-bezier(.34,1.56,.64,1);}
-@keyframes mmIn{from{opacity:0;transform:scale(.9) translateY(16px)}to{opacity:1;transform:none}}
-.mm-icon{font-size:36px;margin-bottom:16px;}
-.mm-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;}
-.mm-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
-.mm-btns{display:flex;gap:12px;justify-content:center;}
-.mm-btn{padding:12px 32px;border-radius:100px;font-size:14px;font-weight:500;cursor:none;border:none;transition:all .22s;font-family:'DM Sans',sans-serif;}
-.mm-yes{background:var(--lime);color:var(--text);}
-.mm-yes:hover{background:var(--lime-l);transform:translateY(-2px);}
-.mm-no{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
-.mm-no:hover{background:rgba(200,230,90,.15);transform:translateY(-2px);}
-
-/* =============================================
-   NAV
-============================================= */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 52px;background:rgba(247,246,242,.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(200,230,90,.2);transition:box-shadow .3s;}
-nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06);}
-.nav-logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--text);text-decoration:none;cursor:none;}
-.nav-links{display:flex;gap:0;list-style:none;}
-.nav-links a{display:flex;align-items:center;height:var(--nav-h);padding:0 18px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;position:relative;}
-.nav-links a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--lime);transition:left .22s,right .22s;}
-.nav-links a:hover,.nav-links a.active{color:var(--text);}
-.nav-links a:hover::after,.nav-links a.active::after{left:12px;right:12px;}
-.nav-right{display:flex;align-items:center;gap:16px;}
-.lang-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;padding:6px 14px;border-radius:100px;background:rgba(200,230,90,.18);border:none;color:var(--muted);cursor:none;transition:all .2s;}
-.lang-btn:hover{background:var(--lime);color:var(--text);}
-.music-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;padding:6px 14px;border-radius:100px;background:transparent;border:1.5px solid rgba(31,31,31,.14);color:var(--muted);cursor:none;transition:all .2s;display:flex;align-items:center;gap:6px;}
-.music-btn:hover{border-color:var(--lime);color:var(--text);}
-.music-btn.on{border-color:var(--lime);background:rgba(200,230,90,.12);}
-
-/* =============================================
-   MASCOT
-============================================= */
-#mascot{position:fixed;right:32px;bottom:32px;z-index:600;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none;}
-.m-bubble{background:white;border-radius:18px 18px 4px 18px;padding:10px 18px;font-size:13px;font-weight:500;box-shadow:var(--shadow);margin-bottom:10px;opacity:0;transform:translateY(6px) scale(.93);transition:all .28s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;}
-.m-bubble.show{opacity:1;transform:translateY(0) scale(1);}
-.m-img{width:92px;pointer-events:all;cursor:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.12));}
-.m-img.float{animation:mfloat 3s ease-in-out infinite;}
-.m-img.jump{animation:mjump .44s ease-out;}
-.m-img.peek-anim{animation:mpeek .8s cubic-bezier(.34,1.56,.64,1) forwards;}
-@keyframes mfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@keyframes mjump{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-22px) scale(1.06)}65%{transform:translateY(-5px) scale(.97)}100%{transform:translateY(0) scale(1)}}
-@keyframes mpeek{from{transform:translateX(130px);opacity:0}to{transform:translateX(0);opacity:1}}
-
-/* =============================================
-   SHARED LAYOUT
-============================================= */
-.page-section{position:relative;z-index:1;}
-.container{max-width:1160px;margin:0 auto;padding:0 52px;}
-
-/* =============================================
-   HERO
-============================================= */
-#hero{min-height:100vh;display:flex;align-items:center;padding-top:var(--nav-h);}
-.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;width:100%;}
-.hero-left{}
-.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:28px;opacity:0;animation:fadeUp .6s .1s forwards;}
-.hero-eyebrow::before{content:'';width:28px;height:1.5px;background:var(--lime);}
-.hero-name{font-family:'Playfair Display',serif;font-size:clamp(60px,8vw,104px);font-weight:700;line-height:.92;letter-spacing:-.025em;margin-bottom:20px;opacity:0;animation:fadeUp .6s .2s forwards;}
-.hero-name .acc{color:var(--lime);}
-.hero-name em{font-style:italic;font-weight:400;display:block;font-size:.42em;color:var(--muted);letter-spacing:.02em;margin-top:6px;}
-.hero-roles{margin-bottom:28px;opacity:0;animation:fadeUp .6s .35s forwards;}
-.hero-role{font-family:'Space Mono',monospace;font-size:clamp(9px,1vw,11px);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:2.2;display:flex;align-items:center;gap:8px;}
-.hero-role::before{content:'◆';font-size:5px;color:var(--lime);}
-.hero-desc{font-size:16px;color:var(--muted);line-height:1.75;max-width:400px;margin-bottom:36px;opacity:0;animation:fadeUp .6s .5s forwards;}
-.hero-tags{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:44px;opacity:0;animation:fadeUp .6s .6s forwards;}
-.tag{padding:8px 18px;border-radius:100px;font-size:12px;font-weight:500;background:var(--card);border:1.5px solid transparent;box-shadow:0 2px 12px rgba(0,0,0,.05);transition:all .2s;cursor:default;}
-.tag:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
-.hero-cta{display:flex;gap:14px;opacity:0;animation:fadeUp .6s .7s forwards;}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:100px;font-size:14px;font-weight:500;text-decoration:none;cursor:none;border:none;font-family:'DM Sans',sans-serif;transition:all .25s;letter-spacing:.02em;}
-.btn-lime{background:var(--lime);color:var(--text);}
-.btn-lime:hover{background:var(--lime-l);transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,230,90,.4);}
-.btn-ghost{background:transparent;border:1.5px solid rgba(31,31,31,.18);color:var(--text);}
-.btn-ghost:hover{border-color:var(--lime);background:var(--lime-p);transform:translateY(-2px);}
-
-/* hero right — peek character */
-.hero-right{display:flex;justify-content:flex-end;align-items:flex-end;opacity:0;animation:fadeUp .7s .3s forwards;}
-.hero-char-wrap{position:relative;width:340px;height:420px;}
-.hero-char-bg{position:absolute;inset:0;border-radius:var(--radius);background:var(--lime-p);box-shadow:var(--shadow);}
-.hero-char{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:260px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.1));}
-.hero-char.peek-hero{animation:peekHero 1s .4s cubic-bezier(.34,1.56,.64,1) both;}
-@keyframes peekHero{from{transform:translateX(-50%) translateY(60px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
-
-/* =============================================
-   ABOUT SNIPPET
-============================================= */
-#about-snippet{padding:100px 0;border-top:1px solid rgba(200,230,90,.18);}
-.snippet-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
-.snip-left{}
-.snip-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:14px;}
-.snip-h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.1;margin-bottom:20px;}
-.snip-body{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:32px;}
-.snip-info{display:flex;flex-direction:column;gap:10px;}
-.snip-row{display:flex;align-items:baseline;gap:14px;}
-.snip-lbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);width:90px;flex-shrink:0;}
-.snip-val{font-size:13px;color:var(--muted);}
-.snip-right{display:flex;flex-direction:column;gap:14px;}
-.id-card{background:var(--card);border-radius:20px;padding:24px 26px;box-shadow:var(--shadow);backdrop-filter:blur(12px);border:1.5px solid transparent;transition:all .25s;}
-.id-card:hover{border-color:var(--lime);transform:translateY(-3px);box-shadow:var(--shadow-h);}
-.id-card-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--lime);margin-bottom:10px;}
-.id-card-items{display:flex;gap:8px;flex-wrap:wrap;}
-.id-pill{font-size:12px;color:var(--muted);background:rgba(200,230,90,.15);padding:4px 12px;border-radius:100px;}
-
-/* =============================================
-   FEATURED PROJECTS
-============================================= */
-#featured{padding:80px 0 100px;}
-.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:48px;}
-.section-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:700;}
-.section-title span{color:var(--lime);}
-.see-all{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
-.see-all:hover{color:var(--lime);}
-.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.proj-card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1.5px solid transparent;transition:all .32s cubic-bezier(.22,1,.36,1);cursor:none;text-decoration:none;color:inherit;display:block;backdrop-filter:blur(12px);}
-.proj-card:hover{transform:translateY(-8px);border-color:var(--lime);box-shadow:var(--shadow-h);}
-.proj-card.wide{grid-column:span 2;}
-.proj-thumb{position:relative;overflow:hidden;background:var(--lime-p);}
-.proj-thumb img,.proj-thumb video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
-.proj-card:hover .proj-thumb img,.proj-card:hover .proj-thumb video{transform:scale(1.04);}
-.proj-thumb-placeholder{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
-.proj-thumb-num{font-family:'Playfair Display',serif;font-size:72px;font-weight:700;color:rgba(200,230,90,.4);}
-.proj-thumb video{aspect-ratio:16/9;}
-.proj-hover-label{position:absolute;inset:0;background:rgba(200,230,90,.82);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--text);font-weight:700;}
-.proj-card:hover .proj-hover-label{opacity:1;}
-.proj-body{padding:22px 26px;}
-.proj-type{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
-.proj-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:8px;line-height:1.2;}
-.proj-problem{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
-.proj-tags{display:flex;gap:6px;flex-wrap:wrap;}
-.proj-tag{font-size:11px;color:var(--muted);background:rgba(200,230,90,.18);padding:3px 10px;border-radius:100px;}
-
-/* =============================================
-   CURRENT FOCUS
-============================================= */
-#current-focus{padding:60px 0 100px;}
-.focus-inner{background:var(--lime-p);border-radius:var(--radius);padding:52px 60px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
-.focus-left{}
-.focus-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-.focus-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,40px);font-weight:700;margin-bottom:16px;line-height:1.1;}
-.focus-items{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;}
-.focus-item{background:rgba(255,255,255,.7);border-radius:100px;padding:8px 18px;font-size:13px;font-weight:500;box-shadow:0 2px 10px rgba(0,0,0,.05);}
-.focus-avail{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:8px;}
-.avail-dot{width:8px;height:8px;border-radius:50%;background:#3cb043;box-shadow:0 0 0 3px rgba(60,176,67,.2);animation:avpulse 2s infinite;flex-shrink:0;}
-@keyframes avpulse{0%,100%{box-shadow:0 0 0 3px rgba(60,176,67,.2)}50%{box-shadow:0 0 0 7px rgba(60,176,67,.06)}}
-.focus-right{flex-shrink:0;}
-
-/* =============================================
-   FOOTER
-============================================= */
-footer{border-top:1px solid rgba(200,230,90,.2);padding:36px 0;}
-.footer-inner{display:flex;align-items:center;justify-content:space-between;}
-.footer-copy{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--soft);}
-.footer-links{display:flex;gap:24px;}
-.footer-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-decoration:none;cursor:none;transition:color .2s;}
-.footer-links a:hover{color:var(--lime);}
-
-/* =============================================
-   SCROLL REVEAL
-============================================= */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.reveal-d1{transition-delay:.1s;}.reveal-d2{transition-delay:.2s;}.reveal-d3{transition-delay:.3s;}.reveal-d4{transition-delay:.4s;}.reveal-d5{transition-delay:.5s;}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
-/* =============================================
-   RESPONSIVE
-============================================= */
-@media(max-width:1024px){
-  .hero-inner{grid-template-columns:1fr;gap:40px;}
-  .hero-right{justify-content:flex-start;}
-  .snippet-inner{grid-template-columns:1fr;gap:40px;}
-  .projects-grid{grid-template-columns:1fr 1fr;}
-  .proj-card.wide{grid-column:span 1;}
-}
-@media(max-width:768px){
-  nav{padding:0 20px;}.container{padding:0 20px;}
-  .nav-links{display:none;}
-  .projects-grid{grid-template-columns:1fr;}
-  .focus-inner{flex-direction:column;}
-  .footer-inner{flex-direction:column;gap:16px;text-align:center;}
-  .hero-char-wrap{width:240px;height:300px;}
-  .hero-char{width:190px;}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Syra Diao · Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ── BACKGROUND ── -->
-<div id="bg-layer">
-  <div id="bg-img"></div>
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-</div>
-
-<!-- ── CURSOR ── -->
-<div id="cur"></div>
-<div id="cur-r"></div>
-
-<!-- ── LOADING ── -->
-<div id="ld">
-  <img src="peek.png" alt="" class="ld-peek" id="ldPeek">
-  <div class="ld-name">SIYU<br><span>DIAO</span></div>
-  <div class="ld-sub" data-en="Loading Portfolio..." data-zh="加载中...">Loading Portfolio...</div>
-  <div class="ld-bar-wrap"><div class="ld-bar" id="ldBar"></div></div>
-  <div class="ld-pct" id="ldPct">0%</div>
-</div>
-
-<!-- ── MUSIC MODAL ── -->
-<div id="music-modal">
-  <div class="mm-box">
-    <div class="mm-icon">🎵</div>
-    <div class="mm-title" data-en="Enable Background Music?" data-zh="开启背景音乐？">Enable Background Music?</div>
-    <div class="mm-sub" data-en="A light ambient track to accompany your visit." data-zh="一段轻柔的背景音乐陪你浏览。">A light ambient track to accompany your visit.</div>
-    <div class="mm-btns">
-      <button class="mm-btn mm-yes" onclick="enableMusic()" data-en="Yes, play it ♪" data-zh="好的，开启 ♪">Yes, play it ♪</button>
-      <button class="mm-btn mm-no" onclick="skipMusic()" data-en="No thanks" data-zh="不了，谢谢">No thanks</button>
-    </div>
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <p class="loading-title" data-i18n="loading_title">SYRA'S <span>PORTFOLIO</span></p>
+  <p class="loading-sub" data-i18n="loading_sub">Loading...</p>
+  <div class="progress-wrap">
+    <div class="progress-bar"></div>
   </div>
+  <p class="progress-pct">0%</p>
 </div>
 
-<!-- ── AUDIO ── -->
-<audio id="bgm" src="bgm.mp3" loop></audio>
-
-<!-- ── NAV ── -->
-<nav id="navbar">
-  <a class="nav-logo" href="index.html">SIYU DIAO</a>
+<!-- Nav -->
+<nav>
+  <a href="index.html" class="nav-logo">Syra<span>.</span></a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active" data-en="Home" data-zh="首页">Home</a></li>
-    <li><a href="projects.html" data-en="Projects" data-zh="项目">Projects</a></li>
-    <li><a href="about.html" data-en="About" data-zh="关于">About</a></li>
-    <li><a href="resume.html" data-en="Resume" data-zh="简历">Resume</a></li>
-    <li><a href="contact.html" data-en="Contact" data-zh="联系">Contact</a></li>
+    <li><a href="index.html"    data-i18n="nav_home">HOME</a></li>
+    <li><a href="about.html"   data-i18n="nav_about">ABOUT</a></li>
+    <li><a href="projects.html" data-i18n="nav_projects">PROJECTS</a></li>
+    <li><a href="刁思予_简历.pdf" target="_blank" data-i18n="nav_resume">RESUME</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-btn" id="langBtn" onclick="toggleLang()">中文</button>
-    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">
-      <span id="musicIcon">♪</span>
-      <span id="musicLbl" data-en="Music" data-zh="音乐">Music</span>
-    </button>
+  <button class="lang-toggle" aria-label="Switch language">中文</button>
+  <div class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
   </div>
 </nav>
 
-<!-- ── MASCOT ── -->
-<div id="mascot">
-  <div class="m-bubble" id="mbubble"></div>
-  <img src="peek.png" alt="Siyu mascot" class="m-img peek-anim" id="mimg">
-</div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
 
-<!-- ══════════════════════════════════════════
-     HERO
-═══════════════════════════════════════════ -->
-<section id="hero" class="page-section">
-  <div class="container">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-eyebrow" data-en="Digital Media Art · Game UX · AIGC Creation" data-zh="数字媒体艺术 · 游戏用户体验 · AIGC 创作">Digital Media Art · Game UX · AIGC Creation</div>
-        <h1 class="hero-name">
-          SIYU<br><span class="acc">DIAO</span>
-          <em data-en="刁思予" data-zh="Siyu Diao">刁思予</em>
-        </h1>
-        <div class="hero-roles">
-          <div class="hero-role" data-en="UX DESIGNER" data-zh="用户体验设计师">UX DESIGNER</div>
-          <div class="hero-role" data-en="GAME UX DESIGNER" data-zh="游戏用户体验设计师">GAME UX DESIGNER</div>
-          <div class="hero-role" data-en="INTERACTIVE NARRATIVE DESIGNER" data-zh="互动叙事设计师">INTERACTIVE NARRATIVE DESIGNER</div>
-          <div class="hero-role" data-en="AIGC CREATOR" data-zh="AIGC 创作者">AIGC CREATOR</div>
-        </div>
-        <p class="hero-desc" data-en="Designing emotional experiences through narrative, space and interaction." data-zh="通过叙事、空间与互动，设计触动人心的体验。">Designing emotional experiences through narrative, space and interaction.</p>
-        <div class="hero-tags">
-          <span class="tag">Unity 2D/3D</span>
-          <span class="tag">C#</span>
-          <span class="tag">Figma</span>
-          <span class="tag" data-en="AIGC Workflow" data-zh="AIGC 工作流">AIGC Workflow</span>
-          <span class="tag">Blender</span>
-        </div>
-        <div class="hero-cta">
-          <a href="projects.html" class="btn btn-lime" data-en="View Projects →" data-zh="查看项目 →">View Projects →</a>
-          <a href="contact.html" class="btn btn-ghost" data-en="Get in Touch" data-zh="联系我">Get in Touch</a>
-        </div>
-      </div>
-      <div class="hero-right">
-        <div class="hero-char-wrap">
-          <div class="hero-char-bg"></div>
-          <img src="peek.png" alt="Siyu character" class="hero-char peek-hero" id="heroChar">
-        </div>
+  <div class="hero-inner">
+    <!-- Character -->
+    <div class="character-wrap reveal-left">
+      <div class="hearts-container" id="hearts"></div>
+      <img
+        id="char-img"
+        class="character-img"
+        src="Typing（坐在电脑前设计）.png"
+        alt="Syra character"
+        data-default="Typing（坐在电脑前设计）.png"
+        data-hover="HOVER 打招呼.png"
+        data-click="CLICK 爱心跳一下.png"
+      />
+    </div>
+
+    <!-- Text -->
+    <div class="hero-text reveal-right">
+      <p class="hero-greeting" data-i18n="hero_greeting">Hi, I'm</p>
+      <h1 class="hero-name">
+        <span class="accent" data-i18n="hero_name">Syra</span>
+      </h1>
+      <p class="hero-role" data-i18n="hero_role">UX Designer &amp; Interactive Media Student</p>
+      <p class="hero-desc" data-i18n="hero_desc">
+        Designing meaningful experiences through storytelling, interaction and play.
+      </p>
+      <div class="hero-cta">
+        <a href="projects.html" class="btn btn-primary" data-i18n="hero_btn1">View Projects</a>
+        <a href="about.html"    class="btn btn-secondary" data-i18n="hero_btn2">About Me</a>
       </div>
     </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span data-i18n="scroll_hint">SCROLL</span>
+    <div class="scroll-arrow"></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     ABOUT SNIPPET
-═══════════════════════════════════════════ -->
-<section id="about-snippet" class="page-section">
-  <div class="container">
-    <div class="snippet-inner">
-      <div class="snip-left reveal">
-        <div class="snip-eyebrow" data-en="Who I Am" data-zh="关于我">Who I Am</div>
-        <h2 class="snip-h2" data-en="About Me" data-zh="关于我">About Me</h2>
-        <p class="snip-body" data-en="Hi, I'm Siyu Diao — a Digital Media Art student at KMUST focusing on UX design, game experience, interactive narrative and AI-assisted creation. My work explores how narrative, space and interaction can shape human emotions and behaviour." data-zh="你好，我是刁思予 —— 昆明理工大学数字媒体艺术专业学生，专注于用户体验设计、游戏体验、互动叙事与 AIGC 创作。我探索叙事、空间与互动如何塑造人的情感与行为。">Hi, I'm Siyu Diao — a Digital Media Art student at KMUST focusing on UX design, game experience, interactive narrative and AI-assisted creation. My work explores how narrative, space and interaction can shape human emotions and behaviour.</p>
-        <div class="snip-info">
-          <div class="snip-row">
-            <span class="snip-lbl" data-en="School" data-zh="学校">School</span>
-            <span class="snip-val" data-en="Kunming University of Science and Technology" data-zh="昆明理工大学">Kunming University of Science and Technology</span>
-          </div>
-          <div class="snip-row">
-            <span class="snip-lbl" data-en="Major" data-zh="专业">Major</span>
-            <span class="snip-val" data-en="Digital Media Art · BFA · 2024–2028" data-zh="数字媒体艺术 · 本科 · 2024–2028">Digital Media Art · BFA · 2024–2028</span>
-          </div>
-          <div class="snip-row">
-            <span class="snip-lbl" data-en="Available" data-zh="实习时间">Available</span>
-            <span class="snip-val" data-en="Jun 26 – Early Sep 2025 (~10 weeks)" data-zh="2025年6月26日 – 9月初（约10周）">Jun 26 – Early Sep 2025 (~10 weeks)</span>
-          </div>
-        </div>
-      </div>
-      <div class="snip-right reveal reveal-d2">
-        <div class="id-card">
-          <div class="id-card-title" data-en="UX DESIGN" data-zh="用户体验设计">UX DESIGN</div>
-          <div class="id-card-items">
-            <span class="id-pill" data-en="Research" data-zh="用户研究">Research</span>
-            <span class="id-pill" data-en="User Flow" data-zh="用户流程">User Flow</span>
-            <span class="id-pill" data-en="Interaction Design" data-zh="交互设计">Interaction Design</span>
-          </div>
-        </div>
-        <div class="id-card">
-          <div class="id-card-title" data-en="GAME EXPERIENCE" data-zh="游戏体验">GAME EXPERIENCE</div>
-          <div class="id-card-items">
-            <span class="id-pill">Unity</span>
-            <span class="id-pill" data-en="Narrative" data-zh="叙事设计">Narrative</span>
-            <span class="id-pill" data-en="Player Experience" data-zh="玩家体验">Player Experience</span>
-          </div>
-        </div>
-        <div class="id-card">
-          <div class="id-card-title" data-en="AIGC CREATION" data-zh="AIGC 创作">AIGC CREATION</div>
-          <div class="id-card-items">
-            <span class="id-pill">Stable Diffusion</span>
-            <span class="id-pill">Runway</span>
-            <span class="id-pill">Kling</span>
-          </div>
-        </div>
-        <a href="about.html" class="btn btn-ghost" style="align-self:flex-start;margin-top:8px;" data-en="Full Profile →" data-zh="查看完整介绍 →">Full Profile →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     FEATURED PROJECTS
-═══════════════════════════════════════════ -->
-<section id="featured" class="page-section">
-  <div class="container">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-eyebrow" data-en="Selected Work" data-zh="精选作品">Selected Work</div>
-        <h2 class="section-title" data-en="Featured <span>Projects</span>" data-zh="精选<span>项目</span>">Featured <span>Projects</span></h2>
-      </div>
-      <a href="projects.html" class="see-all" data-en="View All Projects →" data-zh="查看全部项目 →">View All Projects →</a>
-    </div>
-
-    <div class="projects-grid">
-
-      <!-- 01 AFTERIMAGE — wide -->
-      <a href="project-afterimage.html" class="proj-card wide reveal reveal-d1">
-        <div class="proj-thumb" style="aspect-ratio:21/9;">
-          <img src="像残预览图.png" alt="AFTERIMAGE preview" style="aspect-ratio:21/9;">
-          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-type" data-en="Unity 2D · Cyberpunk Narrative Puzzle Game" data-zh="Unity 2D · 赛博朋克叙事解谜游戏">Unity 2D · Cyberpunk Narrative Puzzle Game</div>
-          <div class="proj-title">AFTERIMAGE / 残像</div>
-          <div class="proj-problem" data-en="How might an AI teammate influence player trust and decision-making?" data-zh="AI 队友如何影响玩家信任与决策？">How might an AI teammate influence player trust and decision-making?</div>
-          <div class="proj-tags">
-            <span class="proj-tag" data-en="Game UX" data-zh="游戏 UX">Game UX</span>
-            <span class="proj-tag" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
-            <span class="proj-tag">C# / Unity</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 02 GROWTH PAIN -->
-      <a href="project-growthpain.html" class="proj-card reveal reveal-d2">
-        <div class="proj-thumb" style="aspect-ratio:4/3;">
-          <img src="奶茶店png.png" alt="Growth Pain preview" style="aspect-ratio:4/3;">
-          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-type" data-en="Visual Novel · Emotional Narrative" data-zh="视觉小说 · 情感叙事">Visual Novel · Emotional Narrative</div>
-          <div class="proj-title">Growth Pain / 生长痛</div>
-          <div class="proj-problem" data-en="How might we visualize invisible emotional pressure?" data-zh="如何将无形的情感压力视觉化？">How might we visualize invisible emotional pressure?</div>
-          <div class="proj-tags">
-            <span class="proj-tag" data-en="Narrative Design" data-zh="叙事设计">Narrative Design</span>
-            <span class="proj-tag">UI Design</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 03 SPATIAL RIGHTS -->
-      <a href="project-spatialrights.html" class="proj-card reveal reveal-d3">
-        <div class="proj-thumb">
-          <div class="proj-thumb-placeholder" style="aspect-ratio:4/3;">
-            <span class="proj-thumb-num">03</span>
-          </div>
-          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-type" data-en="VR Spatial Narrative · Social Issue" data-zh="VR 空间叙事 · 社会议题">VR Spatial Narrative · Social Issue</div>
-          <div class="proj-title">Spatial Rights</div>
-          <div class="proj-problem" data-en="How might we reveal invisible spatial inequality?" data-zh="如何揭示无形的空间不平等？">How might we reveal invisible spatial inequality?</div>
-          <div class="proj-tags">
-            <span class="proj-tag" data-en="Spatial UX" data-zh="空间 UX">Spatial UX</span>
-            <span class="proj-tag" data-en="Research" data-zh="研究">Research</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 04 BLIND BOX -->
-      <a href="project-blindbox.html" class="proj-card reveal reveal-d2">
-        <div class="proj-thumb" style="aspect-ratio:4/3;">
-          <img src="盲盒广告设计1.jpg" alt="Blind Box Advertising" style="aspect-ratio:4/3;">
-          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-type" data-en="Graphic Design · Video Ad" data-zh="平面设计 · 视频广告">Graphic Design · Video Ad</div>
-          <div class="proj-title" data-en="Blind Box Advertising" data-zh="盲盒广告设计">Blind Box Advertising</div>
-          <div class="proj-problem" data-en="Three posters and one advertisement video for MINISO." data-zh="为名创优品设计三张海报和一支视频广告。">Three posters and one advertisement video for MINISO.</div>
-          <div class="proj-tags">
-            <span class="proj-tag" data-en="Brand Visual" data-zh="品牌视觉">Brand Visual</span>
-            <span class="proj-tag" data-en="Motion" data-zh="动效">Motion</span>
-          </div>
-        </div>
-      </a>
-
-      <!-- 05 迷 — video hover -->
-      <a href="project-mi.html" class="proj-card reveal reveal-d3">
-        <div class="proj-thumb" style="aspect-ratio:4/3;position:relative;">
-          <video id="miVideo" src="迷.mp4" muted loop playsinline style="aspect-ratio:4/3;width:100%;height:100%;object-fit:cover;display:block;"></video>
-          <div class="proj-hover-label" data-en="View Case Study →" data-zh="查看案例 →">View Case Study →</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-type" data-en="AI Video Narrative · Game Jam" data-zh="AI 影像叙事 · Game Jam">AI Video Narrative · Game Jam</div>
-          <div class="proj-title" data-en="MAZE / 迷" data-zh="迷 / MAZE">MAZE / 迷</div>
-          <div class="proj-problem" data-en="2min30s AI-generated narrative short film." data-zh="2分30秒 AI 生成叙事短片。">2min30s AI-generated narrative short film.</div>
-          <div class="proj-tags">
-            <span class="proj-tag">AIGC</span>
-            <span class="proj-tag" data-en="Video Direction" data-zh="视频导演">Video Direction</span>
-          </div>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     CURRENT FOCUS
-═══════════════════════════════════════════ -->
-<section id="current-focus" class="page-section">
-  <div class="container">
-    <div class="focus-inner reveal">
-      <div class="focus-left">
-        <div class="focus-eyebrow" data-en="Right Now" data-zh="当前状态">Right Now</div>
-        <h2 class="focus-title" data-en="Open to Internship &amp; Graduate Applications" data-zh="正在寻求实习与研究生申请机会">Open to Internship &amp; Graduate Applications</h2>
-        <div class="focus-items">
-          <span class="focus-item" data-en="Game UX Internship" data-zh="游戏 UX 实习">Game UX Internship</span>
-          <span class="focus-item" data-en="Interaction Design Internship" data-zh="交互设计实习">Interaction Design Internship</span>
-          <span class="focus-item" data-en="PolyU IME" data-zh="香港理工 IME">PolyU IME</span>
-          <span class="focus-item" data-en="CityU" data-zh="香港城市大学">CityU</span>
-          <span class="focus-item" data-en="University of Bristol" data-zh="布里斯托大学">University of Bristol</span>
-        </div>
-        <div class="focus-avail">
-          <span class="avail-dot"></span>
-          <span data-en="Available Jun 26 – Early Sep 2025 · ~10 weeks" data-zh="2025年6月26日 – 9月初 · 约10周">Available Jun 26 – Early Sep 2025 · ~10 weeks</span>
-        </div>
-      </div>
-      <div class="focus-right">
-        <a href="contact.html" class="btn btn-lime" data-en="Get in Touch →" data-zh="联系我 →">Get in Touch →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════════ -->
-<footer class="page-section">
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-copy">© 2026 Siyu Diao · <span data-en="Designed &amp; Developed by Siyu" data-zh="由思予设计与开发">Designed &amp; Developed by Siyu</span></div>
-      <div class="footer-links">
-        <a href="projects.html" data-en="Projects" data-zh="项目">Projects</a>
-        <a href="about.html" data-en="About" data-zh="关于">About</a>
-        <a href="mailto:630388703@qq.com">630388703@qq.com</a>
-        <a href="刁思予_简历.pdf" target="_blank" data-en="Resume" data-zh="简历">Resume</a>
-      </div>
-    </div>
-  </div>
+<!-- Footer -->
+<footer>
+  <p data-i18n="footer">Made with ♥ by Syra Diao · 2024</p>
 </footer>
 
-<script>
-/* =============================================
-   CURSOR
-============================================= */
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  cur.style.left=mx+'px';cur.style.top=my+'px';
-});
-(function rafCursor(){
-  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
-  ring.style.left=rx+'px';ring.style.top=ry+'px';
-  requestAnimationFrame(rafCursor);
-})();
-document.querySelectorAll('a,button,.proj-card,.id-card,.tag').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.width='16px';cur.style.height='16px';ring.style.width='44px';ring.style.height='44px';});
-  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='34px';ring.style.height='34px';});
-});
+<!-- Music -->
+<audio id="bg-music" loop preload="none">
+  <source src="ai视频.mp4" type="video/mp4">
+</audio>
+<button id="music-btn" aria-label="Toggle music">🎵</button>
 
-/* =============================================
-   PARALLAX BACKGROUND
-============================================= */
-const bgImg=document.getElementById('bg-img');
-document.addEventListener('mousemove',e=>{
-  const xPct=(e.clientX/window.innerWidth-.5)*12;
-  const yPct=(e.clientY/window.innerHeight-.5)*10;
-  bgImg.style.transform=`translate(${xPct}px,${yPct}px)`;
-});
-
-/* =============================================
-   LOADING
-============================================= */
-const ldEl=document.getElementById('ld');
-const ldBar=document.getElementById('ldBar');
-const ldPct=document.getElementById('ldPct');
-let pct=0;
-const ldTimer=setInterval(()=>{
-  pct+=Math.random()*18+8;
-  if(pct>=100){pct=100;clearInterval(ldTimer);
-    setTimeout(()=>{
-      ldEl.classList.add('out');
-      setTimeout(()=>{ldEl.remove();checkMusic();},800);
-    },300);
-  }
-  ldBar.style.width=pct+'%';
-  ldPct.textContent=Math.round(pct)+'%';
-},200);
-
-/* =============================================
-   LANGUAGE
-============================================= */
-let lang=localStorage.getItem('sd-lang')||'en';
-const langBtn=document.getElementById('langBtn');
-
-function applyLang(){
-  document.querySelectorAll('[data-en][data-zh]').forEach(el=>{
-    const val=el.getAttribute('data-'+lang);
-    if(val!==null)el.innerHTML=val;
-  });
-  langBtn.textContent=lang==='en'?'中文':'EN';
-  document.documentElement.lang=lang==='zh'?'zh':'en';
-}
-function toggleLang(){
-  lang=lang==='en'?'zh':'en';
-  localStorage.setItem('sd-lang',lang);
-  applyLang();
-}
-applyLang();
-
-/* =============================================
-   MUSIC
-============================================= */
-const bgm=document.getElementById('bgm');
-const musicBtn=document.getElementById('musicBtn');
-const musicIcon=document.getElementById('musicIcon');
-let musicOn=false;
-bgm.volume=0.3;
-
-function checkMusic(){
-  const pref=localStorage.getItem('sd-music');
-  if(pref==='yes'){enableMusic();}
-  else if(pref==='no'){skipMusic();}
-  else{document.getElementById('music-modal').classList.add('show');}
-}
-function enableMusic(){
-  document.getElementById('music-modal').classList.remove('show');
-  bgm.play().catch(()=>{});
-  musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');
-  localStorage.setItem('sd-music','yes');
-}
-function skipMusic(){
-  document.getElementById('music-modal').classList.remove('show');
-  musicOn=false;musicIcon.textContent='♪';
-  localStorage.setItem('sd-music','no');
-}
-function toggleMusic(){
-  if(!musicOn){bgm.play().catch(()=>{});musicOn=true;musicIcon.textContent='♫';musicBtn.classList.add('on');}
-  else{bgm.pause();musicOn=false;musicIcon.textContent='♪';musicBtn.classList.remove('on');}
-}
-
-/* =============================================
-   MASCOT
-============================================= */
-const mimg=document.getElementById('mimg');
-const mbub=document.getElementById('mbubble');
-const mascot=document.getElementById('mascot');
-const IMGS={
-  idle:'默认.png',hover:'HOVER 打招呼.png',
-  click:'点击爱心跳一下.png',walk:'步行.png',type:'打字（坐在电脑前设计）.png'
-};
-const BUBBLE={
-  hover:{en:"Hi! I'm Siyu :)",zh:'你好！我是思予～'},
-  click:{en:'Thanks for visiting ♡',zh:'感谢来访 ♡'}
-};
-let mState='peek',mHover=false,mScrollT=null,mInAbout=false;
-
-function goMascot(s,bubbleKey,dur){
-  mState=s;
-  mimg.className='m-img';
-  mimg.src=s==='peek'?'peek.png':(IMGS[s]||IMGS.idle);
-  if(s==='click')mimg.classList.add('jump');
-  if(s==='idle'||s==='type')mimg.classList.add('float');
-  if(bubbleKey){
-    mbub.textContent=BUBBLE[bubbleKey][lang]||BUBBLE[bubbleKey].en;
-    mbub.classList.add('show');
-  }else{mbub.classList.remove('show');}
-  if(dur)setTimeout(resolve,dur);
-}
-function resolve(){
-  if(mHover)goMascot('hover','hover');
-  else if(mInAbout)goMascot('type',null);
-  else goMascot('idle',null);
-}
-setTimeout(()=>goMascot('idle',null),1500);
-
-mascot.addEventListener('mouseenter',()=>{if(mState==='click')return;mHover=true;goMascot('hover','hover');});
-mascot.addEventListener('mouseleave',()=>{mHover=false;if(mState!=='click')resolve();});
-mascot.addEventListener('click',e=>{e.stopPropagation();goMascot('click','click',1000);});
-
-// scroll → walk
-window.addEventListener('scroll',()=>{
-  if(mState==='click')return;
-  if(mState!=='walk'){mimg.className='m-img';mimg.src=IMGS.walk;}
-  clearTimeout(mScrollT);
-  mScrollT=setTimeout(resolve,500);
-});
-
-// about section observer
-const aboutSnip=document.getElementById('about-snippet');
-if(aboutSnip){
-  new IntersectionObserver(entries=>{
-    mInAbout=entries[0].isIntersecting;
-    if(mState!=='click'&&!mHover)resolve();
-  },{threshold:.3}).observe(aboutSnip);
-}
-
-// bubble text updates when lang changes
-const _tl=toggleLang;
-// patch: re-render bubble on lang toggle
-const origToggleLang=toggleLang;
-window.toggleLang=function(){origToggleLang();
-  if(mState==='hover'&&mHover)mbub.textContent=BUBBLE.hover[lang];
-};
-
-/* =============================================
-   HERO CHAR — switch to idle after load
-============================================= */
-const heroChar=document.getElementById('heroChar');
-setTimeout(()=>{
-  if(heroChar){heroChar.src='默认.png';heroChar.className='hero-char';}
-},1600);
-
-/* =============================================
-   VIDEO HOVER (迷.mp4)
-============================================= */
-const miCard=document.querySelector('#featured .proj-card:last-child');
-const miVideo=document.getElementById('miVideo');
-if(miCard&&miVideo){
-  miCard.addEventListener('mouseenter',()=>miVideo.play().catch(()=>{}));
-  miCard.addEventListener('mouseleave',()=>{miVideo.pause();miVideo.currentTime=0;});
-}
-
-/* =============================================
-   NAV SCROLL
-============================================= */
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
-});
-
-/* =============================================
-   SCROLL REVEAL
-============================================= */
-const revEls=document.querySelectorAll('.reveal');
-const revObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revObs.unobserve(e.target);}});
-},{threshold:.12});
-revEls.forEach(el=>revObs.observe(el));
-</script>
+<script src="main.js"></script>
 </body>
 </html>
