@@ -26,8 +26,12 @@ const LANG = {
     about_sub:     'Interactive Media Student',
     about_school:  'Kunming University of Science and Technology City College',
     about_bio:     "I'm a designer who believes that great experiences emerge from the intersection of storytelling, empathy, and play. I craft interactive worlds, UX flows, and visual narratives that invite people to feel, explore, and discover.",
+    about_name_display:    'Syra<br><span style="color:var(--coral)">Diao</span>',
+    about_sub:             'Interactive Media Student',
     about_skills_label:    'Skills',
+    about_skills_list:     ['Figma', 'Blender', 'Photoshop', 'After Effects', 'Procreate', 'HTML/CSS/JS', 'Unity', 'UE5'],
     about_interests_label: 'Interests',
+    about_interests_list:  ['UX Design', 'Game Design', 'Interactive Storytelling', 'AI Experience Design'],
     about_resume_btn:      '⬇ Download Resume',
 
     projects_label: 'My Work',
@@ -71,8 +75,12 @@ const LANG = {
     about_sub:     '互动媒体专业学生',
     about_school:  '昆明理工大学城市学院',
     about_bio:     '我相信，伟大的体验来自叙事、共情与游戏三者的交汇。我设计互动世界、用户旅程和视觉叙事，让人们感受、探索与发现。',
+    about_name_display:    '<span style="color:var(--coral)">刁思予</span>',
+    about_sub:             '互动媒体专业学生',
     about_skills_label:    '技能',
-    about_interests_label: '兴趣',
+    about_skills_list:     ['Figma', 'Blender', 'Photoshop', 'After Effects', 'Procreate', 'HTML/CSS/JS', 'Unity', 'UE5'],
+    about_interests_label: '兴趣方向',
+    about_interests_list:  ['UX 设计', '游戏设计', '互动叙事', 'AI 体验设计'],
     about_resume_btn:      '⬇ 下载简历',
 
     projects_label: '我的作品',
@@ -108,8 +116,8 @@ function applyLang() {
     if (LANG[currentLang][key] !== undefined) {
       const val = LANG[currentLang][key];
       if (Array.isArray(val)) {
-        // for tags
-        el.innerHTML = val.map(v => `<span class="tag">${v}</span>`).join('');
+        const cls = el.dataset.i18nClass || 'tag';
+        el.innerHTML = val.map(v => `<span class="${cls}">${v}</span>`).join('');
       } else {
         el.textContent = val;
       }

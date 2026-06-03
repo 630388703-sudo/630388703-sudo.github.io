@@ -8,12 +8,11 @@
 </head>
 <body>
 
-<!-- Nav -->
 <nav>
   <a href="index.html" class="nav-logo">Syra<span>.</span></a>
   <ul class="nav-links">
-    <li><a href="index.html"    data-i18n="nav_home">HOME</a></li>
-    <li><a href="about.html"   data-i18n="nav_about">ABOUT</a></li>
+    <li><a href="index.html"     data-i18n="nav_home">HOME</a></li>
+    <li><a href="about.html"    data-i18n="nav_about">ABOUT</a></li>
     <li><a href="projects.html" data-i18n="nav_projects">PROJECTS</a></li>
     <li><a href="刁思予_简历.pdf" target="_blank" data-i18n="nav_resume">RESUME</a></li>
   </ul>
@@ -22,54 +21,53 @@
 </nav>
 
 <main>
-  <div class="about-hero" style="padding: 140px 48px 96px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start;">
+  <div style="padding: 140px 48px 96px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start;">
 
-    <!-- Sticky character -->
+    <!-- Character + resume btn -->
     <div class="about-character reveal-left">
-      <img src="peek.png" alt="Syra peeking illustration" style="width:min(300px,100%); filter:drop-shadow(0 12px 28px rgba(92,61,46,0.15)); border-radius:24px;" />
-      <a href="刁思予_简历.pdf" download class="btn btn-primary" style="margin-top:24px;" data-i18n="about_resume_btn">⬇ Download Resume</a>
+      <img src="peek.png" alt="Syra illustration"
+           style="width:min(300px,100%); filter:drop-shadow(0 12px 28px rgba(92,61,46,0.15)); border-radius:24px;" />
+      <a href="刁思予_简历.pdf" download class="btn btn-primary"
+         style="margin-top:24px;" data-i18n="about_resume_btn">⬇ Download Resume</a>
     </div>
 
     <!-- Content -->
     <div class="about-content">
+
+      <!-- Name block -->
       <div class="about-name-block reveal delay-1">
         <p class="section-label" data-i18n="about_label">About Me</p>
-        <h1 class="about-name-en">Syra<br><span style="color:var(--coral)">Diao</span></h1>
-        <p class="about-name-cn">刁思予</p>
+        <!-- Name: switches between "Syra Diao" (EN) and "刁思予" (ZH) -->
+        <h1 class="about-name-en" data-i18n-html="about_name_display">Syra Diao</h1>
         <p class="about-school" data-i18n="about_school">Kunming University of Science and Technology City College</p>
+        <p class="about-sub" style="font-size:1rem; color:var(--muted); margin-top:6px;" data-i18n="about_sub">Interactive Media Student</p>
       </div>
 
+      <!-- Bio -->
       <p class="about-bio reveal delay-2" data-i18n="about_bio">
-        I'm a designer who believes that great experiences emerge from the intersection of storytelling, empathy, and play. I craft interactive worlds, UX flows, and visual narratives that invite people to feel, explore, and discover.
+        I'm a designer who believes that great experiences emerge from the intersection of storytelling, empathy, and play.
       </p>
 
       <!-- Skills -->
       <div class="reveal delay-2">
         <p class="section-label" data-i18n="about_skills_label">Skills</p>
-        <div class="skills-grid" style="margin-bottom:32px;">
-          <span class="skill-pill">Figma</span>
-          <span class="skill-pill">Blender</span>
-          <span class="skill-pill">Photoshop</span>
-          <span class="skill-pill">After Effects</span>
-          <span class="skill-pill">Procreate</span>
-          <span class="skill-pill">HTML/CSS/JS</span>
-          <span class="skill-pill">Unity</span>
-          <span class="skill-pill">UE5</span>
+        <!-- data-i18n-class tells applyLang which CSS class to use for each pill -->
+        <div class="skills-grid" style="margin-bottom:32px;"
+             data-i18n="about_skills_list" data-i18n-class="skill-pill">
+          <!-- filled by JS -->
         </div>
       </div>
 
       <!-- Interests -->
       <div class="reveal delay-3">
         <p class="section-label" data-i18n="about_interests_label">Interests</p>
-        <div class="interests-list">
-          <span class="interest-tag">UX Design</span>
-          <span class="interest-tag">Game Design</span>
-          <span class="interest-tag">Interactive Storytelling</span>
-          <span class="interest-tag">AI Experience Design</span>
+        <div class="interests-list"
+             data-i18n="about_interests_list" data-i18n-class="interest-tag">
+          <!-- filled by JS -->
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </main>
 
