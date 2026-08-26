@@ -25,13 +25,13 @@ const LANG = {
     about_title:   "Hello, I'm Syra!",
     about_sub:     'Interactive Media Student',
     about_school:  'Kunming University of Science and Technology City College',
-    about_bio:     "I'm a digital media art student developing a connected practice across game environments, AIGC, UI/UX, interactive installations, exhibition experiences, and character design.",
+    about_bio:     "I'm a designer who believes that great experiences emerge from the intersection of storytelling, empathy, and play. I craft interactive worlds, UX flows, and visual narratives that invite people to feel, explore, and discover.",
     about_name_display:    'Syra<br><span style="color:var(--coral)">Diao</span>',
     about_sub:             'Interactive Media Student',
     about_skills_label:    'Skills',
-    about_skills_list:     ['UE5', 'Blender', '3ds Max', 'TouchDesigner', 'Figma', 'Photoshop', 'After Effects', 'Unity', 'AIGC Image & Video'],
+    about_skills_list:     ['Figma', 'Blender', 'Photoshop', 'After Effects', 'Procreate', 'HTML/CSS/JS', 'Unity', 'UE5'],
     about_interests_label: 'Interests',
-    about_interests_list:  ['Game Environment Design', 'AIGC', 'UI/UX Design', 'Interactive Installation', 'Exhibition Design', 'Game Character Design'],
+    about_interests_list:  ['UX Design', 'Game Design', 'Interactive Storytelling', 'AI Experience Design'],
     about_resume_btn:      '⬇ Download Resume',
 
     projects_label: 'My Work',
@@ -74,13 +74,13 @@ const LANG = {
     about_title:   '你好！我是思予',
     about_sub:     '互动媒体专业学生',
     about_school:  '昆明理工大学城市学院',
-    about_bio:     '我是一名数字媒体艺术学生，正在把游戏场景、AIGC、UI/UX、互动装置、展览体验与角色设计发展成一套互相连接的创作能力。',
+    about_bio:     '我相信，伟大的体验来自叙事、共情与游戏三者的交汇。我设计互动世界、用户旅程和视觉叙事，让人们感受、探索与发现。',
     about_name_display:    '<span style="color:var(--coral)">刁思予</span>',
     about_sub:             '互动媒体专业学生',
     about_skills_label:    '技能',
-    about_skills_list:     ['UE5', 'Blender', '3ds Max', 'TouchDesigner', 'Figma', 'Photoshop', 'After Effects', 'Unity', 'AIGC 图像与视频'],
+    about_skills_list:     ['Figma', 'Blender', 'Photoshop', 'After Effects', 'Procreate', 'HTML/CSS/JS', 'Unity', 'UE5'],
     about_interests_label: '兴趣方向',
-    about_interests_list:  ['游戏场景设计', 'AIGC', 'UI/UX 设计', '互动装置', '展览设计', '游戏角色设计'],
+    about_interests_list:  ['UX 设计', '游戏设计', '互动叙事', 'AI 体验设计'],
     about_resume_btn:      '⬇ 下载简历',
 
     projects_label: '我的作品',
@@ -106,7 +106,7 @@ const LANG = {
   }
 };
 
-let currentLang = localStorage.getItem('syra_lang') || 'zh';
+let currentLang = localStorage.getItem('syra_lang') || 'en';
 
 function t(key) { return LANG[currentLang][key] || key; }
 
