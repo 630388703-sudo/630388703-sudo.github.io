@@ -342,37 +342,6 @@ body.switching .t{opacity:0;transform:translateY(4px);}
 .sk-tool-chip.primary{border-color:var(--text);color:var(--text);background:var(--yellow);}
 @media(max-width:900px){.sk-inner{width:min(calc(100% - 40px),720px)}.sk-header{grid-template-columns:1fr;gap:20px}.sk-core{grid-template-columns:1fr}.sk-card{min-height:210px}.sk-lower{grid-template-columns:1fr}.sk-extended{grid-template-columns:1fr}.sk-mini{border-right:0;border-bottom:1px solid var(--line)}.sk-mini:last-child{border-bottom:0}}
 
-/* ── CAROUSEL ── */
-#carousel{position:absolute;inset:0;display:none;padding:72px 0 44px;overflow:hidden;background:var(--bg);}
-#carousel.on{display:flex;align-items:center;justify-content:center;}
-#carousel::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);pointer-events:none;}
-.car-inner{position:relative;z-index:1;width:100%;max-width:1100px;padding:0 20px;display:flex;flex-direction:column;gap:16px;}
-.car-header{text-align:center;}
-.car-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--cyan);margin-bottom:8px;}
-.car-title{font-size:clamp(22px,3vw,40px);font-weight:700;color:var(--text);letter-spacing:-1px;}
-.car-title em{color:var(--cyan);font-style:normal;font-size:.55em;letter-spacing:3px;margin-left:10px;opacity:.7;}
-.car-stage{display:flex;align-items:center;gap:16px;}
-.car-arrow{background:none;border:1px solid var(--line);color:var(--cyan);font-size:32px;width:44px;height:44px;cursor:none;transition:all .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.car-arrow:hover{background:var(--cyan);color:#000;border-color:var(--cyan);}
-.car-track{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;overflow:hidden;}
-.car-card{background:var(--bg2);border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:none;transition:transform .3s,box-shadow .3s;position:relative;}
-.car-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
-.car-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,229,255,0.1);}
-.car-card:hover::before{transform:scaleX(1);}
-.car-card-img{width:100%;aspect-ratio:3/4;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.car-card-img svg{width:60%;height:60%;opacity:.3;}
-.car-card-body{padding:16px;}
-.car-card-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--cyan);opacity:.5;margin-bottom:6px;}
-.car-card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.car-card-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text-dim);margin-bottom:12px;}
-.car-card-btn{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border:1px solid var(--cyan);color:var(--cyan);background:none;cursor:none;transition:all .2s;display:inline-block;}
-.car-card-btn:hover{background:var(--cyan);color:#000;}
-.car-dots{display:flex;justify-content:center;gap:8px;}
-.car-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,229,255,.3);background:none;cursor:none;transition:all .2s;}
-.car-dot.on{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px var(--cyan);}
-.car-return{text-align:left;}
-.car-return a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-decoration:none;transition:color .2s;}
-.car-return a:hover{color:var(--cyan);}
 
 /* ── CONTACT v2 ── */
 #contact2{position:absolute;inset:0;display:none;padding:72px 40px 44px;background:var(--bg);overflow:hidden;}
@@ -664,6 +633,95 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 .zhixu-card{text-decoration:none;color:inherit;background:#E8EEFF url('assets/zhixu/cover.svg') right center/cover no-repeat!important;display:block}
 .zhixu-card .pc-foot{background:linear-gradient(transparent,#E8EEFF 28%);padding-top:42px}.zhixu-card:focus-visible{outline:3px solid #2455f5;outline-offset:-5px}
 @media(max-width:640px){.p-grid.has-zhixu{grid-template-columns:1fr;grid-auto-rows:260px}.zhixu-card .pc-badge{display:block}}
+
+/* A small editorial collage for each project, made from the project's own artwork. */
+#desk .p-grid.has-zhixu{grid-auto-rows:minmax(285px,calc((100vh - 175px)/2));gap:18px;padding:8px 8px 26px;scrollbar-color:#b5b0a6 transparent}
+#desk .pc{isolation:isolate;border:1px solid #777168;box-shadow:3px 4px 0 rgba(25,25,23,.15)}
+#desk .pc:first-child{grid-column:span 2}
+#desk .pc:nth-child(3){grid-column:span 2}
+#desk .pc:nth-child(5){grid-column:span 2}
+#desk .pc:nth-child(7){grid-column:span 2}
+#desk .pc:nth-child(2n){transform:rotate(.45deg)}
+#desk .pc:nth-child(2n):hover,#desk .pc:hover{transform:translateY(-5px) rotate(0);box-shadow:9px 10px 0 var(--yellow)}
+#desk .pc:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+#desk .pc::after{pointer-events:none}
+#desk .pc-num{top:13px;left:14px;z-index:6;color:#24231f;background:#f5f0e8;padding:6px 8px;border:1px solid #24231f;letter-spacing:1px;font-weight:600}
+#desk .pc-badge{top:14px;right:15px;z-index:6;background:#dfff67;color:#24231f!important;border:1px solid #24231f!important;border-radius:0;letter-spacing:.5px;font-weight:600;max-width:58%;white-space:normal;text-align:right}
+#desk .pc-foot{z-index:6;padding:24px 22px 18px;background:linear-gradient(transparent,#f4f0e8 30%,#f4f0e8 100%)}
+#desk .pc-title{font-size:clamp(22px,2.4vw,34px)}
+#desk .pc-sub{font-size:9px;letter-spacing:.8px;color:#5e5750}
+#desk .pc-open{opacity:1;transform:none;font-size:10px;letter-spacing:.5px;color:#302c27!important}
+#desk .pc-open::before{content:''}
+.pc-collage{position:absolute;inset:0;overflow:hidden;background:#d8e2ea}
+.pc-collage::before{content:'';position:absolute;inset:0;z-index:1;opacity:.6;background-image:linear-gradient(rgba(255,255,255,.34) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.34) 1px,transparent 1px);background-size:24px 24px}
+.pc-collage .art{position:absolute;display:block;object-fit:cover;background:#f6f2eb;border:5px solid #f6f2eb;box-shadow:6px 8px 0 rgba(23,23,22,.28);z-index:2;transition:transform .35s}
+.pc:hover .pc-collage .art{transform:rotate(0) translateY(-3px)}
+.pc-collage .art-main{width:57%;height:72%;left:16%;top:11%;transform:rotate(-6deg)}
+.pc-collage .art-small{width:34%;height:46%;right:8%;top:26%;transform:rotate(8deg)}
+.pc-collage .scrap{position:absolute;z-index:3;display:block;font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.6vw,23px);font-weight:700;line-height:1;padding:10px 12px;background:#e9f65e;color:#29261f;transform:rotate(-8deg);box-shadow:2px 3px 0 rgba(0,0,0,.18)}
+.pc-collage .scrap.one{left:6%;top:39%}.pc-collage .scrap.two{right:5%;top:12%;background:#f3846c;transform:rotate(9deg)}
+.pc-collage .tape{position:absolute;z-index:4;width:64px;height:22px;left:43%;top:10%;background:rgba(251,241,207,.68);transform:rotate(-13deg);border:1px solid rgba(80,70,55,.15)}
+.pc-collage.afterimage{background:#b8c8d9}.pc-collage.afterimage .art-main{width:62%;left:13%;object-fit:contain;background:#272e39;border-color:#272e39}.pc-collage.afterimage .art-small{width:26%;height:54%;right:8%;top:17%;object-fit:cover}
+.pc-collage.growth{background:#d5cedd}.pc-collage.growth .art-main{width:61%;left:8%;top:10%}.pc-collage.growth .art-small{right:9%;top:19%;width:38%;height:58%}
+.pc-collage.blindbox{background:#f1b7a9}.pc-collage.blindbox .art-main{left:12%;width:55%}.pc-collage.blindbox .art-small{width:36%;right:7%}
+.pc-collage.maze{background:#b3cfeb}.pc-collage.maze .art-main{left:16%;width:57%;object-fit:cover}.pc-collage.maze .art-small{right:7%;top:14%;width:31%;height:60%;object-fit:cover}
+.pc-collage.archive{background:#e1d6b7}.pc-collage.archive .art-main{left:12%;width:58%;object-fit:cover}.pc-collage.archive .art-small{right:7%;top:23%;width:37%;height:48%;object-fit:cover}
+.pc-collage.coursework{background:#c3deb0}.pc-collage.coursework .art-main{left:13%;width:59%}.pc-collage.coursework .art-small{right:8%;width:35%}
+#desk .zhixu-card{background:#dce6fb url('assets/zhixu/cover.svg') center/contain no-repeat!important}
+#desk .zhixu-card::after{content:'UI/UX ✳ 2026';position:absolute;inset:auto auto 32% 6%;z-index:3;width:auto;height:auto;background:#e7f15a;color:#24231f;font:700 clamp(14px,2vw,27px) 'JetBrains Mono',monospace;padding:12px 15px;opacity:1;transform:rotate(-8deg);box-shadow:3px 4px 0 #24231f}
+#desk .zhixu-card .pc-foot{background:linear-gradient(transparent,#e8eeff 30%,#e8eeff 100%)}
+.pc-collage .type-art{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1c3042;color:#eaf5ee;font:700 64px Georgia,serif}.pc-collage .type-art span{font:10px 'JetBrains Mono',monospace;letter-spacing:2px;margin-top:15px}.pc-collage .archive-art{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:30px;background:repeating-linear-gradient(0deg,transparent 0 23px,rgba(58,44,28,.13) 24px),#eee2c8;color:#3a2f22}.pc-collage .archive-art span{font:700 clamp(26px,3vw,53px) Georgia,'Noto Sans SC',serif;writing-mode:vertical-rl}.pc-collage .archive-art small{font:9px 'JetBrains Mono',monospace;writing-mode:vertical-rl}.pc-collage .archive-diagram{display:grid;place-items:center;background:radial-gradient(circle at center,transparent 24%,#805d3f 25%,transparent 26%),linear-gradient(90deg,transparent 49%,#805d3f 50%,transparent 51%),#f3e9d4;color:#3a2f22}.pc-collage .archive-diagram span{font:700 20px Georgia,'Noto Sans SC',serif;line-height:1.5;text-align:center;background:#f3e9d4;padding:10px}
+
+/* The same paper, image and label language continues across the whole site. */
+#top{border-bottom:2px solid #24231f;box-shadow:0 4px 0 rgba(25,25,23,.08)}
+.top-logo{position:relative;background:#e2ed70;padding:7px 10px;margin:-7px 0;transform:rotate(-3deg);box-shadow:3px 3px 0 #24231f}
+.top-nav a{font-weight:600}.top-nav li:nth-child(2) a{background:#dfeaf1;padding:7px 9px;transform:rotate(-2deg);display:inline-block}
+#hero{background:radial-gradient(circle at 81% 38%,rgba(187,211,220,.55),transparent 30%),transparent}
+#hero .h-wrap{max-width:67%;z-index:2}
+.h-tag{display:inline-block;background:#e7f15a;color:#24231f;padding:9px 12px;transform:rotate(-2deg);box-shadow:3px 3px 0 #24231f}
+.h-name{position:relative;text-shadow:3px 4px 0 rgba(185,176,161,.58)}
+.h-name::after{content:'✳';position:absolute;top:-8%;left:min(440px,55%);font:normal clamp(25px,3.5vw,52px) Georgia,serif;color:#e16e4e;transform:rotate(-22deg)}
+.h-chips .chip{border-radius:0;background:#e9e4db;border:1px solid #8f887e;box-shadow:2px 2px 0 rgba(25,25,23,.25);transform:rotate(-2deg)}.h-chips .chip:nth-child(3n){background:#d6e4ee;transform:rotate(2deg)}.h-chips .chip:nth-child(4n){background:#e7f15a;transform:rotate(-1deg)}
+.h-cta{border-radius:0;background:#24231f;color:#f7f2e8;transform:rotate(-2deg);box-shadow:7px 7px 0 #e7f15a}
+.hero-board{position:absolute;right:5vw;top:18%;width:min(32vw,430px);height:480px;pointer-events:none;z-index:1}
+.hero-board .hero-paper{position:absolute;inset:9% 8% 11% 9%;background:#d9e8ef;border:1px solid #24231f;transform:rotate(5deg);box-shadow:11px 13px 0 #24231f}
+.hero-board img{position:absolute;object-fit:contain;border:6px solid #faf6ee;box-shadow:5px 7px 0 rgba(25,25,23,.28);background:#faf6ee}
+.hero-board .hero-image-main{width:61%;height:66%;top:13%;left:15%;transform:rotate(-8deg)}
+.hero-board .hero-image-small{width:42%;height:46%;top:28%;right:0;transform:rotate(10deg)}
+.hero-board .hero-sticker{position:absolute;z-index:2;left:0;top:11%;padding:12px 16px;background:#e7f15a;color:#24231f;font:700 clamp(16px,2vw,28px) Georgia,serif;transform:rotate(-8deg);box-shadow:3px 4px 0 #24231f}
+.hero-board .hero-sticker.alt{left:auto;right:-3%;top:auto;bottom:8%;background:#ef8668;transform:rotate(7deg)}
+.hero-board::after{content:'';position:absolute;z-index:3;width:74px;height:22px;background:rgba(252,241,204,.74);top:11%;left:45%;transform:rotate(-10deg);border:1px solid rgba(65,53,41,.2)}
+#skills .sk-header{position:relative;background:#e2e8e1;border:1px solid #24231f;padding:22px 28px;margin-top:12px;box-shadow:8px 8px 0 #e7f15a;transform:rotate(-.5deg)}
+#skills .sk-header::before{content:'FIELD NOTES / 01';position:absolute;right:25px;top:-15px;background:#ef8668;padding:8px 12px;color:#24231f;font:700 10px 'JetBrains Mono',monospace;transform:rotate(4deg);border:1px solid #24231f}
+#skills .sk-core{gap:20px;padding:10px 7px}
+#skills .sk-card{box-shadow:4px 5px 0 #b7afa1;transform:rotate(-1deg);background:#f7f2e7}
+#skills .sk-card:nth-child(2){transform:rotate(1.2deg);background:#e1eaf1}
+#skills .sk-card:nth-child(3){transform:rotate(-.5deg);background:#ecefc3}
+#skills .sk-card:hover{transform:translateY(-5px) rotate(0)}
+#skills .sk-card-kicker{display:inline-block;align-self:flex-start;background:#e7f15a;border:1px solid #24231f;padding:5px 7px;color:#24231f;transform:rotate(-2deg)}
+#skills .sk-extended{gap:9px;border:0}
+#skills .sk-mini{border:1px solid #8d877c!important;background:#e7e3da;min-height:140px;box-shadow:3px 3px 0 #b7afa1}
+#skills .sk-mini:nth-child(2){background:#dce8ec;transform:translateY(7px)}#skills .sk-mini:nth-child(3){background:#e7efc5}
+#skills .sk-tool-chip{border-radius:0;transform:rotate(-2deg)}#skills .sk-tool-chip:nth-child(3n){transform:rotate(2deg)}
+#contact2{background:radial-gradient(circle at 20% 40%,rgba(231,241,90,.3),transparent 30%),var(--bg)!important}
+.ct2-inner{max-width:980px;gap:55px}
+.ct2-left{position:relative;transform:rotate(-3deg);border:1px solid #24231f;padding:18px;background:#dce9ed;box-shadow:9px 9px 0 #24231f}
+.ct2-left::before{content:'LET’S TALK / 2026';position:absolute;top:-18px;left:24px;padding:8px 10px;background:#e7f15a;border:1px solid #24231f;font:700 10px 'JetBrains Mono',monospace;transform:rotate(5deg)}
+.ct2-left::after{content:'';position:absolute;top:-9px;right:30px;width:55px;height:22px;background:rgba(252,241,204,.7);transform:rotate(16deg)}
+.ct2-avatar{max-width:210px;margin:auto}
+.ct2-card{border-radius:0!important;transform:rotate(.6deg)}
+.ct2-card:nth-child(2){transform:rotate(-.7deg);background:#f4ecd9!important;box-shadow:8px 8px 0 #d9e8ef!important}
+.ct2-card-title{display:inline-block;background:#e7f15a;color:#24231f;padding:7px 9px;transform:rotate(-2deg)}
+#win{transform:rotate(-.2deg);box-shadow:14px 14px 0 #d9ff43,22px 22px 0 #24231f}
+.w-hd{position:relative;background:#e2e9e6!important;background-image:linear-gradient(rgba(25,25,23,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(25,25,23,.06) 1px,transparent 1px)!important;background-size:32px 32px!important}
+.w-hd::after{content:'PROJECT FILE ✳';position:absolute;top:18px;right:20px;background:#e7f15a;border:1px solid #24231f;padding:7px 10px;font:700 10px 'JetBrains Mono',monospace;transform:rotate(5deg)}
+.w-box:nth-child(odd){transform:rotate(-.5deg);background:#f6f0e3}.w-box:nth-child(even){transform:rotate(.5deg);background:#dfeaf0}
+.w-img{border:6px solid #f9f5ec;box-shadow:4px 5px 0 rgba(25,25,23,.22)}
+#ld::after{content:'✳ SELECTED WORK';position:absolute;right:10%;top:23%;background:#e7f15a;color:#24231f;padding:13px 17px;border:1px solid #24231f;box-shadow:5px 6px 0 #24231f;font:700 12px 'JetBrains Mono',monospace;transform:rotate(8deg)}
+@media(max-width:1050px){.hero-board{opacity:.45;right:1vw}.h-wrap{max-width:72%}}
+@media(max-width:760px){#hero .h-wrap{max-width:100%}.hero-board{width:170px;height:190px;top:12%;right:-25px;opacity:.22}.hero-board .hero-sticker{display:none}.h-name::after{left:60%;top:-11%}#skills .sk-header{transform:none;box-shadow:5px 5px 0 #e7f15a}#skills .sk-core{gap:12px}#skills .sk-card,#skills .sk-card:nth-child(n){transform:none}#contact2{overflow-y:auto}#contact2 .ct2-inner{grid-template-columns:1fr;gap:24px;padding:40px 0}#contact2 .ct2-left{max-width:230px;margin:auto}.ct2-avatar{max-width:150px}.w-hd::after{display:none}#ld::after{right:5%;top:12%;font-size:9px}}
+@media(max-width:900px){#desk .p-grid.has-zhixu{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:300px}#desk .pc:nth-child(n){grid-column:span 1}#desk .pc:first-child{grid-column:span 2}}
+@media(max-width:640px){#desk .p-grid.has-zhixu{grid-template-columns:1fr;grid-auto-rows:310px;margin:76px 12px 58px;padding:4px 2px 22px;gap:18px}#desk .pc:nth-child(n){grid-column:span 1}#desk .pc:nth-child(2n){transform:none}#desk .pc-badge{font-size:8px;max-width:66%}#desk .pc-foot{padding:22px 16px 14px}#desk .zhixu-card::after{font-size:16px}}
 </style></head>
 <body>
 <div id="cur"></div><div id="ring"></div>
@@ -671,8 +729,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 <!-- LOADING -->
 <div id="ld">
   <div class="ld-corners"><span></span><span></span><span></span><span></span></div>
-  <div class="ld-sub">CREATIVE SYSTEM v1.0</div>
-  <div class="ld-sys">DSY SYSTEM</div>
+  <div class="ld-sub">SYRA DIAO / SELECTED WORK / 2026</div>
+  <div class="ld-sys">刁思予 ✳ DSY</div>
   <div class="ld-msg" id="ldMsg">Initializing Portfolio...</div>
   <div class="ld-track"><div class="ld-fill" id="ldFill"></div></div>
   <div class="ld-pct" id="ldPct">000</div>
@@ -695,7 +753,6 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
       <li><a href="#" onclick="goHero();return false;" class="t" data-zh="首页" data-en="Home">首页</a></li>
       <li><a href="#" onclick="goDesk();return false;" class="t" data-zh="作品" data-en="Work">作品</a></li>
       <li><a href="#" onclick="goSkills();return false;" class="t" data-zh="技能" data-en="Skills">技能</a></li>
-      <li><a href="#" onclick="goCarousel();return false;" class="t" data-zh="作品集" data-en="Portfolio">作品集</a></li>
       <li><a href="#" onclick="openW('about');return false;" class="t" data-zh="关于" data-en="About">关于</a></li>
       <li><a href="#" onclick="goContact2();return false;" class="t" data-zh="联系" data-en="Contact">联系</a></li>
     </ul>
@@ -708,6 +765,13 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 
   <!-- HERO -->
   <div id="hero">
+    <div class="hero-board" aria-hidden="true">
+      <div class="hero-paper"></div>
+      <img class="hero-image-main" src="peek.png" alt="">
+      <img class="hero-image-small" src="Typing（坐在电脑前设计）.png" alt="">
+      <span class="hero-sticker">DESIGN<br>IN MOTION ↗</span>
+      <span class="hero-sticker alt">刁思予 / DSY</span>
+    </div>
     <div class="h-wrap">
       <div class="h-tag t" data-zh="数字媒体艺术 · 昆明理工大学 · 2026" data-en="Digital Media Art · KMUST · 2026">数字媒体艺术 · 昆明理工大学 · 2026</div>
       <h1 class="h-name t">刁思予<br><span class="bl">DSY</span></h1>
@@ -717,7 +781,7 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         <div class="h-deco-line"></div>
         <div class="h-deco-line"></div>
         <div class="h-deco-line"></div>
-        <div class="h-deco-txt">SYS://DSY_PORTFOLIO_v1.0 — STATUS: ONLINE</div>
+        <div class="h-deco-txt">VISUAL STORIES / INTERACTIVE WORLDS / 2026</div>
       </div>
       <div class="h-chips t">
         <span class="chip" data-zh="叙事设计" data-en="Narrative Design">叙事设计</span>
@@ -743,10 +807,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         <div class="pc-foot"><div class="pc-title t" data-zh="知序 · AIGC 知识库" data-en="Zhixu · AIGC Fieldnotes">知序 · AIGC 知识库</div><div class="pc-sub t" data-zh="七页界面 · 信息架构 · 交互原型" data-en="7 screens · Architecture · Prototype">七页界面 · 信息架构 · 交互原型</div><div class="pc-open t" data-zh="查看 UI 案例 →" data-en="View UI Case Study →">查看 UI 案例 →</div></div>
       </a>
 
-      <div class="pc" onclick="openW('afterimage')">
-        <div class="pc-bg"><div class="pc-grid-lines"></div>
-          <div class="pc-orb" style="width:220px;height:220px;background:radial-gradient(circle,rgba(77,163,255,.22),transparent);top:-30px;right:-30px;border-radius:50%;"></div>
-        </div>
+      <div class="pc" role="button" tabindex="0" onclick="openW('afterimage')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('afterimage')}">
+        <div class="pc-collage afterimage" aria-hidden="true"><img class="art art-main" src="残像预览图.png" alt="" loading="lazy"><img class="art art-small" src="默认.png" alt="" loading="lazy"><span class="scrap one">ECHO_01</span><span class="scrap two">MEMORY?</span><span class="tape"></span></div>
         <div class="pc-num">001</div>
         <div class="pc-badge t" data-zh="游戏 · Unity 2D" data-en="Game · Unity 2D">游戏 · Unity 2D</div>
         <div class="pc-foot">
@@ -756,10 +818,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         </div>
       </div>
 
-      <div class="pc" style="background:#1A1410;" onclick="openW('growingpains')">
-        <div class="pc-bg"><div class="pc-grid-lines"></div>
-          <div class="pc-orb" style="width:180px;height:180px;background:radial-gradient(circle,rgba(217,255,0,.18),transparent);bottom:-20px;left:-10px;border-radius:50%;"></div>
-        </div>
+      <div class="pc" role="button" tabindex="0" onclick="openW('growingpains')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('growingpains')}">
+        <div class="pc-collage growth" aria-hidden="true"><img class="art art-main" src="有色场景.png" alt="" loading="lazy"><img class="art art-small" src="分镜作业.png" alt="" loading="lazy"><span class="scrap one">成长 / CHOICE</span><span class="scrap two">02</span><span class="tape"></span></div>
         <div class="pc-num">002</div>
         <div class="pc-badge t" style="border-color:rgba(217,255,0,.18);color:rgba(217,255,0,.45);" data-zh="视觉小说 · 作品集 No.1" data-en="Visual Novel · Portfolio #1">视觉小说 · 作品集 No.1</div>
         <div class="pc-foot">
@@ -769,7 +829,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         </div>
       </div>
 
-      <div class="pc lt" onclick="openW('blindbox')">
+      <div class="pc lt" role="button" tabindex="0" onclick="openW('blindbox')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('blindbox')}">
+        <div class="pc-collage blindbox" aria-hidden="true"><img class="art art-main" src="盲盒广告设计1.jpg" alt="" loading="lazy"><img class="art art-small" src="盲盒广告设计2.jpg" alt="" loading="lazy"><span class="scrap one">SURPRISE!</span><span class="scrap two">03 ✳</span><span class="tape"></span></div>
         <div class="pc-num">003</div>
         <div class="pc-badge t" data-zh="广告设计 · 名创优品" data-en="Ad Design · MINISO">广告设计 · 名创优品</div>
         <div class="pc-foot">
@@ -779,10 +840,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         </div>
       </div>
 
-      <div class="pc" style="background:#0A0E14;" onclick="openW('maze')">
-        <div class="pc-bg"><div class="pc-grid-lines"></div>
-          <div class="pc-orb" style="width:160px;height:160px;background:radial-gradient(circle,rgba(77,163,255,.18),transparent);top:20px;right:20px;border-radius:50%;"></div>
-        </div>
+      <div class="pc" role="button" tabindex="0" onclick="openW('maze')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('maze')}">
+        <div class="pc-collage maze" aria-hidden="true"><video class="art art-main" src="迷.mp4" muted loop playsinline autoplay preload="metadata"></video><div class="art art-small type-art">迷<span>MAZE / 迷宫</span></div><span class="scrap one">WHERE?</span><span class="scrap two">04 ↗</span><span class="tape"></span></div>
         <div class="pc-num">004</div>
         <div class="pc-badge t" data-zh="游戏竞赛 · 完美世界" data-en="Game Jam · Perfect World">游戏竞赛 · 完美世界</div>
         <div class="pc-foot">
@@ -792,10 +851,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         </div>
       </div>
 
-      <div class="pc" style="background:#14120A;" onclick="openW('archive')">
-        <div class="pc-bg"><div class="pc-grid-lines"></div>
-          <div class="pc-orb" style="width:200px;height:200px;background:radial-gradient(circle,rgba(217,255,0,.14),transparent);top:-20px;left:50%;transform:translateX(-50%);border-radius:50%;"></div>
-        </div>
+      <div class="pc" role="button" tabindex="0" onclick="openW('archive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('archive')}">
+        <div class="pc-collage archive" aria-hidden="true"><div class="art art-main archive-art"><span>马家大院</span><small>YUNNAN / ARCHIVE / 2025</small></div><div class="art art-small archive-diagram"><span>四水归堂<br>一颗印</span></div><span class="scrap one">ARCHIVE</span><span class="scrap two">云南 / 05</span><span class="tape"></span></div>
         <div class="pc-num">005</div>
         <div class="pc-badge t" style="border-color:rgba(217,255,0,.18);color:rgba(217,255,0,.45);" data-zh="信息设计 · 档案" data-en="Info Design · Archive">信息设计 · 档案</div>
         <div class="pc-foot">
@@ -805,7 +862,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
         </div>
       </div>
 
-      <div class="pc lt" onclick="openW('coursework')">
+      <div class="pc lt" role="button" tabindex="0" onclick="openW('coursework')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('coursework')}">
+        <div class="pc-collage coursework" aria-hidden="true"><img class="art art-main" src="护老人海报.jpg" alt="" loading="lazy"><img class="art art-small" src="分镜作业.png" alt="" loading="lazy"><span class="scrap one">WORK / PLAY</span><span class="scrap two">06</span><span class="tape"></span></div>
         <div class="pc-num">006</div>
         <div class="pc-badge t" data-zh="课程作业 · 2024–2025" data-en="Coursework · 2024–2025">课程作业 · 2024–2025</div>
         <div class="pc-foot">
@@ -845,24 +903,6 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
     </div>
   </div>
 
-  <!-- PORTFOLIO CAROUSEL -->
-  <div id="carousel">
-    <div class="car-inner">
-      <div class="car-header">
-        <div class="car-eyebrow t" data-zh="// 作品展示" data-en="// Portfolio Showcase">// 作品展示</div>
-        <h2 class="car-title t" data-zh="作品集" data-en="Portfolio">作品集 <em>portfolio</em></h2>
-      </div>
-      <div class="car-stage">
-        <button class="car-arrow car-prev" onclick="carMove(-1)">&#8249;</button>
-        <div class="car-track" id="carTrack"></div>
-        <button class="car-arrow car-next" onclick="carMove(1)">&#8250;</button>
-      </div>
-      <div class="car-dots" id="carDots"></div>
-      <div class="car-return">
-        <a href="#" onclick="goHero();return false;" class="t" data-zh="↙ 返回" data-en="↙ Return">↙ 返回</a>
-      </div>
-    </div>
-  </div>
 
   <!-- CONTACT v2 -->
   <div id="contact2">
@@ -1385,62 +1425,6 @@ setLang = function(l){
   if(document.getElementById('skills').classList.contains('on')) renderSkills();
 };
 
-// ─────── CAROUSEL ───────
-const carProjects = [
-  {num:'007',key:'zhixu',zh:'知序 · AIGC 知识库',en:'Zhixu · AIGC Fieldnotes',sub_zh:'UI / UX · 手机 App · 可交互原型',sub_en:'UI / UX · Mobile App · Prototype',color:'#2455F5'},
-  { num:'001', key:'afterimage',  zh:'《残像》',      en:'AFTERIMAGE',      sub_zh:'赛博朋克叙事游戏', sub_en:'Cyberpunk Narrative Game',  color:'#4DA3FF' },
-  { num:'002', key:'growingpains',zh:'《生长痛》',    en:'GROWING PAINS',   sub_zh:'视觉小说 · 作品集No.1', sub_en:'Visual Novel · Portfolio #1', color:'#D9FF00' },
-  { num:'003', key:'blindbox',    zh:'名创优品盲盒广告',en:'MINISO Blind Box',sub_zh:'广告设计 · 平面+视频', sub_en:'Ad Design · Print+Video',   color:'#FF6B35' },
-  { num:'004', key:'maze',        zh:'《迷》',        en:'MAZE',            sub_zh:'Game Jam · AI影像', sub_en:'Game Jam · AI Film',         color:'#4DA3FF' },
-  { num:'005', key:'archive',     zh:'马家大院档案',  en:'Courtyard Archive',sub_zh:'信息设计 · 建筑可视化', sub_en:'Info Design · Architecture', color:'#D9FF00' },
-  { num:'006', key:'coursework',  zh:'课程作业集',    en:'Coursework',      sub_zh:'AI短片·角色设计·海报', sub_en:'AI Film·Character·Poster',   color:'#FF6B35' },
-];
-
-let carPage = 0;
-const PER_PAGE = 3;
-
-function renderCarousel(){
-  const track = document.getElementById('carTrack');
-  const dots = document.getElementById('carDots');
-  if(!track) return;
-  const totalPages = Math.ceil(carProjects.length / PER_PAGE);
-  const start = carPage * PER_PAGE;
-  const slice = carProjects.slice(start, start + PER_PAGE);
-
-  track.innerHTML = slice.map(p => `
-    <div class="car-card" onclick="openW('${p.key}')">
-      <div class="car-card-img" ${p.key==='zhixu'?'style="background:url(assets/zhixu/cover.svg) center/cover"':''}>
-        <svg style="${p.key==='zhixu'?'visibility:hidden':''}" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/>
-          <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono" font-size="10" fill="${p.color}" letter-spacing="2">${p.num}</text>
-          <circle cx="50" cy="50" r="30" fill="none" stroke="${p.color}" stroke-width="0.5" opacity="0.5"/>
-        </svg>
-      </div>
-      <div class="car-card-body">
-        <div class="car-card-num">${p.num}</div>
-        <div class="car-card-title">${lang==='zh'?p.zh:p.en}</div>
-        <div class="car-card-sub">${lang==='zh'?p.sub_zh:p.sub_en}</div>
-        <button class="car-card-btn t" data-zh="查看详情" data-en="View Details">查看详情</button>
-      </div>
-    </div>
-  `).join('');
-
-  dots.innerHTML = Array.from({length:totalPages},(_,i)=>
-    `<div class="car-dot${i===carPage?' on':''}" onclick="carGo(${i})"></div>`
-  ).join('');
-}
-
-function carMove(dir){
-  const total = Math.ceil(carProjects.length / PER_PAGE);
-  carPage = (carPage + dir + total) % total;
-  renderCarousel();
-}
-function carGo(i){ carPage=i; renderCarousel(); }
-
-function goCarousel(){
-  hideAll();
-  document.getElementById('carousel').classList.add('on');
-  renderCarousel();
-}
 
 // ─────── CONTACT v2 ───────
 const ct2Data = {
@@ -1493,7 +1477,6 @@ function hideAll(){
   document.getElementById('hero').style.display='none';
   document.getElementById('desk').classList.remove('on');
   document.getElementById('skills').classList.remove('on');
-  document.getElementById('carousel').classList.remove('on');
   document.getElementById('contact2').classList.remove('on');
 }
 
@@ -1516,7 +1499,6 @@ goSkills = function(){
 const __setLang = setLang;
 setLang = function(l){
   __setLang(l);
-  if(document.getElementById('carousel').classList.contains('on')) renderCarousel();
   if(document.getElementById('contact2').classList.contains('on')) renderContact2();
 };
 
@@ -1668,4 +1650,3 @@ function toggleMusic(){
 </script>
 </body>
 </html>
-
