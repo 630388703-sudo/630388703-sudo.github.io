@@ -53,3 +53,5 @@ button{font:inherit}button:disabled{cursor:default;opacity:.35}
 
 #contact2 .contact-photo-card{background:#fffaf0;padding:18px;box-shadow:7px 9px 0 #292b2926}#contact2 .ct2-portrait{display:block;width:100%;max-width:none;height:auto;aspect-ratio:3/4;object-fit:contain;filter:none;margin:0 auto}
 @media(max-width:760px){#contact2,#contact2.on{padding:132px 22px 76px;align-items:flex-start}#contact2 .ct2-inner{padding:0;gap:34px}#contact2 .contact-photo-card{width:230px}}
+
+.source-page{object-fit:contain!important;background:#918783!important}.leaf .source-page{height:auto!important;max-height:320px;transform:none}

@@ -719,7 +719,7 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 @media(max-width:760px){#hero .h-wrap{max-width:100%}.hero-board{width:170px;height:190px;top:12%;right:-25px;opacity:.22}.hero-board .hero-sticker{display:none}.h-name::after{left:60%;top:-11%}#skills .sk-header{transform:none;box-shadow:5px 5px 0 #e7f15a}#skills .sk-core{gap:12px}#skills .sk-card,#skills .sk-card:nth-child(n){transform:none}#contact2{overflow-y:auto}#contact2 .ct2-inner{grid-template-columns:1fr;gap:24px;padding:40px 0}#contact2 .ct2-left{max-width:230px;margin:auto}.ct2-avatar{max-width:150px}.w-hd::after{display:none}#ld::after{right:5%;top:12%;font-size:9px}}
 @media(max-width:900px){#desk .p-grid.has-zhixu{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:300px}#desk .pc:nth-child(n){grid-column:span 1}#desk .pc:first-child{grid-column:span 2}}
 @media(max-width:640px){#desk .p-grid.has-zhixu{grid-template-columns:1fr;grid-auto-rows:310px;margin:76px 12px 58px;padding:4px 2px 22px;gap:18px}#desk .pc:nth-child(n){grid-column:span 1}#desk .pc:nth-child(2n){transform:none}#desk .pc-badge{font-size:8px;max-width:66%}#desk .pc-foot{padding:22px 16px 14px}#desk .zhixu-card::after{font-size:16px}}
-</style><link rel="stylesheet" href="assets/studio/studio.css?v=20260929-3">
+</style><link rel="stylesheet" href="assets/studio/studio.css?v=20260929-4">
 </head>
 <body>
 <div id="cur"></div><div id="ring"></div>
@@ -899,17 +899,6 @@ const T={
       gameplay:'游戏录屏',visual_label:'视觉设计',
       visual_desc:'使用 Gemini、Kling、Runway 生成场景背景与视频素材。青色 #00F5D4 配合深色终端美学，构建赛博朋克视觉语言。',
     },
-    growingpains:{
-      title:'002 · 生长痛',
-      tabs:['概述','场景渲染','叙事设计'],
-      h1:'《生长痛》',en:'GROWING PAINS — 高中题材视觉小说',
-      num:'002 / 视觉小说 · 留学申请作品集 No.1 · 2024–2025',
-      tags:['视觉小说','剧本设计','留学申请作品集 No.1','Stable Diffusion','ControlNet','Figma','Premiere Pro'],
-      desc:'一部高中题材叙事游戏，探索学业压力与成长焦虑。六幕分支剧本，隐性四维价值系统，六种结局。融入「内卷」「时间不可逆」等社会议题。',
-      scene_label:'场景渲染图',scene_desc:'UE5 场景搭建与 Stable Diffusion 渲染，构建《生长痛》的视觉世界观。',
-      nar_label:'叙事设计',
-      nar_boxes:[['剧本结构','六幕完整剧本，分支选择驱动四个隐性价值维度：认同感、时间感、压力值、自我感。'],['结局系统','六种结局由价值维度最终权重决定，呈现不同的成长路径与情感出口。'],['社会议题','「内卷」：资源竞争下的自我消耗。「时间不可逆」：选择的代价与成长的痛感。'],['视觉语言','SD IP-Adapter + Lineart ControlNet 生成统一风格角色立绘，灰蓝色调强化压抑感。']],
-    },
     archive:{
       title:'005 · 马家大院档案',
       tabs:['档案展示'],
@@ -964,17 +953,6 @@ const T={
       boxes:[['Scene System','Full-stack development across 10+ scenes. Custom Editor tool AfterimageSetupTool.cs built to streamline scene setup workflow.'],['Dialogue System','JSON-driven NPC dialogue trees with multi-branch support, conditional triggers, and behavior tracking integration.'],['AI Mirror System','Player behavioral data drives the AI companion dynamically — recording choices, analyzing patterns, adjusting Echo responses.'],['Engineering Challenges','Resolved Singleton conflicts, recursive LoadScene issues, coroutine race conditions, and dual-layer Tab cross-scene mechanics.']],
       gameplay:'Gameplay Recording',visual_label:'Visual Design',
       visual_desc:'Scene backgrounds and video assets generated via Gemini, Kling, and Runway. Cyan #00F5D4 against dark terminal aesthetic builds the cyberpunk visual language.',
-    },
-    growingpains:{
-      title:'002 · Growing Pains',
-      tabs:['Overview','Scene Renders','Narrative Design'],
-      h1:'GROWING PAINS',en:'A High School Narrative Experience',
-      num:'002 / Visual Novel · Portfolio Piece No.1 · 2024–2025',
-      tags:['Visual Novel','Script Design','Portfolio Piece No.1','Stable Diffusion','ControlNet','Figma','Premiere Pro'],
-      desc:'A narrative game exploring academic pressure and the anxiety of adolescence. Six-act branching script, a hidden four-axis value system, and six distinct endings — examining themes of academic competition and the irreversibility of choices.',
-      scene_label:'Scene Renders',scene_desc:'UE5 environment design and Stable Diffusion rendering to build the visual world of Growing Pains.',
-      nar_label:'Narrative Design',
-      nar_boxes:[['Script Architecture','Six-act complete script with branching choices driving four hidden value dimensions: identity, time perception, pressure, and self-awareness.'],['Ending System','Six endings determined by final value dimension weights — each presenting a different growth path and emotional resolution.'],['Social Themes','"Academic Competition": self-consumption under resource competition. "Temporal Irreversibility": the cost of choices and the pain of growth.'],['Visual Language','SD IP-Adapter + Lineart ControlNet for unified character sprite style. Cool blue-gray palette reinforces the emotional weight.']],
     },
     archive:{
       title:'005 · Courtyard Archive',
@@ -1133,11 +1111,6 @@ function buildPanel(key,idx){
     if(idx===0)return`<div class="w-hd"><div class="w-hd-grid"></div><div class="w-label">${d.overview_num}</div><div class="w-h1">${d.h1}</div><div class="w-en">${d.en}</div><div class="w-htags">${buildTags(d.tags,true)}</div></div><div class="w-ct"><div class="w-sl">${d.overview_label}</div><iframe src="//player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0" scrolling="no" frameborder="0" allowfullscreen class="w-media"></iframe><p class="w-p">${d.desc}</p></div>`;
     if(idx===1)return`<div class="w-ct"><div class="w-sl">${d.tech_label}</div><div class="w-g2">${d.boxes.map((b,i)=>`<div class="w-box${i>1?' yl':''}"><h4>${b[0]}</h4><p>${b[1]}</p></div>`).join('')}</div><div class="w-sl" style="margin-top:24px;">${d.gameplay}</div><iframe title="残像项目视频" src="https://player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0" allowfullscreen class="w-media"></iframe></div>`;
     if(idx===2)return`<div class="w-ct"><div class="w-sl">${d.visual_label}</div><p class="w-p">${d.visual_desc}</p><div class="w-g2i"><img src="有色场景.png" class="w-img" onclick="openLb(this.src)" style="aspect-ratio:16/9;object-fit:cover;"><img src="奶茶店png.png" class="w-img" onclick="openLb(this.src)" style="aspect-ratio:16/9;object-fit:cover;"></div></div>`;
-  }
-  if(key==='growingpains'){
-    if(idx===0)return`<div class="w-hd"><div class="w-hd-grid"></div><div class="w-label">${d.num}</div><div class="w-h1">${d.h1}</div><div class="w-en">${d.en}</div><div class="w-htags">${buildTags(d.tags,true)}</div></div><div class="w-ct"><p class="w-p">${d.desc}</p></div>`;
-    if(idx===1)return`<div class="w-ct"><div class="w-sl">${d.scene_label}</div><div class="w-g2i"><img src="有色场景.png" class="w-img" onclick="openLb(this.src)" style="aspect-ratio:16/9;object-fit:cover;"><img src="奶茶店png.png" class="w-img" onclick="openLb(this.src)" style="aspect-ratio:16/9;object-fit:cover;"></div><p class="w-p">${d.scene_desc}</p></div>`;
-    if(idx===2)return`<div class="w-ct"><div class="w-sl">${d.nar_label}</div><div class="w-g2">${d.nar_boxes.map((b,i)=>`<div class="w-box${i>1?' yl':''}"><h4>${b[0]}</h4><p>${b[1]}</p></div>`).join('')}</div></div>`;
   }
   if(key==='archive'){
     return`<div class="w-hd"><div class="w-hd-grid"></div><div class="w-label">${d.num}</div><div class="w-h1" style="font-size:clamp(20px,3vw,36px);">${d.h1}</div><div class="w-en">${d.en}</div><div class="w-htags">${buildTags(d.tags,true)}</div></div><div class="w-ct"><p class="w-p">${d.desc}</p><iframe src="./马家大院.pdf" class="w-pdf"></iframe><div class="w-actions"><a href="./马家大院.pdf" target="_blank" class="w-btn pri">${d.open}</a><a href="./马家大院.pdf" download class="w-btn">${d.dl}</a></div></div>`;
@@ -1451,6 +1424,6 @@ function toggleMusic(){
   }
 }
 </script>
-<script src="assets/studio/studio.js?v=20260929-3"></script>
+<script src="assets/studio/studio.js?v=20260929-4"></script>
 </body>
 </html>
