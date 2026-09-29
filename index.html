@@ -722,7 +722,8 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 @media(max-width:760px){#hero .h-wrap{max-width:100%}.hero-board{width:170px;height:190px;top:12%;right:-25px;opacity:.22}.hero-board .hero-sticker{display:none}.h-name::after{left:60%;top:-11%}#skills .sk-header{transform:none;box-shadow:5px 5px 0 #e7f15a}#skills .sk-core{gap:12px}#skills .sk-card,#skills .sk-card:nth-child(n){transform:none}#contact2{overflow-y:auto}#contact2 .ct2-inner{grid-template-columns:1fr;gap:24px;padding:40px 0}#contact2 .ct2-left{max-width:230px;margin:auto}.ct2-avatar{max-width:150px}.w-hd::after{display:none}#ld::after{right:5%;top:12%;font-size:9px}}
 @media(max-width:900px){#desk .p-grid.has-zhixu{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:300px}#desk .pc:nth-child(n){grid-column:span 1}#desk .pc:first-child{grid-column:span 2}}
 @media(max-width:640px){#desk .p-grid.has-zhixu{grid-template-columns:1fr;grid-auto-rows:310px;margin:76px 12px 58px;padding:4px 2px 22px;gap:18px}#desk .pc:nth-child(n){grid-column:span 1}#desk .pc:nth-child(2n){transform:none}#desk .pc-badge{font-size:8px;max-width:66%}#desk .pc-foot{padding:22px 16px 14px}#desk .zhixu-card::after{font-size:16px}}
-</style></head>
+</style><link rel="stylesheet" href="assets/studio/studio.css?v=20260929-1">
+</head>
 <body>
 <div id="cur"></div><div id="ring"></div>
 
@@ -752,7 +753,7 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
     <ul class="top-nav">
       <li><a href="#" onclick="goHero();return false;" class="t" data-zh="首页" data-en="Home">首页</a></li>
       <li><a href="#" onclick="goDesk();return false;" class="t" data-zh="作品" data-en="Work">作品</a></li>
-      <li><a href="#" onclick="goSkills();return false;" class="t" data-zh="技能" data-en="Skills">技能</a></li>
+      <li><a href="#" onclick="goSkills();return false;" class="t" data-zh="能力与思考" data-en="Thinking">能力与思考</a></li>
       <li><a href="#" onclick="openW('about');return false;" class="t" data-zh="关于" data-en="About">关于</a></li>
       <li><a href="#" onclick="goContact2();return false;" class="t" data-zh="联系" data-en="Contact">联系</a></li>
     </ul>
@@ -800,81 +801,7 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
   </div>
 
   <!-- DESKTOP -->
-  <div id="desk">
-    <div class="p-grid has-zhixu">
-      <a class="pc zhixu-card" href="project-zhixu.html" aria-label="知序 AIGC 知识库 UI 设计案例">
-        <div class="pc-num">007</div><div class="pc-badge t" data-zh="UI / UX · 手机 App" data-en="UI / UX · Mobile App">UI / UX · 手机 App</div>
-        <div class="pc-foot"><div class="pc-title t" data-zh="知序 · AIGC 知识库" data-en="Zhixu · AIGC Fieldnotes">知序 · AIGC 知识库</div><div class="pc-sub t" data-zh="七页界面 · 信息架构 · 交互原型" data-en="7 screens · Architecture · Prototype">七页界面 · 信息架构 · 交互原型</div><div class="pc-open t" data-zh="查看 UI 案例 →" data-en="View UI Case Study →">查看 UI 案例 →</div></div>
-      </a>
-
-      <div class="pc" role="button" tabindex="0" onclick="openW('afterimage')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('afterimage')}">
-        <div class="pc-collage afterimage" aria-hidden="true"><img class="art art-main" src="残像预览图.png" alt="" loading="lazy"><img class="art art-small" src="默认.png" alt="" loading="lazy"><span class="scrap one">ECHO_01</span><span class="scrap two">MEMORY?</span><span class="tape"></span></div>
-        <div class="pc-num">001</div>
-        <div class="pc-badge t" data-zh="游戏 · Unity 2D" data-en="Game · Unity 2D">游戏 · Unity 2D</div>
-        <div class="pc-foot">
-          <div class="pc-title t" data-zh="《残像》" data-en="AFTERIMAGE">《残像》</div>
-          <div class="pc-sub t" data-zh="赛博朋克叙事解谜游戏" data-en="Cyberpunk Narrative Puzzle Game">赛博朋克叙事解谜游戏</div>
-          <div class="pc-open t" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
-        </div>
-      </div>
-
-      <div class="pc" role="button" tabindex="0" onclick="openW('growingpains')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('growingpains')}">
-        <div class="pc-collage growth" aria-hidden="true"><img class="art art-main" src="有色场景.png" alt="" loading="lazy"><img class="art art-small" src="分镜作业.png" alt="" loading="lazy"><span class="scrap one">成长 / CHOICE</span><span class="scrap two">02</span><span class="tape"></span></div>
-        <div class="pc-num">002</div>
-        <div class="pc-badge t" style="border-color:rgba(217,255,0,.18);color:rgba(217,255,0,.45);" data-zh="视觉小说 · 作品集 No.1" data-en="Visual Novel · Portfolio #1">视觉小说 · 作品集 No.1</div>
-        <div class="pc-foot">
-          <div class="pc-title t" data-zh="《生长痛》" data-en="GROWING PAINS">《生长痛》</div>
-          <div class="pc-sub t" data-zh="高中题材叙事游戏" data-en="High School Narrative Experience">高中题材叙事游戏</div>
-          <div class="pc-open t" style="color:var(--yellow);" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
-        </div>
-      </div>
-
-      <div class="pc lt" role="button" tabindex="0" onclick="openW('blindbox')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('blindbox')}">
-        <div class="pc-collage blindbox" aria-hidden="true"><img class="art art-main" src="盲盒广告设计1.jpg" alt="" loading="lazy"><img class="art art-small" src="盲盒广告设计2.jpg" alt="" loading="lazy"><span class="scrap one">SURPRISE!</span><span class="scrap two">03 ✳</span><span class="tape"></span></div>
-        <div class="pc-num">003</div>
-        <div class="pc-badge t" data-zh="广告设计 · 名创优品" data-en="Ad Design · MINISO">广告设计 · 名创优品</div>
-        <div class="pc-foot">
-          <div class="pc-title t" data-zh="盲盒广告" data-en="Blind Box Campaign">盲盒广告</div>
-          <div class="pc-sub t" data-zh="平面 + 视频广告设计" data-en="Print & Video Ad Design">平面 + 视频广告设计</div>
-          <div class="pc-open t" style="color:var(--orange);" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
-        </div>
-      </div>
-
-      <div class="pc" role="button" tabindex="0" onclick="openW('maze')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('maze')}">
-        <div class="pc-collage maze" aria-hidden="true"><video class="art art-main" src="迷.mp4" muted loop playsinline autoplay preload="metadata"></video><div class="art art-small type-art">迷<span>MAZE / 迷宫</span></div><span class="scrap one">WHERE?</span><span class="scrap two">04 ↗</span><span class="tape"></span></div>
-        <div class="pc-num">004</div>
-        <div class="pc-badge t" data-zh="游戏竞赛 · 完美世界" data-en="Game Jam · Perfect World">游戏竞赛 · 完美世界</div>
-        <div class="pc-foot">
-          <div class="pc-title t" data-zh="《迷》" data-en="MAZE">《迷》</div>
-          <div class="pc-sub t" data-zh="AI 影像叙事概念" data-en="AI Film Game Concept">AI 影像叙事概念</div>
-          <div class="pc-open t" data-zh="打开项目 →" data-en="Open Project →">打开项目 →</div>
-        </div>
-      </div>
-
-      <div class="pc" role="button" tabindex="0" onclick="openW('archive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('archive')}">
-        <div class="pc-collage archive" aria-hidden="true"><div class="art art-main archive-art"><span>马家大院</span><small>YUNNAN / ARCHIVE / 2025</small></div><div class="art art-small archive-diagram"><span>四水归堂<br>一颗印</span></div><span class="scrap one">ARCHIVE</span><span class="scrap two">云南 / 05</span><span class="tape"></span></div>
-        <div class="pc-num">005</div>
-        <div class="pc-badge t" style="border-color:rgba(217,255,0,.18);color:rgba(217,255,0,.45);" data-zh="信息设计 · 档案" data-en="Info Design · Archive">信息设计 · 档案</div>
-        <div class="pc-foot">
-          <div class="pc-title t" data-zh="马家大院档案" data-en="Courtyard Archive">马家大院档案</div>
-          <div class="pc-sub t" data-zh="云南传统建筑信息可视化" data-en="Yunnan Architecture Infographic">云南传统建筑信息可视化</div>
-          <div class="pc-open t" style="color:var(--yellow);" data-zh="打开档案 →" data-en="Open Archive →">打开档案 →</div>
-        </div>
-      </div>
-
-      <div class="pc lt" role="button" tabindex="0" onclick="openW('coursework')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openW('coursework')}">
-        <div class="pc-collage coursework" aria-hidden="true"><img class="art art-main" src="护老人海报.jpg" alt="" loading="lazy"><img class="art art-small" src="分镜作业.png" alt="" loading="lazy"><span class="scrap one">WORK / PLAY</span><span class="scrap two">06</span><span class="tape"></span></div>
-        <div class="pc-num">006</div>
-        <div class="pc-badge t" data-zh="课程作业 · 2024–2025" data-en="Coursework · 2024–2025">课程作业 · 2024–2025</div>
-        <div class="pc-foot">
-          <div class="pc-title t" data-zh="课程作业集" data-en="Coursework">课程作业集</div>
-          <div class="pc-sub t" data-zh="AI 短片 · 角色设计 · 海报" data-en="AI Film · Character Design · Poster">AI 短片 · 角色设计 · 海报</div>
-          <div class="pc-open t" data-zh="打开文件夹 →" data-en="Open Folder →">打开文件夹 →</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+  <main id="desk" aria-label="作品档案"></main>
 
   <!-- SKILLS PAGE -->
   <div id="skills">
@@ -1053,7 +980,7 @@ const T={
     },
     coursework:{
       title:'006 · 课程作业',
-      tabs:['AI 短片','角色设计','公益海报','分镜作业'],
+      tabs:['AI 短片','角色设计','公益海报'],
       h1:'课程作业集',en:'COURSEWORK COLLECTION — KMUST 2024–2025',
       num:'006 / 课程作业 · 昆明理工大学 · 2024–2025',
       ai_label:'AI与艺术 / 期末作业',ai_h:'15秒 AI 短片',
@@ -1064,8 +991,6 @@ const T={
       po_label:'AI与艺术 / 期末作业',po_h:'公益海报《护老人》',
       po_desc:'以云南省「护老人」行动为主题的 AI 生成公益海报。使用 Gemini 生成扁平插画底图，结合 HTML/CSS 排版，经 WeasyPrint 导出 A1 精度 PDF。',
       po_tags:['Gemini','HTML/CSS','公益设计'],
-      sb_label:'课程作业 / 分镜设计',sb_h:'分镜作业',
-      sb_tags:['分镜','视觉叙事'],
     },
     about:{
       title:'关于我',
@@ -1096,7 +1021,7 @@ const T={
       h1:'联系我',en:'CONTACT — PROJECTS / INTERNSHIP / EXCHANGE',
       num:'游戏场景 · AIGC · UI/UX · 互动体验',
       avail:'欢迎交流项目合作、实习机会、展览与作品反馈。',
-      items:[['Email','<a href="mailto:630388703@qq.com">630388703@qq.com</a>'],['电话','138-8889-9756'],['Bilibili','<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">刁思予的 B站主页</a>'],['简历','<a href="刁思予_简历.pdf" class="w-btn pri" style="display:inline-block;margin-top:4px;">下载简历 PDF</a>']],
+      items:[['Email','<a href="mailto:630388703@qq.com">630388703@qq.com</a>'],['电话','138-8889-9756'],['Bilibili','<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">刁思予的 B站项目视频</a>'],['简历','<a href="刁思予_简历.pdf" class="w-btn pri" style="display:inline-block;margin-top:4px;">下载简历 PDF</a>']],
     },
   },
   en:{
@@ -1152,7 +1077,7 @@ const T={
     },
     coursework:{
       title:'006 · Coursework',
-      tabs:['AI Short Film','Character Design','Welfare Poster','Storyboard'],
+      tabs:['AI Short Film','Character Design','Welfare Poster'],
       h1:'COURSEWORK COLLECTION',en:'KMUST DIGITAL MEDIA ART — 2024–2025',
       num:'006 / Coursework · KMUST · 2024–2025',
       ai_label:'AI & Art / Final Project',ai_h:'15-Second AI Film',
@@ -1163,8 +1088,6 @@ const T={
       po_label:'AI & Art / Final Project',po_h:'Welfare Poster: Protect the Elderly',
       po_desc:'An AI-generated public welfare poster on Yunnan\'s "Protect the Elderly" initiative. Gemini used for flat illustration generation; HTML/CSS layout exported to A1-resolution PDF via WeasyPrint.',
       po_tags:['Gemini','HTML/CSS','Public Design'],
-      sb_label:'Coursework / Storyboard Design',sb_h:'Storyboard Assignment',
-      sb_tags:['Storyboard','Visual Narrative'],
     },
     about:{
       title:'About Me',
@@ -1220,11 +1143,11 @@ function ldStep(){
     ldMsg.textContent=msgs[ldi];
     lpct=Math.round((ldi+1)/msgs.length*100);
     ldFill.style.width=lpct+'%';animPct(lpct);ldi++;
-    if(ldi<msgs.length)setTimeout(ldStep,620);
+    if(ldi<msgs.length)setTimeout(ldStep,110);
     else setTimeout(()=>{ldEl.classList.add('out');setTimeout(()=>{ldEl.remove();shellEl.classList.add('on');fluidEl.classList.add('on');const go=document.getElementById('gridOverlay');if(go)go.classList.add('on');},800);},400);
   }
 }
-setTimeout(ldStep,500);
+setTimeout(ldStep,50);
 
 // ─────── CURSOR ───────
 const cur=document.getElementById('cur');
@@ -1312,7 +1235,7 @@ function buildPanel(key,idx){
   const d=T[lang][key];
   if(key==='afterimage'){
     if(idx===0)return`<div class="w-hd"><div class="w-hd-grid"></div><div class="w-label">${d.overview_num}</div><div class="w-h1">${d.h1}</div><div class="w-en">${d.en}</div><div class="w-htags">${buildTags(d.tags,true)}</div></div><div class="w-ct"><div class="w-sl">${d.overview_label}</div><iframe src="//player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0" scrolling="no" frameborder="0" allowfullscreen class="w-media"></iframe><p class="w-p">${d.desc}</p></div>`;
-    if(idx===1)return`<div class="w-ct"><div class="w-sl">${d.tech_label}</div><div class="w-g2">${d.boxes.map((b,i)=>`<div class="w-box${i>1?' yl':''}"><h4>${b[0]}</h4><p>${b[1]}</p></div>`).join('')}</div><div class="w-sl" style="margin-top:24px;">${d.gameplay}</div><video controls class="w-media"><source src="残像录屏" type="video/mp4"></video></div>`;
+    if(idx===1)return`<div class="w-ct"><div class="w-sl">${d.tech_label}</div><div class="w-g2">${d.boxes.map((b,i)=>`<div class="w-box${i>1?' yl':''}"><h4>${b[0]}</h4><p>${b[1]}</p></div>`).join('')}</div><div class="w-sl" style="margin-top:24px;">${d.gameplay}</div><iframe title="残像项目视频" src="https://player.bilibili.com/player.html?bvid=BV1D6dLBiExR&autoplay=0" allowfullscreen class="w-media"></iframe></div>`;
     if(idx===2)return`<div class="w-ct"><div class="w-sl">${d.visual_label}</div><p class="w-p">${d.visual_desc}</p><div class="w-g2i"><img src="有色场景.png" class="w-img" onclick="openLb(this.src)" style="aspect-ratio:16/9;object-fit:cover;"><img src="奶茶店png.png" class="w-img" onclick="openLb(this.src)" style="aspect-ratio:16/9;object-fit:cover;"></div></div>`;
   }
   if(key==='growingpains'){
@@ -1335,7 +1258,6 @@ function buildPanel(key,idx){
       ()=>`<div class="w-ct"><div class="w-sl">${d.ai_label}</div><div class="w-label" style="margin-bottom:8px;">${d.ai_h}</div><video controls class="w-media"><source src="ai视频.mp4" type="video/mp4"></video><p class="w-p">${d.ai_desc}</p><div class="w-htags" style="margin-top:0;">${buildTags(d.ai_tags,false)}</div></div>`,
       ()=>`<div class="w-ct"><div class="w-sl">${d.ch_label}</div><div class="w-label" style="margin-bottom:8px;">${d.ch_h}</div><iframe src="./设计手册.pdf" class="w-pdf"></iframe><div class="w-htags" style="margin-top:12px;">${buildTags(d.ch_tags,false)}</div></div>`,
       ()=>`<div class="w-ct"><div class="w-sl">${d.po_label}</div><div class="w-label" style="margin-bottom:8px;">${d.po_h}</div><img src="护老人海报.jpg" class="w-img" onclick="openLb(this.src)" style="margin-bottom:14px;"><p class="w-p">${d.po_desc}</p><div class="w-htags">${buildTags(d.po_tags,false)}</div></div>`,
-      ()=>`<div class="w-ct"><div class="w-sl">${d.sb_label}</div><div class="w-label" style="margin-bottom:8px;">${d.sb_h}</div><img src="分镜作业.png" class="w-img" onclick="openLb(this.src)" style="margin-bottom:14px;"><div class="w-htags">${buildTags(d.sb_tags,false)}</div></div>`,
     ];
     return tabs[idx]?tabs[idx]():'';
   }
@@ -1431,13 +1353,13 @@ const ct2Data = {
   zh: [
     { icon:'📞', val:'138-8889-9756' },
     { icon:'✉️', val:'<a href="mailto:630388703@qq.com">630388703@qq.com</a>' },
-    { icon:'▶️', val:'<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">B站主页</a>' },
+    { icon:'▶️', val:'<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">B站项目视频</a>' },
     { icon:'📄', val:'<a href="刁思予_简历.pdf">下载简历 PDF</a>' },
   ],
   en: [
     { icon:'📞', val:'138-8889-9756' },
     { icon:'✉️', val:'<a href="mailto:630388703@qq.com">630388703@qq.com</a>' },
-    { icon:'▶️', val:'<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">Bilibili Channel</a>' },
+    { icon:'▶️', val:'<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank">Bilibili Project Video</a>' },
     { icon:'📄', val:'<a href="刁思予_简历.pdf">Download CV PDF</a>' },
   ]
 };
@@ -1648,5 +1570,6 @@ function toggleMusic(){
   }
 }
 </script>
+<script src="assets/studio/studio.js?v=20260929-1"></script>
 </body>
 </html>
