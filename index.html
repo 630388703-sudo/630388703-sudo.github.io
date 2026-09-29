@@ -659,7 +659,12 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 }
 </style>
 
-</head>
+<style>
+.p-grid.has-zhixu{grid-template-rows:none;grid-auto-rows:minmax(240px,calc((100vh - 170px)/2));overflow-y:auto;padding:8px 12px 16px 0;align-content:start}
+.zhixu-card{text-decoration:none;color:inherit;background:#E8EEFF url('assets/zhixu/cover.svg') right center/cover no-repeat!important;display:block}
+.zhixu-card .pc-foot{background:linear-gradient(transparent,#E8EEFF 28%);padding-top:42px}.zhixu-card:focus-visible{outline:3px solid #2455f5;outline-offset:-5px}
+@media(max-width:640px){.p-grid.has-zhixu{grid-template-columns:1fr;grid-auto-rows:260px}.zhixu-card .pc-badge{display:block}}
+</style></head>
 <body>
 <div id="cur"></div><div id="ring"></div>
 
@@ -732,7 +737,11 @@ a,button,.pc,.w-x,.w-tab,.w-img,.w-btn,.lt-btn{cursor:pointer!important;}
 
   <!-- DESKTOP -->
   <div id="desk">
-    <div class="p-grid">
+    <div class="p-grid has-zhixu">
+      <a class="pc zhixu-card" href="project-zhixu.html" aria-label="知序 AIGC 知识库 UI 设计案例">
+        <div class="pc-num">007</div><div class="pc-badge t" data-zh="UI / UX · 手机 App" data-en="UI / UX · Mobile App">UI / UX · 手机 App</div>
+        <div class="pc-foot"><div class="pc-title t" data-zh="知序 · AIGC 知识库" data-en="Zhixu · AIGC Fieldnotes">知序 · AIGC 知识库</div><div class="pc-sub t" data-zh="七页界面 · 信息架构 · 交互原型" data-en="7 screens · Architecture · Prototype">七页界面 · 信息架构 · 交互原型</div><div class="pc-open t" data-zh="查看 UI 案例 →" data-en="View UI Case Study →">查看 UI 案例 →</div></div>
+      </a>
 
       <div class="pc" onclick="openW('afterimage')">
         <div class="pc-bg"><div class="pc-grid-lines"></div>
@@ -1302,6 +1311,7 @@ function buildPanel(key,idx){
 }
 
 function openW(key){
+  if(key==='zhixu'){location.href='project-zhixu.html?lang='+lang;return;}
   curKey=key;
   renderWin(key);
   document.getElementById('ov').classList.add('on');
@@ -1377,6 +1387,7 @@ setLang = function(l){
 
 // ─────── CAROUSEL ───────
 const carProjects = [
+  {num:'007',key:'zhixu',zh:'知序 · AIGC 知识库',en:'Zhixu · AIGC Fieldnotes',sub_zh:'UI / UX · 手机 App · 可交互原型',sub_en:'UI / UX · Mobile App · Prototype',color:'#2455F5'},
   { num:'001', key:'afterimage',  zh:'《残像》',      en:'AFTERIMAGE',      sub_zh:'赛博朋克叙事游戏', sub_en:'Cyberpunk Narrative Game',  color:'#4DA3FF' },
   { num:'002', key:'growingpains',zh:'《生长痛》',    en:'GROWING PAINS',   sub_zh:'视觉小说 · 作品集No.1', sub_en:'Visual Novel · Portfolio #1', color:'#D9FF00' },
   { num:'003', key:'blindbox',    zh:'名创优品盲盒广告',en:'MINISO Blind Box',sub_zh:'广告设计 · 平面+视频', sub_en:'Ad Design · Print+Video',   color:'#FF6B35' },
@@ -1398,8 +1409,8 @@ function renderCarousel(){
 
   track.innerHTML = slice.map(p => `
     <div class="car-card" onclick="openW('${p.key}')">
-      <div class="car-card-img">
-        <svg viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/>
+      <div class="car-card-img" ${p.key==='zhixu'?'style="background:url(assets/zhixu/cover.svg) center/cover"':''}>
+        <svg style="${p.key==='zhixu'?'visibility:hidden':''}" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/>
           <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono" font-size="10" fill="${p.color}" letter-spacing="2">${p.num}</text>
           <circle cx="50" cy="50" r="30" fill="none" stroke="${p.color}" stroke-width="0.5" opacity="0.5"/>
         </svg>
@@ -1657,3 +1668,4 @@ function toggleMusic(){
 </script>
 </body>
 </html>
+

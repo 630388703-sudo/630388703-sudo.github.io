@@ -7,6 +7,8 @@
 /* ── i18n strings ── */
 const LANG = {
   en: {
+    zx_title: 'Zhixu · AIGC Fieldnotes',
+    zx_desc: 'Seven mobile screens connecting knowledge, tools, prompts and creative practice.',
     nav_home:     'HOME',
     nav_about:    'ABOUT',
     nav_projects: 'PROJECTS',
@@ -56,6 +58,8 @@ const LANG = {
     loading_sub:   'Loading...',
   },
   zh: {
+    zx_title: '知序 · AIGC 知识库',
+    zx_desc: '以七页移动界面连接知识学习、工具选择、提示词与创作实践。',
     nav_home:     '首页',
     nav_about:    '关于',
     nav_projects: '项目',
@@ -272,3 +276,4 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', toggleLang);
   });
 });
+
