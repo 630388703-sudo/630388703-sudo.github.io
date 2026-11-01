@@ -28,7 +28,7 @@
     { id: 'afterimage', key: 'afterimage', image: '残像预览图.png', ratio: 1834 / 1037, kicker: ['001 · 莉莉丝 Game Jam · Unity 2D · 2026', '001 · Lilith Game Jam · Unity 2D · 2026'], title: ['残像', 'Afterimage'], sub: ['「我的 AI 队友」：你塑造了它，它也在重构你。', 'My AI Teammate: you shape it, and it reshapes you.'] },
     { id: 'growingpains', key: 'growingpains', image: 'assets/growingpains/page-1.jpg', ratio: 1684 / 618, kicker: ['002 · 叙事探索游戏 · 个人项目', '002 · Narrative exploration · Personal project'], title: ['生长痛', 'Growth Pain'], sub: ['压力，如何悄悄改变我们对自己的认识？', 'How does pressure quietly reshape the way we see ourselves?'] },
     { id: 'archive', key: 'archive', image: 'assets/archive/cover.jpg', ratio: 2200 / 3112, kicker: ['005 · 云南传统建筑 · 信息可视化 · 2025', '005 · Vernacular architecture · Information design · 2025'], title: ['马家大院档案', 'Courtyard Archive'], sub: ['让建筑结构成为可以阅读的信息。', 'Make architectural structure readable.'] },
-    { id: 'aiwork', key: 'aiwork', image: 'assets/ai/jellyfish-cover.jpg', ratio: 1.6, kicker: ['009 · AI 协作 · Three.js · 2026', '009 · AI collaboration · Three.js · 2026'], title: ['机械水母', 'Mechanical Medusa'], sub: ['一只没有模型文件的水母：全部由代码生成，可以旋转、拆开再复原。', 'A jellyfish without a model file: all generated in code, to turn, take apart and reassemble.'], actions: [['ai', ['打开 3D 作品 ↗', 'Open the 3D piece ↗']]] },
+    { id: 'aiwork', key: 'aiwork', image: 'assets/ai/jellyfish-cut.webp', ratio: 982 / 1176, h: 5.6, kicker: ['009 · AI 协作 · Three.js · 2026', '009 · AI collaboration · Three.js · 2026'], title: ['机械水母', 'Mechanical Medusa'], sub: ['一只没有模型文件的水母：全部由代码生成，可以旋转、拆开再复原。', 'A jellyfish without a model file: all generated in code, to turn, take apart and reassemble.'], actions: [['ai', ['打开 3D 作品 ↗', 'Open the 3D piece ↗']]] },
     { id: 'thinking', nav: 'thinking', cards: true, kicker: ['能力与思考', 'How I think, how I make'], title: ['作品背后，还有这些思考。', 'Behind the work, a way of thinking.'], sub: ['创意与游戏策划 · 用户与产品思考 · AI 工作流 · 交互与技术实现 · 视觉与信息表达 · 反思与创作记录', 'Game & narrative · Product thinking · AI workflow · Interaction & making · Visual communication · Reflection'], actions: [['thinking', ['展开能力与思考', 'Read the full map']]] },
     { id: 'contact', nav: 'contact', portrait: 'assets/studio/siyu-portrait.jpg', ratio: 0.75, kicker: ['关于 · 联系', 'About · Contact'], title: ['Hi, 我是刁思予。', "Hi, I'm Siyu."], sub: ['可实习：2027 年 1 月 5 日至 3 月中旬 · 630388703@qq.com · 138-8899-7566', 'Internship: 5 Jan to mid-March 2027 · 630388703@qq.com · 138-8899-7566'], actions: [['about', ['关于我', 'About me']], ['contact', ['联系与留言', 'Contact & message']], ['cv', ['下载简历 PDF', 'Download CV']]] },
   ];
@@ -58,7 +58,12 @@
     };
   })();
 
-  const loadAll = async () => { for (const src of SCRIPTS) { if (src.includes('three.min') && window.THREE) continue; await new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); } };
+  // one loader: the page's own (#ld) when it is still up, otherwise the same markup inside the tunnel
+  const LD = () => document.getElementById('ld') || (root && root.querySelector('.dsy-ld'));
+  const loaderHTML = () => `<div class="rm-load dsy-ld"><div class="ld-sys">刁思予 <i>✳</i> DSY</div><div class="ld-msg">${tr('正在进入记忆隧道', 'Entering the memory tunnel')}</div><div class="ld-track"><div class="ld-fill"></div></div><div class="ld-pct">000</div></div>`;
+  const progress = (p, msg) => { const el = LD(); if (!el) return; const f = el.querySelector('.ld-fill'), c = el.querySelector('.ld-pct'), m = el.querySelector('.ld-msg'); if (f) f.style.width = p + '%'; if (c) c.textContent = String(Math.round(p)).padStart(3, '0'); if (msg && m) m.textContent = msg; };
+  const finishLoader = () => { const el = LD(); if (!el) return; progress(100); setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 900); }, 250); };
+  const loadAll = async () => { let i = 0; for (const src of SCRIPTS) { i++; if (src.includes('three.min') && window.THREE) continue; await new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); progress(i / SCRIPTS.length * 80); } };
 
   const origHero = window.goHero;
   window.goHero = function () { if (wantRoom()) showRoom(); else origHero.apply(this, arguments); };
@@ -117,7 +122,7 @@
     if (building) return building;
     building = (async () => {
       root = document.createElement('div'); root.id = 'room';
-      root.innerHTML = `<canvas></canvas><div class="rm-load">${tr('正在进入记忆隧道…', 'Entering the memory tunnel…')}</div>
+      root.innerHTML = `<canvas></canvas>${document.getElementById('ld') ? '' : loaderHTML()}
         <header class="rm-top"><button class="rm-brand" data-go="home">D<b>.</b>S<b>.</b>Y</button>
           <nav class="rm-nav">${[['home', ['首页', 'Home']], ['work', ['作品', 'Work']], ['thinking', ['能力与思考', 'Thinking']], ['about', ['关于', 'About']], ['contact', ['联系', 'Contact']]].map(([k, l]) => `<button data-go="${k}" data-l='${JSON.stringify(l)}'>${L(l)}</button>`).join('')}</nav>
           <div class="rm-tools"><button class="rm-sound" aria-pressed="false" data-l='["声音","Sound"]'>${tr('声音', 'Sound')}</button><button data-lang="zh">CN</button><button data-lang="en">EN</button></div></header>
@@ -131,8 +136,9 @@
       $$('.rm-rail button', root).forEach(b => b.onclick = () => goTo(+b.dataset.i));
       $('.rm-sound', root).onclick = () => Sound.toggle();
       root.addEventListener('pointerdown', () => Sound.unlock(), { once: true });
-      try { await loadAll(); build(); } catch (e) { console.error(e); root.remove(); root = null; building = null; document.documentElement.classList.remove('dsy-3d'); origHero(); return; }
-      $('.rm-load', root).remove(); start();
+      progress(6, tr('正在进入记忆隧道', 'Entering the memory tunnel'));
+      try { await loadAll(); build(); } catch (e) { console.error(e); LD()?.remove(); root.remove(); root = null; building = null; document.documentElement.classList.remove('dsy-3d'); origHero(); return; }
+      progress(92); start(); requestAnimationFrame(() => requestAnimationFrame(finishLoader));
     })();
     await building; building = null;
   }
@@ -228,7 +234,7 @@
     const MEM_PTS = `
       uniform sampler2D uTex; uniform float uA, uTime, uOp, uW, uH, uPx; uniform float uRes[5];
       attribute vec2 aUv; attribute vec3 aRnd;
-      varying vec3 vCol; varying float vAlpha;
+      varying vec3 vCol; varying float vAlpha; varying float vTa;
       void main() {
         float band = clamp(floor(aUv.x * 5.0), 0.0, 4.0); int bi = int(band);
         vec3 p = vec3((aUv.x - 0.5) * uW, (aUv.y - 0.5) * uH + uRes[bi], 0.0);
@@ -237,14 +243,14 @@
         vec3 drift = vec3(sin(uTime * 0.21 + aRnd.x * 6.28), cos(uTime * 0.17 + aRnd.y * 6.28), sin(uTime * 0.13 + aRnd.z * 6.28)) * 0.5;
         vec3 scatter = (aRnd - 0.5) * vec3(uW * 1.5, uH * 1.7, 7.0) + drift + vec3(0.0, (band - 2.0) * 0.45, -1.2 - band * 0.35);
         p += (1.0 - k) * scatter;
-        vCol = texture2D(uTex, aUv).rgb;
+        vec4 tc = texture2D(uTex, aUv); vCol = tc.rgb; vTa = tc.a;
         vAlpha = uOp * (0.25 + 0.75 * k) * (1.0 - smoothstep(0.9, 1.0, uA) * 0.85);
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
         gl_PointSize = uPx * (4.2 + (1.0 - k) * 0.8) * (10.0 / -mv.z);
         gl_Position = projectionMatrix * mv;
       }`;
-    const MEM_PTS_F = `varying vec3 vCol; varying float vAlpha;
-      void main() { float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; gl_FragColor = vec4(vCol * 0.92, vAlpha * smoothstep(0.5, 0.25, d)); }`;
+    const MEM_PTS_F = `varying vec3 vCol; varying float vAlpha; varying float vTa;
+      void main() { float d = length(gl_PointCoord - 0.5); if (d > 0.5 || vTa < 0.08) discard; gl_FragColor = vec4(vCol * 0.92, vAlpha * vTa * smoothstep(0.5, 0.25, d)); }`;
     const MEM_PLANE_V = `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
     const MEM_PLANE_F = `uniform sampler2D uTex; uniform float uA, uOp, uH; uniform float uRes[5]; varying vec2 vUv;
       void main() {
@@ -253,7 +259,7 @@
         vec2 uv = vec2(vUv.x, vUv.y - r / uH);
         if (uv.y < 0.0 || uv.y > 1.0) discard;
         float seam = (abs(r) > 0.001 && fract(vUv.x * 5.0) < 0.006) ? 0.0 : 1.0;
-        gl_FragColor = vec4(texture2D(uTex, uv).rgb * 0.92, smoothstep(0.72, 1.0, uA) * uOp * seam);
+        vec4 tc = texture2D(uTex, uv); gl_FragColor = vec4(tc.rgb * 0.92, tc.a * smoothstep(0.72, 1.0, uA) * uOp * seam);
       }`;
     const frame = (st, tex, w, h, x, y, z, ry, main, goto) => {
       const g = new T.Group(); g.position.set(x, y, z); g.rotation.y = ry; scene.add(g);
@@ -289,7 +295,7 @@
       } else if (s.portrait) {
         frame(i, srgb(loader.load(s.portrait)), 2.4, 3.2, x + 0.6, 0.1, -1.2, -0.15, true);
       } else {
-        const fw = s.ratio < 1 ? 4.6 * s.ratio : W, fh = s.ratio < 1 ? 4.6 : W / s.ratio;
+        const fh0 = s.h || 4.6, fw = s.ratio < 1 ? fh0 * s.ratio : W, fh = s.ratio < 1 ? fh0 : W / s.ratio;
         frame(i, texFor(s), fw, fh, x, 0.2, -1.2, -0.12, true);
       }
     });

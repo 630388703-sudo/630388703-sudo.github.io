@@ -1,0 +1,12 @@
+/* One loading screen for the 3D site, the tunnel and the AI piece: dark, the name, one thin line. */
+html.dsy-3d #ld,.dsy-ld{position:fixed;inset:0;z-index:9997;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:22px!important;background:#030305!important;color:#eef0fa;transition:opacity .9s ease}
+html.dsy-3d #ld.out,.dsy-ld.out{opacity:0;pointer-events:none}
+html.dsy-3d #ld::before,html.dsy-3d #ld::after{display:none!important}
+html.dsy-3d #ld .ld-corners,html.dsy-3d #ld .ld-sub{display:none!important}
+html.dsy-3d #ld .ld-sys,.dsy-ld .ld-sys{font:400 clamp(56px,7vw,104px)/1 'DM Serif Display',Georgia,serif!important;letter-spacing:-.02em!important;color:#fff!important;text-shadow:none!important;margin:0!important}
+html.dsy-3d #ld .ld-sys i,.dsy-ld .ld-sys i{font-style:normal;color:#7ea6ff}
+html.dsy-3d #ld .ld-msg,.dsy-ld .ld-msg{font:400 14px/1.6 'Noto Sans SC',sans-serif!important;letter-spacing:.04em!important;text-transform:none!important;color:#9aa0b8!important;min-height:22px}
+html.dsy-3d #ld .ld-track,.dsy-ld .ld-track{width:240px!important;height:1px!important;background:#1d2030!important;position:relative;overflow:hidden}
+html.dsy-3d #ld .ld-fill,.dsy-ld .ld-fill{height:100%;width:0;background:#7ea6ff!important;box-shadow:none!important;transition:width .5s cubic-bezier(.4,0,.2,1)}
+html.dsy-3d #ld .ld-pct,.dsy-ld .ld-pct{font:400 12px 'JetBrains Mono',monospace!important;letter-spacing:.12em!important;color:#6d7181!important}
+html.dsy-3d #ld .ld-sys::before,html.dsy-3d #ld .ld-sys::after,html.dsy-3d #ld .ld-msg::before,html.dsy-3d #ld .ld-msg::after,.dsy-ld .ld-sys::after,.dsy-ld .ld-msg::before{display:none!important;content:none!important}
