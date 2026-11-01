@@ -1,5 +1,7 @@
-/* Mechanical Medusa — a jellyfish built entirely from code (three.js r128).
-   Every part registers an exploded pose; one value (explode) moves the whole creature between assembled and taken apart. */
+/* Mechanical Medusa — a jellyfish built entirely from code (three.js r128), after a reference image:
+   a lobed glass bell full of blue-violet light on a silver frame with cyan light lines, a mechanical hub,
+   four armoured oral arms wrapped in translucent ribbons, and long glass filaments with glowing tips.
+   Every part has an exploded pose; one value (explode) moves the whole creature between assembled and taken apart. */
 (() => {
   const T = THREE;
   const q = new URLSearchParams(location.search);
@@ -13,55 +15,59 @@
   setLang(lang0); document.querySelectorAll('[data-l]').forEach(b => b.onclick = () => setLang(b.dataset.l));
   if (STILL) { document.body.classList.add('still'); document.getElementById('load').remove(); }
 
-  // renderer, scene, camera
+  // ── renderer, studio scene, camera ──
   const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL, alpha: CUT });
   if (CUT) { renderer.setClearColor(0x000000, 0); document.documentElement.style.background = document.body.style.background = 'transparent'; }
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); renderer.outputEncoding = T.sRGBEncoding;
-  renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
-  renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap; renderer.physicallyCorrectLights = false;
+  renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
   document.body.prepend(renderer.domElement);
   const scene = new T.Scene();
-  if (!CUT) { const c = document.createElement('canvas'); c.width = 16; c.height = 512; const g = c.getContext('2d'); const v = g.createLinearGradient(0, 0, 0, 512); v.addColorStop(0, '#eef0f4'); v.addColorStop(0.62, '#d9dce3'); v.addColorStop(1, '#b8bcc6'); g.fillStyle = v; g.fillRect(0, 0, 16, 512); const bgT = new T.CanvasTexture(c); bgT.encoding = T.sRGBEncoding; scene.background = bgT; }
-  const cam = new T.PerspectiveCamera(38, 1, 0.1, 100); cam.position.set(6.2, 2.6, 8.4);
+  if (!CUT) { const c = document.createElement('canvas'); c.width = 16; c.height = 512; const g = c.getContext('2d'); const v = g.createLinearGradient(0, 0, 0, 512); v.addColorStop(0, '#f6f7fa'); v.addColorStop(0.7, '#eceef3'); v.addColorStop(1, '#d6d9e1'); g.fillStyle = v; g.fillRect(0, 0, 16, 512); const bgT = new T.CanvasTexture(c); bgT.encoding = T.sRGBEncoding; scene.background = bgT; }
+  const cam = new T.PerspectiveCamera(34, 1, 0.1, 100); cam.position.set(7.5, 1.2, 12.5);
   const controls = new T.OrbitControls(cam, renderer.domElement);
-  controls.target.set(0, -0.4, 0); controls.enableDamping = true; controls.dampingFactor = 0.06; controls.minDistance = 4.5; controls.maxDistance = 18; controls.enablePan = false;
-  controls.autoRotate = !reduced && !STILL; controls.autoRotateSpeed = 0.45;
+  controls.target.set(0, -1.7, 0); controls.enableDamping = true; controls.dampingFactor = 0.06; controls.minDistance = 6; controls.maxDistance = 24; controls.enablePan = false;
+  controls.autoRotate = !reduced && !STILL; controls.autoRotateSpeed = 0.4;
 
-  // a soft studio environment painted on a canvas, so metal has something to reflect
+  // softbox environment for the silver and the glass
   const envCanvas = document.createElement('canvas'); envCanvas.width = 1024; envCanvas.height = 512;
-  { const g = envCanvas.getContext('2d'); const sky = g.createLinearGradient(0, 0, 0, 512); sky.addColorStop(0, '#c9ccd4'); sky.addColorStop(0.5, '#9a9ea8'); sky.addColorStop(1, '#3a3d45'); g.fillStyle = sky; g.fillRect(0, 0, 1024, 512);
-    // softboxes: a big key, a strip on each side, a top light
-    [[230, 150, 170, 90, 'rgba(255,255,255,1)'], [700, 120, 110, 160, 'rgba(255,255,255,.95)'], [920, 230, 60, 200, 'rgba(235,242,255,.9)'], [512, 20, 260, 40, 'rgba(255,255,255,.9)']].forEach(([x, y, w, h, c]) => { g.fillStyle = c; g.filter = 'blur(18px)'; g.fillRect(x - w / 2, y - h / 2, w, h); }); g.filter = 'none'; }
+  { const g = envCanvas.getContext('2d'); const sky = g.createLinearGradient(0, 0, 0, 512); sky.addColorStop(0, '#d8dbe3'); sky.addColorStop(0.5, '#a3a8b4'); sky.addColorStop(1, '#2e313a'); g.fillStyle = sky; g.fillRect(0, 0, 1024, 512);
+    g.filter = 'blur(16px)'; [[230, 140, 190, 90, '#ffffff'], [700, 110, 110, 170, '#ffffff'], [930, 240, 60, 220, '#e8efff'], [512, 18, 300, 40, '#ffffff'], [380, 330, 220, 30, '#9fb4ff']].forEach(([x, y, w, h, c]) => { g.fillStyle = c; g.fillRect(x - w / 2, y - h / 2, w, h); }); g.filter = 'none'; }
   const envTex = new T.CanvasTexture(envCanvas); envTex.mapping = T.EquirectangularReflectionMapping; envTex.encoding = T.sRGBEncoding;
   const pmrem = new T.PMREMGenerator(renderer); scene.environment = pmrem.fromEquirectangular(envTex).texture;
 
-  // lights: warm key with soft shadow, cool fill, white rim
-  scene.add(new T.HemisphereLight(0xffffff, 0x6d727e, 0.38));
-  const key = new T.DirectionalLight(0xfff4e8, 2.6); key.position.set(5, 9, 6); key.castShadow = true;
-  key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -7, right: 7, top: 7, bottom: -9, near: 1, far: 30 }); key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02; scene.add(key);
-  const fill = new T.DirectionalLight(0xdfe8ff, 0.4); fill.position.set(-7, 3, 4); scene.add(fill);
-  const rim = new T.DirectionalLight(0xffffff, 1.6); rim.position.set(-3, 5, -8); scene.add(rim);
-  const coreLight = new T.PointLight(0x7ea6ff, 1.2, 5); coreLight.position.set(0, 1.1, 0); scene.add(coreLight);
-  const ground = new T.Mesh(new T.PlaneGeometry(60, 60), new T.ShadowMaterial({ opacity: 0.16 })); ground.rotation.x = -Math.PI / 2; ground.position.y = -6.4; ground.receiveShadow = true; if (!CUT) scene.add(ground);
+  scene.add(new T.HemisphereLight(0xffffff, 0x8088a0, 0.55));
+  const key = new T.DirectionalLight(0xffffff, 2.2); key.position.set(5, 10, 7); key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -8, right: 8, top: 8, bottom: -10, near: 1, far: 34 }); key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02; scene.add(key);
+  const fill = new T.DirectionalLight(0xe4ebff, 0.5); fill.position.set(-8, 2, 5); scene.add(fill);
+  const rim = new T.DirectionalLight(0xffffff, 1.4); rim.position.set(-3, 6, -9); scene.add(rim);
+  const innerLight = new T.PointLight(0x6f8cff, 2.2, 5); innerLight.position.set(0, 0.6, 0); scene.add(innerLight);
+  const ground = new T.Mesh(new T.PlaneGeometry(60, 60), new T.ShadowMaterial({ opacity: 0.12 })); ground.rotation.x = -Math.PI / 2; ground.position.y = -7.6; ground.receiveShadow = true; if (!CUT) scene.add(ground);
 
-  // materials
+  // ── materials ──
   const M = {
-    steel: new T.MeshStandardMaterial({ color: 0xd3d8e2, metalness: 1, roughness: 0.2, envMapIntensity: 1.2 }),
-    dark: new T.MeshStandardMaterial({ color: 0x2b2f3a, metalness: 0.9, roughness: 0.4 }),
-    brass: new T.MeshStandardMaterial({ color: 0xd9b27a, metalness: 1, roughness: 0.26, envMapIntensity: 1.1 }),
-    rubber: new T.MeshStandardMaterial({ color: 0x15171f, metalness: 0.2, roughness: 0.6 }),
-    ceramic: new T.MeshPhysicalMaterial({ color: 0xf3f3f1, metalness: 0, roughness: 0.32, clearcoat: 0.8, clearcoatRoughness: 0.22 }),
-    shell: new T.MeshPhysicalMaterial({ color: 0xf4f4f2, metalness: 0, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.18, side: T.DoubleSide }),
-    graphite: new T.MeshStandardMaterial({ color: 0x2a2d35, metalness: 0.6, roughness: 0.38 }),
-    blue: new T.MeshStandardMaterial({ color: 0x3f6fe6, metalness: 0.6, roughness: 0.28 }),
-    window: new T.MeshPhysicalMaterial({ color: 0x141a26, metalness: 0.2, roughness: 0.05, transparent: true, opacity: 0.82, clearcoat: 1, side: T.DoubleSide, depthWrite: false }),
-    bead: new T.MeshPhysicalMaterial({ color: 0xcfe0ff, metalness: 0, roughness: 0.05, transparent: true, opacity: 0.55, clearcoat: 1 }),
-    glass: new T.MeshPhysicalMaterial({ color: 0xbfd3ff, metalness: 0, roughness: 0.08, transparent: true, opacity: 0.2, side: T.DoubleSide, depthWrite: false, clearcoat: 1, clearcoatRoughness: 0.1 }),
-    glow: new T.MeshStandardMaterial({ color: 0x7ea6ff, emissive: 0x7ea6ff, emissiveIntensity: 1.1, metalness: 0, roughness: 0.4 }),
-    glowSoft: new T.MeshStandardMaterial({ color: 0x9fbcff, emissive: 0x5b82e6, emissiveIntensity: 1.2, metalness: 0.2, roughness: 0.4 }),
+    silver: new T.MeshStandardMaterial({ color: 0xc9ccd3, metalness: 1, roughness: 0.22, envMapIntensity: 1.25 }),
+    gunmetal: new T.MeshStandardMaterial({ color: 0x5d606a, metalness: 1, roughness: 0.34 }),
+    dark: new T.MeshStandardMaterial({ color: 0x23252c, metalness: 0.7, roughness: 0.4 }),
+    cyan: new T.MeshStandardMaterial({ color: 0x29c9ff, emissive: 0x00b4ff, emissiveIntensity: 1.6, roughness: 0.3, toneMapped: false }),
+    violet: new T.MeshStandardMaterial({ color: 0x9b6bff, emissive: 0x7a3dff, emissiveIntensity: 1.5, roughness: 0.3, toneMapped: false }),
+    glass: new T.MeshPhysicalMaterial({ color: 0xeef3ff, metalness: 0, roughness: 0.03, transparent: true, opacity: 0.4, clearcoat: 1, clearcoatRoughness: 0.04, side: T.DoubleSide, depthWrite: false, envMapIntensity: 1.6 }),
+    filament: new T.MeshPhysicalMaterial({ color: 0xa9bfe8, metalness: 0.5, roughness: 0.12, transparent: true, opacity: 0.85, clearcoat: 1 }),
   };
+  // the light inside the bell: a deep blue haze with bright cyan and violet filaments
+  const nebula = (() => {
+    const c = document.createElement('canvas'); c.width = 512; c.height = 512; const g = c.getContext('2d');
+    const base = g.createRadialGradient(256, 200, 20, 256, 256, 360); base.addColorStop(0, 'rgba(120,170,255,0.5)'); base.addColorStop(0.55, 'rgba(70,96,220,0.42)'); base.addColorStop(1, 'rgba(150,110,240,0.28)'); g.fillStyle = base; g.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 900; i++) { const x = Math.random() * 512, y = Math.random() * 512, r = Math.random() * 2.2; g.fillStyle = Math.random() < 0.6 ? 'rgba(170,240,255,.8)' : 'rgba(205,170,255,.75)'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+    g.lineCap = 'round';
+    for (let i = 0; i < 110; i++) { g.strokeStyle = Math.random() < 0.6 ? 'rgba(150,240,255,.8)' : 'rgba(200,160,255,.75)'; g.lineWidth = 0.6 + Math.random() * 1.6; g.shadowColor = g.strokeStyle; g.shadowBlur = 8; g.beginPath(); let x = Math.random() * 512, y = Math.random() * 512; g.moveTo(x, y); for (let k = 0; k < 5; k++) { const nx = x + (Math.random() - 0.5) * 120, ny = y + (Math.random() - 0.5) * 120; g.quadraticCurveTo((x + nx) / 2 + (Math.random() - 0.5) * 60, (y + ny) / 2 + (Math.random() - 0.5) * 60, nx, ny); x = nx; y = ny; } g.stroke(); }
+    const t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; return t;
+  })();
+  M.nebula = new T.MeshBasicMaterial({ map: nebula, transparent: true, side: T.DoubleSide, depthWrite: false });
+  const ribbonAlpha = (() => { const c = document.createElement('canvas'); c.width = 64; c.height = 256; const g = c.getContext('2d'); const v = g.createLinearGradient(0, 0, 0, 256); v.addColorStop(0, 'rgba(255,255,255,0.15)'); v.addColorStop(0.15, 'rgba(255,255,255,1)'); v.addColorStop(0.8, 'rgba(255,255,255,0.9)'); v.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = v; g.fillRect(0, 0, 64, 256); const h = g.createLinearGradient(0, 0, 64, 0); h.addColorStop(0, 'rgba(0,0,0,0.8)'); h.addColorStop(0.25, 'rgba(0,0,0,0)'); h.addColorStop(0.75, 'rgba(0,0,0,0)'); h.addColorStop(1, 'rgba(0,0,0,0.8)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = h; g.fillRect(0, 0, 64, 256); return new T.CanvasTexture(c); })();
+  M.ribbon = new T.MeshPhysicalMaterial({ color: 0x5c6cff, emissive: 0x5a34ff, emissiveIntensity: 0.85, metalness: 0, roughness: 0.2, transparent: true, opacity: 0.6, alphaMap: ribbonAlpha, side: T.DoubleSide, depthWrite: false, clearcoat: 0.6 });
 
-  // every part: an assembled pose and an exploded pose
+  // ── every part: an assembled pose and an exploded pose ──
   const jelly = new T.Group(); scene.add(jelly);
   const parts = [];
   const part = (mesh, { off = [0, 0, 0], rot = [0, 0, 0], delay = 0, parent = jelly } = {}) => {
@@ -72,140 +78,105 @@
   };
   const rnd = (a, b) => a + Math.random() * (b - a);
 
-  // ── bell: eight sectors × three bands of ceramic panels with real seams; the middle band is a tinted window ──
-  const R = 2, TH = 1.22, PET = 8;
-  const BANDS = [[0.0, 0.36], [0.38, 0.38], [0.79, TH - 0.79]];
-  const SEAM = 0.035, bolt = new T.CylinderGeometry(0.022, 0.022, 0.03, 10), ventG = new T.BoxGeometry(0.16, 0.035, 0.04);
-  const onSphere = (th, ph, r = R) => new T.Vector3(Math.sin(th) * Math.sin(ph) * r, Math.cos(th) * r, Math.sin(th) * Math.cos(ph) * r);
-  for (let k = 0; k < PET; k++) {
-    const phi = (k / PET) * Math.PI * 2, dw = Math.PI * 2 / PET, mid = phi + dw / 2;
-    const dir = new T.Vector3(Math.sin(mid), 0, Math.cos(mid));
-    BANDS.forEach(([t0, tl], b) => {
-      const panel = new T.Group();
-      const isWin = b === 1;
-      panel.add(new T.Mesh(new T.SphereGeometry(R, 20, 8, phi + SEAM / 2, dw - SEAM, t0 + (b ? SEAM / 2 : 0), tl - SEAM / 2), isWin ? M.window : M.shell));
-      if (!isWin) panel.add(new T.Mesh(new T.SphereGeometry(R * 0.972, 20, 8, phi + SEAM / 2, dw - SEAM, t0 + (b ? SEAM / 2 : 0), tl - SEAM / 2), M.graphite));
-      if (b === 2) for (let v = 0; v < 3; v++) { const vt = new T.Mesh(ventG, M.graphite); vt.position.copy(onSphere(t0 + tl * (0.3 + v * 0.18), mid, R + 0.012)); vt.lookAt(0, vt.position.y * 0.2, 0); vt.rotateY(Math.PI / 2); panel.add(vt); }
-      if (b !== 1) [phi + 0.07, phi + dw - 0.07].forEach(ph => { const bl = new T.Mesh(bolt, M.steel); bl.position.copy(onSphere(t0 + tl - 0.06, ph, R + 0.01)); bl.lookAt(0, 0, 0); bl.rotateX(Math.PI / 2); panel.add(bl); });
-      part(panel, { off: [dir.x * (1.5 + b * 0.5), 2.6 - b * 0.7, dir.z * (1.5 + b * 0.5)], rot: [dir.z * (0.5 + b * 0.15), 0, -dir.x * (0.5 + b * 0.15)], delay: b * 0.03 });
-    });
-  }
-  // eight blue ribs sit in the seams between the sectors
-  for (let k = 0; k < PET; k++) {
-    const phi = (k / PET) * Math.PI * 2, pts = [];
-    for (let i = 0; i <= 24; i++) pts.push(onSphere((i / 24) * TH, phi, R + 0.015));
-    const rib = new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), 48, 0.03, 8), M.blue);
-    const d = new T.Vector3(Math.sin(phi), 0, Math.cos(phi));
-    part(rib, { off: [d.x * 2.6, 2.0, d.z * 2.6], rot: [d.z * 0.5, 0, -d.x * 0.5], delay: 0.06 });
-  }
-  const capGeo = new T.LatheGeometry([[0, 0], [0.34, 0], [0.34, 0.04], [0.26, 0.08], [0.24, 0.16], [0.16, 0.2], [0.1, 0.27], [0, 0.29]].map(([x, y]) => new T.Vector2(x, y)), 32);
-  const cap = new T.Mesh(capGeo, M.steel); cap.position.y = R - 0.02; part(cap, { off: [0, 3.4, 0], delay: 0.02 });
-  const capGlow = new T.Mesh(new T.SphereGeometry(0.08, 16, 12), M.glow); capGlow.position.y = R + 0.3; part(capGlow, { off: [0, 3.8, 0], delay: 0.02 });
-
-  // ── rim: a brass ring, 32 bevelled plates, light beads between them ──
-  const rimR = Math.sin(TH) * R, rimY = Math.cos(TH) * R;
-  const ring = new T.Mesh(new T.TorusGeometry(rimR, 0.06, 14, 128), M.graphite); ring.rotation.x = Math.PI / 2; ring.position.y = rimY; part(ring, { off: [0, 0.6, 0], delay: 0.1 });
-  const ring2 = new T.Mesh(new T.TorusGeometry(rimR + 0.04, 0.016, 8, 128), M.steel); ring2.rotation.x = Math.PI / 2; ring2.position.y = rimY - 0.07; part(ring2, { off: [0, 0.3, 0], delay: 0.11 });
-  const plateGeo = (() => { const w = 0.15, h = 0.11, r = 0.03, sh = new T.Shape(); sh.moveTo(-w + r, -h); sh.lineTo(w - r, -h); sh.quadraticCurveTo(w, -h, w, -h + r); sh.lineTo(w, h - r); sh.quadraticCurveTo(w, h, w - r, h); sh.lineTo(-w + r, h); sh.quadraticCurveTo(-w, h, -w, h - r); sh.lineTo(-w, -h + r); sh.quadraticCurveTo(-w, -h, -w + r, -h);
-    const g = new T.ExtrudeGeometry(sh, { depth: 0.022, bevelEnabled: true, bevelSize: 0.01, bevelThickness: 0.01, bevelSegments: 2, curveSegments: 4 }); g.rotateX(-Math.PI / 2); return g; })();
-  const beadGeo = new T.SphereGeometry(0.026, 12, 10);
-  for (let k = 0; k < 32; k++) {
-    const a = (k / 32) * Math.PI * 2, d = new T.Vector3(Math.sin(a), 0, Math.cos(a));
-    const plate = new T.Mesh(plateGeo, k % 4 === 0 ? M.blue : M.ceramic);
-    plate.position.set(d.x * (rimR + 0.1), rimY - 0.05, d.z * (rimR + 0.1)); plate.rotation.y = a; plate.rotation.x = 0.42;
-    part(plate, { off: [d.x * rnd(1.4, 2.2), rnd(-0.4, 0.6), d.z * rnd(1.4, 2.2)], rot: [rnd(-2, 2), rnd(-2, 2), rnd(-2, 2)], delay: 0.12 + (k % 8) * 0.01 });
-    const a2 = a + Math.PI / 32, d2 = new T.Vector3(Math.sin(a2), 0, Math.cos(a2));
-    const bead = new T.Mesh(beadGeo, M.glow); bead.position.set(d2.x * (rimR + 0.02), rimY - 0.08, d2.z * (rimR + 0.02));
-    part(bead, { off: [d2.x * 1.2, -0.3, d2.z * 1.2], delay: 0.14 });
-  }
-
-  // ── inside: spine, glowing core, three gears, six pistons ──
-  const spine = new T.Mesh(new T.CylinderGeometry(0.09, 0.12, 1.9, 16), M.dark); spine.position.y = 1.05; part(spine, { off: [0, -0.2, 0], delay: 0.3 });
-  const core = new T.Mesh(new T.IcosahedronGeometry(0.42, 1), M.glow); core.position.y = 1.15; part(core, { delay: 0.4 });
-  const coreCage = new T.Mesh(new T.IcosahedronGeometry(0.56, 1), new T.MeshStandardMaterial({ color: 0xc9ced8, metalness: 1, roughness: 0.3, wireframe: true })); coreCage.position.y = 1.15; part(coreCage, { off: [0, 0, 0], rot: [0.8, 1.2, 0], delay: 0.35 });
-  const gearGeo = (r, n, h) => {
-    const s = new T.Shape(), depth = 0.11;
-    for (let i = 0; i < n * 4; i++) { const a = (i / (n * 4)) * Math.PI * 2, rr = (i % 4 < 2) ? r : r - depth; const x = Math.cos(a) * rr, y = Math.sin(a) * rr; i ? s.lineTo(x, y) : s.moveTo(x, y); }
-    const hole = new T.Path(); hole.absarc(0, 0, r * 0.32, 0, Math.PI * 2, true); s.holes.push(hole);
-    for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2, c = new T.Path(); c.absarc(Math.cos(a) * r * 0.62, Math.sin(a) * r * 0.62, r * 0.13, 0, Math.PI * 2, true); s.holes.push(c); }
-    const g = new T.ExtrudeGeometry(s, { depth: h, bevelEnabled: true, bevelSize: 0.012, bevelThickness: 0.012, bevelSegments: 1, curveSegments: 6 }); g.rotateX(-Math.PI / 2); g.translate(0, -h / 2, 0); return g;
+  // ── bell: eight bulging glass lobes on a mushroom profile, each full of light ──
+  const R = 2.1, TH = 1.78, LOBES = 8, FLAT = 0.98;
+  const profile = th => (1 + 0.1 * Math.sin(th * 1.7)) * (th > 1.35 ? 1 - (th - 1.35) * 0.7 : 1);
+  const bellPoint = (th, ph, r = R, bulge = 0) => { const f = profile(th) * (1 + bulge); return new T.Vector3(Math.sin(th) * Math.sin(ph) * r * f, Math.cos(th) * r * f * FLAT + 0.2, Math.sin(th) * Math.cos(ph) * r * f); };
+  const lobeGeo = (phi0, dw, r, bulge) => {
+    const ws = 22, hs = 30, g = new T.SphereGeometry(1, ws, hs, phi0, dw, 0, TH), pa = g.attributes.position;
+    for (let row = 0; row <= hs; row++) for (let col = 0; col <= ws; col++) {
+      const i = row * (ws + 1) + col, u = col / ws, th = (row / hs) * TH;
+      const b = bulge * Math.sin(Math.PI * u) * Math.pow(Math.sin(Math.PI * Math.min(th / TH, 1)), 0.7);
+      const v = bellPoint(th, phi0 + u * dw, r, b); pa.setXYZ(i, v.x, v.y, v.z);
+    }
+    g.computeVertexNormals(); return g;
   };
-  const gears = [[1.15, 30, 0.08, 0.72, M.graphite, 0.25, -1.4], [0.82, 22, 0.1, 1.58, M.steel, -0.4, 1.6], [0.55, 14, 0.12, 1.86, M.blue, 0.7, 2.6]].map(([r, n, h, y, mat, spin, oy], i) => {
-    const g = new T.Mesh(gearGeo(r, n, h), mat); g.position.y = y; g.userData.spin = spin; part(g, { off: [0, oy, 0], rot: [i ? 0.4 : -0.4, 0, i ? 0.3 : -0.3], delay: 0.24 + i * 0.04 }); return g;
-  });
-  for (let k = 0; k < 6; k++) {
-    const a = (k / 6) * Math.PI * 2 + 0.3, d = new T.Vector3(Math.sin(a), 0, Math.cos(a));
-    const piston = new T.Group(); piston.position.set(d.x * 0.85, 1.15, d.z * 0.85); piston.rotation.y = a;
-    const barrel = new T.Mesh(new T.CylinderGeometry(0.06, 0.06, 0.6, 12), M.steel); barrel.rotation.x = Math.PI / 2; piston.add(barrel);
-    const rod = new T.Mesh(new T.CylinderGeometry(0.03, 0.03, 0.5, 8), M.ceramic); rod.rotation.x = Math.PI / 2; rod.position.z = 0.45; piston.add(rod);
-    const tip = new T.Mesh(new T.SphereGeometry(0.06, 12, 8), M.glowSoft); tip.position.z = 0.72; piston.add(tip);
-    part(piston, { off: [d.x * 1.8, rnd(-0.3, 0.3), d.z * 1.8], rot: [rnd(-1, 1), rnd(-1, 1), 0], delay: 0.32 });
+  const dw = Math.PI * 2 / LOBES;
+  for (let k = 0; k < LOBES; k++) {
+    const phi0 = k * dw + 0.012, mid = k * dw + dw / 2, dir = new T.Vector3(Math.sin(mid), 0, Math.cos(mid));
+    const lobe = new T.Group();
+    lobe.add(new T.Mesh(lobeGeo(phi0, dw - 0.024, R, 0.16), M.glass));
+    lobe.add(new T.Mesh(lobeGeo(phi0 + 0.03, dw - 0.084, R * 0.9, 0.08), M.nebula));
+    part(lobe, { off: [dir.x * 2.3, 1.3, dir.z * 2.3], rot: [dir.z * 0.5, 0, -dir.x * 0.5], delay: 0 });
   }
-
-  // gyroscope rings around the core, and cables from the core to the rim
-  const gyros = [0.7, 0.78, 0.86].map((r, i) => { const g = new T.Mesh(new T.TorusGeometry(r, 0.012, 8, 96), i === 1 ? M.brass : M.steel); g.position.y = 1.15; g.userData.axis = [[1, 0.2, 0], [0.2, 1, 0.4], [0, 0.4, 1]][i]; part(g, { off: [0, 0, 0], rot: [i * 0.8, i * 0.5, 0], delay: 0.36 }); return g; });
-  for (let k = 0; k < 12; k++) {
-    const a = (k / 12) * Math.PI * 2 + 0.13, d = new T.Vector3(Math.sin(a), 0, Math.cos(a));
-    const p0 = new T.Vector3(d.x * 0.3, 1.0, d.z * 0.3), p3 = new T.Vector3(d.x * (rimR - 0.12), rimY + 0.02, d.z * (rimR - 0.12));
-    const curve = new T.CubicBezierCurve3(p0, new T.Vector3(d.x * 0.7, 0.55, d.z * 0.7), new T.Vector3(d.x * 1.3, 0.45, d.z * 1.3), p3);
-    const cable = new T.Mesh(new T.TubeGeometry(curve, 32, 0.014, 6), M.rubber);
-    part(cable, { off: [d.x * 1.1, -0.5, d.z * 1.1], rot: [rnd(-0.4, 0.4), 0, rnd(-0.4, 0.4)], delay: 0.28 });
+  // the silver frame: a rib on every seam, a thin cyan light line along it, and a crown on top
+  for (let k = 0; k < LOBES; k++) {
+    const ph = k * dw, pts = [], light = [];
+    for (let i = 0; i <= 30; i++) { const th = 0.12 + (i / 30) * (TH - 0.12); pts.push(bellPoint(th, ph, R + 0.03)); light.push(bellPoint(th, ph, R + 0.075)); }
+    const rib = new T.Group();
+    rib.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), 60, 0.055, 10), M.silver));
+    rib.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(light.slice(2, 24)), 40, 0.014, 6), M.cyan));
+    for (let i = 4; i <= 26; i += 5) { const n = new T.Mesh(new T.CylinderGeometry(0.045, 0.045, 0.04, 12), M.gunmetal); n.position.copy(pts[i]).multiplyScalar(1.01); n.lookAt(0, 0.2, 0); n.rotateX(Math.PI / 2); rib.add(n); }
+    const d = new T.Vector3(Math.sin(ph), 0, Math.cos(ph));
+    part(rib, { off: [d.x * 3.0, 1.0, d.z * 3.0], rot: [d.z * 0.4, 0, -d.x * 0.4], delay: 0.05 });
   }
+  const topY = bellPoint(0, 0).y;
+  const crown = new T.Group(); crown.position.y = topY - 0.02;
+  crown.add(new T.Mesh(new T.CylinderGeometry(0.3, 0.38, 0.12, 32), M.silver));
+  const crownLight = new T.Mesh(new T.TorusGeometry(0.22, 0.025, 8, 40), M.cyan); crownLight.rotation.x = Math.PI / 2; crownLight.position.y = 0.07; crown.add(crownLight);
+  const crownEye = new T.Mesh(new T.SphereGeometry(0.08, 16, 12), M.cyan); crownEye.position.y = 0.1; crown.add(crownEye);
+  part(crown, { off: [0, 2.2, 0], delay: 0.02 });
+  // a rim band where the lobes end
+  const rimTh = TH - 0.04, rimP = bellPoint(rimTh, 0), rimR = Math.hypot(rimP.x, rimP.z), rimY = rimP.y;
+  const rimBand = new T.Mesh(new T.TorusGeometry(rimR, 0.035, 10, 128), M.silver); rimBand.rotation.x = Math.PI / 2; rimBand.position.y = rimY; part(rimBand, { off: [0, 0.4, 0], delay: 0.1 });
 
-  // ── tentacles: twelve chains of vertebrae with fins and light, four oral arms with ruffled frills ──
-  const tentacles = [];
-  const vert = new T.LatheGeometry([[0, -0.07], [0.05, -0.07], [0.066, -0.05], [0.045, -0.02], [0.042, 0.02], [0.066, 0.05], [0.05, 0.07], [0, 0.07]].map(([x, y]) => new T.Vector2(x, y)), 16);
-  const armour = new T.CylinderGeometry(0.085, 0.078, 0.1, 18, 1, true, -Math.PI * 0.62, Math.PI * 1.24);
-  const jointRing = new T.TorusGeometry(0.05, 0.012, 8, 20);
-  const beadSm = new T.SphereGeometry(0.03, 10, 8);
-  const finGeo = (() => { const sh = new T.Shape(); sh.moveTo(0, -0.05); sh.quadraticCurveTo(0.14, 0, 0, 0.06); sh.lineTo(0, -0.05); const g = new T.ExtrudeGeometry(sh, { depth: 0.006, bevelEnabled: false }); g.translate(0.03, 0, -0.003); return g; })();
-  const frillGeo = (() => { const g = new T.RingGeometry(0.04, 0.2, 48, 2); const pa = g.attributes.position; for (let i = 0; i < pa.count; i++) { const x = pa.getX(i), y = pa.getY(i), a = Math.atan2(y, x), r = Math.hypot(x, y); pa.setZ(i, Math.sin(a * 9) * 0.035 * (r / 0.2)); } g.computeVertexNormals(); g.rotateX(-Math.PI / 2); return g; })();
-  const chain = (ax, az, n, len, oral) => {
-    const segs = [];
+  // ── hub under the bell: stacked silver plates with cyan light rings ──
+  const hub = new T.Group(); hub.position.y = rimY + 0.25;
+  hub.add(new T.Mesh(new T.CylinderGeometry(0.95, 0.8, 0.16, 48), M.silver));
+  const hubDark = new T.Mesh(new T.CylinderGeometry(0.78, 0.7, 0.12, 48), M.dark); hubDark.position.y = -0.14; hub.add(hubDark);
+  [[0.9, 0.06], [0.74, -0.07]].forEach(([r, y]) => { const ring = new T.Mesh(new T.TorusGeometry(r, 0.022, 8, 80), M.cyan); ring.rotation.x = Math.PI / 2; ring.position.y = y; hub.add(ring); });
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2, port = new T.Mesh(new T.BoxGeometry(0.1, 0.06, 0.05), M.gunmetal); port.position.set(Math.sin(a) * 0.96, 0, Math.cos(a) * 0.96); port.rotation.y = a; hub.add(port); }
+  part(hub, { off: [0, -0.6, 0], delay: 0.3 });
+  const spine = new T.Mesh(new T.CylinderGeometry(0.12, 0.16, 1.3, 20), M.gunmetal); spine.position.y = rimY + 0.75; part(spine, { off: [0, 0.8, 0], delay: 0.28 });
+  const coreGlow = new T.Mesh(new T.IcosahedronGeometry(0.32, 2), M.cyan); coreGlow.position.y = rimY + 0.9; part(coreGlow, { off: [0, 1.15, 0], delay: 0.3 });
+
+  // ── four armoured oral arms, twisting down, each wrapped by translucent ribbons ──
+  const arms = [];
+  const segCore = new T.CylinderGeometry(0.08, 0.085, 0.26, 12);
+  const plateA = new T.CylinderGeometry(0.16, 0.142, 0.27, 20, 1, true, 0, Math.PI * 1.05);
+  const plateB = new T.CylinderGeometry(0.152, 0.136, 0.25, 20, 1, true, Math.PI * 1.08, Math.PI * 0.86);
+  const dotG = new T.SphereGeometry(0.025, 8, 6);
+  for (let a = 0; a < 4; a++) {
+    const ang = a / 4 * Math.PI * 2 + Math.PI / 4, ax = Math.sin(ang) * 0.42, az = Math.cos(ang) * 0.42, n = 26, segs = [];
     for (let j = 0; j < n; j++) {
       const g = new T.Group();
-      g.add(new T.Mesh(vert, M.graphite));
-      if (!oral && j % 2 === 0) { const a = new T.Mesh(armour, M.shell); a.rotation.y = (j % 4) * Math.PI / 2; g.add(a); }
-      const jr = new T.Mesh(jointRing, j % 5 === 4 ? M.glow : M.blue); jr.rotation.x = Math.PI / 2; jr.position.y = 0.08; g.add(jr);
-      if (oral && j % 2 === 0) { const f = new T.Mesh(frillGeo, M.glass); f.scale.setScalar(1.15 - j / (n * 1.2)); g.add(f); }
-      if (!oral && j % 4 === 1) { const f = new T.Mesh(finGeo, M.ceramic); f.rotation.y = (j % 8 === 1 ? 0 : Math.PI); g.add(f); }
-      g.scale.setScalar(1 - (j / n) * 0.6);
+      g.add(new T.Mesh(segCore, M.dark));
+      const pA = new T.Mesh(plateA, M.silver); pA.rotation.y = j * 0.12; g.add(pA);
+      const pB = new T.Mesh(plateB, M.gunmetal); pB.rotation.y = j * 0.12; g.add(pB);
+      if (j % 3 === 1) { const d = new T.Mesh(dotG, M.cyan); d.position.set(Math.sin(j * 0.35) * 0.152, 0, Math.cos(j * 0.35) * 0.152); g.add(d); }
+      g.scale.setScalar(1 - (j / n) * 0.55);
       const out = new T.Vector3(ax, 0, az).normalize();
-      part(g, { off: [out.x * (0.7 + j * 0.07) + rnd(-0.08, 0.08), -j * (oral ? 0.1 : 0.13) + rnd(-0.05, 0.05), out.z * (0.7 + j * 0.07) + rnd(-0.08, 0.08)], rot: [rnd(-0.6, 0.6), rnd(-1.5, 1.5), rnd(-0.6, 0.6)], delay: 0.4 + j * 0.011 });
+      part(g, { off: [out.x * (0.9 + j * 0.06), -j * 0.06, out.z * (0.9 + j * 0.06)], rot: [rnd(-0.5, 0.5), rnd(-1, 1), rnd(-0.5, 0.5)], delay: 0.38 + j * 0.01 });
       segs.push(g);
     }
-    tentacles.push({ ax, az, segs, len, oral, phase: rnd(0, 6) });
-  };
-  for (let k = 0; k < 12; k++) { const a = (k / 12) * Math.PI * 2; chain(Math.sin(a) * rimR * 0.92, Math.cos(a) * rimR * 0.92, 28, 0.135, false); }
-  for (let k = 0; k < 4; k++) { const a = (k / 4) * Math.PI * 2 + 0.4; chain(Math.sin(a) * 0.35, Math.cos(a) * 0.35, 18, 0.16, true); }
+    arms.push({ ax, az, ang, segs, phase: a * 1.7 });
+  }
+  // ribbons: 8 ruffled translucent strips; each follows one arm
+  const ribbons = [];
+  for (let r = 0; r < 8; r++) {
+    const mesh = new T.Mesh(new T.PlaneGeometry(1, 1, 6, 90), M.ribbon); mesh.frustumCulled = false; jelly.add(mesh);
+    ribbons.push({ mesh, arm: arms[r % 4], side: r < 4 ? 1 : -1, width: r < 4 ? 0.62 : 0.42, phase: rnd(0, 6), len: r < 4 ? 1 : 0.8 });
+  }
 
-  // drifting dust
-  const N = 900, P = new Float32Array(N * 3);
-  for (let i = 0; i < N; i++) { P[i * 3] = rnd(-14, 14); P[i * 3 + 1] = rnd(-8, 8); P[i * 3 + 2] = rnd(-14, 6); }
-  const dg = new T.BufferGeometry(); dg.setAttribute('position', new T.BufferAttribute(P, 3));
-  const dust = new T.Points(dg, new T.PointsMaterial({ color: 0xcfd8ff, size: 0.03, transparent: true, opacity: 0.6, depthWrite: false })); scene.add(dust);
+  // ── long glass filaments with glowing tips (instanced) ──
+  const FIL = 28, FSEG = 50, FLEN = 0.13;
+  const filMesh = new T.InstancedMesh(new T.CylinderGeometry(0.011, 0.011, FLEN * 1.05, 6), M.filament, FIL * FSEG); filMesh.castShadow = true; filMesh.frustumCulled = false; jelly.add(filMesh);
+  const tipMeshC = new T.InstancedMesh(new T.SphereGeometry(0.045, 12, 10), M.cyan, FIL / 2), tipMeshV = new T.InstancedMesh(new T.SphereGeometry(0.045, 12, 10), M.violet, FIL / 2);
+  tipMeshC.frustumCulled = tipMeshV.frustumCulled = false; jelly.add(tipMeshC, tipMeshV);
+  const fils = Array.from({ length: FIL }, (_, i) => { const a = i / FIL * Math.PI * 2 + rnd(-0.05, 0.05), rr = rimR * rnd(0.88, 0.98); return { a, x: Math.sin(a) * rr, z: Math.cos(a) * rr, phase: rnd(0, 6), len: rnd(0.75, 1), swing: rnd(0.6, 1.2) }; });
 
-  const shaftTex = (() => { const c = document.createElement('canvas'); c.width = 64; c.height = 256; const g = c.getContext('2d'); const v = g.createLinearGradient(0, 0, 0, 256); v.addColorStop(0, 'rgba(126,166,255,.35)'); v.addColorStop(1, 'rgba(126,166,255,0)'); g.fillStyle = v; g.fillRect(0, 0, 64, 256); const h = g.createLinearGradient(0, 0, 64, 0); h.addColorStop(0, 'rgba(0,0,0,1)'); h.addColorStop(0.5, 'rgba(0,0,0,0)'); h.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = h; g.fillRect(0, 0, 64, 256); return new T.CanvasTexture(c); })();
-  const shaft = new T.Mesh(new T.PlaneGeometry(7, 16), new T.MeshBasicMaterial({ map: shaftTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0.5 })); shaft.position.set(0, 5, -4); scene.add(shaft);
-  const NB = 140, BP = new Float32Array(NB * 3), BS = new Float32Array(NB);
-  for (let i = 0; i < NB; i++) { BP[i * 3] = rnd(-2.5, 2.5); BP[i * 3 + 1] = rnd(-6, 5); BP[i * 3 + 2] = rnd(-2.5, 2.5); BS[i] = rnd(0.004, 0.012); }
-  const bg = new T.BufferGeometry(); bg.setAttribute('position', new T.BufferAttribute(BP, 3));
-  const bubbleTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 32; const g = c.getContext('2d'); g.strokeStyle = 'rgba(220,232,255,.9)'; g.lineWidth = 2; g.beginPath(); g.arc(16, 16, 12, 0, 7); g.stroke(); return new T.CanvasTexture(c); })();
-  const bubbles = new T.Points(bg, new T.PointsMaterial({ map: bubbleTex, size: 0.09, transparent: true, opacity: 0.55, depthWrite: false })); scene.add(bubbles);
-  jelly.traverse(o => { if (o.isMesh && o.material !== M.window && o.material !== M.glass) { o.castShadow = true; } });
-  shaft.visible = false; dust.visible = false; bubbles.material.opacity = 0.25;
-  document.getElementById('nParts').textContent = (() => { let n = 0; jelly.traverse(o => { if (o.isMesh) n++; }); return n; })();
-
-  // post
-  const composer = new T.EffectComposer(renderer); composer.addPass(new T.RenderPass(scene, cam));
-  const bloom = new T.UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), 0.55, 0.45, 0.82); composer.addPass(bloom);
-  const resize = () => { renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); cam.aspect = innerWidth / innerHeight;
-    // keep the creature on the right half so the caption has its own side
+  // ── page bits ──
+  let nMeshes = 0; jelly.traverse(o => { if (o.isMesh) nMeshes += o.isInstancedMesh ? o.count : 1; });
+  document.getElementById('nParts').textContent = nMeshes;
+  jelly.traverse(o => { if (o.isMesh && ![M.glass, M.nebula, M.ribbon].includes(o.material)) o.castShadow = true; });
+  const resize = () => {
+    renderer.setSize(innerWidth, innerHeight); cam.aspect = innerWidth / innerHeight;
     if (innerWidth > 760 && !STILL) cam.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.17, 0, innerWidth, innerHeight); else cam.clearViewOffset();
-    cam.updateProjectionMatrix(); };
+    cam.updateProjectionMatrix();
+  };
   resize(); addEventListener('resize', resize);
 
-  // explode control: manual button, or an automatic cycle
+  // ── explode control ──
   let explode = STILL ? +(q.get('e') ?? 0.38) : 0, target = 0, auto = !reduced && !STILL, cycleAt = 0;
   const btnEx = document.getElementById('explode'), btnAuto = document.getElementById('auto');
   const label = () => { btnEx.innerHTML = target > 0.5 ? '<span class="zh">复原</span><span class="en">Reassemble</span>' : '<span class="zh">拆解</span><span class="en">Explode</span>'; };
@@ -214,61 +185,89 @@
   if (!auto) btnAuto.setAttribute('aria-pressed', 'false');
 
   const ease = x => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
-  const clock = new T.Clock();
-  const tmpQ = new T.Quaternion(), tmpE = new T.Euler();
+  const stage = (e, delay) => ease(Math.min(1, Math.max(0, (e * 1.5 - delay) / 0.95)));
+  const clock = new T.Clock(), dummy = new T.Object3D(), up = new T.Vector3(0, 1, 0), tmpQ = new T.Quaternion();
   let frames = 0;
 
-  function tentaclePose(tc, t, e) {
-    // a hanging chain that sways; each segment hangs from the previous one
-    let x = tc.ax, y = rimY - 0.05 - (tc.oral ? 0.9 : 0), z = tc.az, ang = 0;
-    tc.segs.forEach((g, j) => {
-      const sway = Math.sin(t * 1.3 - j * 0.32 + tc.phase) * (0.05 + j * 0.012) * (1 - e);
-      const outward = (tc.oral ? 0.02 : 0.06) * (1 - j / tc.segs.length);
-      ang += sway;
-      const dir = new T.Vector3(tc.ax, 0, tc.az).normalize();
-      x += dir.x * outward + Math.sin(ang) * 0.04 * dir.z;
-      z += dir.z * outward - Math.sin(ang) * 0.04 * dir.x;
-      y -= tc.len * Math.cos(ang) * (1 - j / tc.segs.length * 0.3);
+  function armPose(arm, t, e) {
+    const live = 1 - e, out = new T.Vector3(arm.ax, 0, arm.az).normalize();
+    let x = arm.ax, y = rimY + 0.05, z = arm.az;
+    arm.segs.forEach((g, j) => {
+      const f = j / arm.segs.length;
+      // a slow twist that grows along the arm, plus an outward drift
+      const tw = Math.sin(t * 0.7 + arm.phase + j * 0.18) * 0.07 * f * live;
+      x += out.x * 0.03 + Math.cos(arm.ang + j * 0.22) * tw;
+      z += out.z * 0.03 - Math.sin(arm.ang + j * 0.22) * tw;
+      y -= 0.2 * (1 - f * 0.15);
       g.userData.base.p.set(x, y, z);
-      g.userData.base.r.set(Math.sin(ang) * dir.z * 0.8, 0, -Math.sin(ang) * dir.x * 0.8);
+      g.userData.base.r.set(Math.sin(j * 0.2 + arm.phase) * 0.25 * f, j * 0.18, Math.cos(j * 0.2 + arm.phase) * 0.25 * f);
     });
+  }
+
+  function ribbonPose(rb, t) {
+    const segs = rb.arm.segs, pa = rb.mesh.geometry.attributes.position, cols = 7, rows = 91;
+    const out = new T.Vector3(rb.arm.ax, 0, rb.arm.az).normalize(), side = new T.Vector3(-out.z, 0, out.x).multiplyScalar(rb.side);
+    for (let r = 0; r < rows; r++) {
+      const v = r / (rows - 1) * rb.len, fj = v * (segs.length - 1), j0 = Math.floor(fj), j1 = Math.min(segs.length - 1, j0 + 1), w = fj - j0;
+      const p0 = segs[j0].position, p1 = segs[j1].position;
+      const cx = p0.x + (p1.x - p0.x) * w, cy = p0.y + (p1.y - p0.y) * w, cz = p0.z + (p1.z - p0.z) * w;
+      const width = rb.width * (0.35 + 0.65 * Math.sin(Math.PI * Math.min(1, v * 1.15))) * (1 + 0.25 * Math.sin(v * 9 + t * 1.3 + rb.phase));
+      for (let c = 0; c < cols; c++) {
+        const u = c / (cols - 1), ruffle = Math.sin(v * 22 + u * 3 + t * 2.1 + rb.phase) * 0.09 * u;
+        pa.setXYZ(r * cols + c, cx + side.x * (0.12 + u * width) + out.x * (ruffle + 0.06), cy - u * 0.08, cz + side.z * (0.12 + u * width) + out.z * (ruffle + 0.06));
+      }
+    }
+    pa.needsUpdate = true; rb.mesh.geometry.computeVertexNormals();
+  }
+
+  function filamentPose(t, e) {
+    let ic = 0, iv = 0;
+    fils.forEach((f, i) => {
+      const k = stage(e, 0.45 + (i % 8) * 0.01), out = new T.Vector3(f.x, 0, f.z).normalize();
+      let x = f.x, y = rimY - 0.02, z = f.z, ang = 0, prev = new T.Vector3(x, y, z);
+      for (let j = 0; j < FSEG; j++) {
+        const s = j / FSEG;
+        ang += (Math.sin(t * 0.9 + f.phase - j * 0.16) * 0.03 * f.swing + Math.sin(j * 0.13 + f.phase) * 0.018) * (1 - e);
+        x += out.x * 0.022 * (1 - s * 0.7) + Math.sin(ang) * 0.09 * out.z;
+        z += out.z * 0.022 * (1 - s * 0.7) - Math.sin(ang) * 0.09 * out.x;
+        y -= FLEN * f.len * Math.cos(ang);
+        const ex = (0.6 + j * 0.045) * k, cur = new T.Vector3(x + out.x * ex, y - j * 0.025 * k, z + out.z * ex);
+        dummy.position.copy(prev).add(cur).multiplyScalar(0.5);
+        tmpQ.setFromUnitVectors(up, cur.clone().sub(prev).normalize()); dummy.quaternion.copy(tmpQ); dummy.scale.set(1, 1, 1); dummy.updateMatrix();
+        filMesh.setMatrixAt(i * FSEG + j, dummy.matrix);
+        prev = cur;
+      }
+      dummy.position.copy(prev); dummy.quaternion.identity(); dummy.updateMatrix();
+      if (i % 2) tipMeshV.setMatrixAt(iv++, dummy.matrix); else tipMeshC.setMatrixAt(ic++, dummy.matrix);
+    });
+    filMesh.instanceMatrix.needsUpdate = tipMeshC.instanceMatrix.needsUpdate = tipMeshV.instanceMatrix.needsUpdate = true;
   }
 
   function frame() {
     const t = clock.getElapsedTime();
     if (auto) { const c = (t - cycleAt) % 14; target = c > 6 && c < 11 ? 1 : 0; label(); }
     if (!STILL) explode += (target - explode) * 0.025;
-
-    // swimming: the bell contracts and the body bobs; quieter while taken apart
-    const live = 1 - explode;
-    const pulse = reduced ? 0 : Math.sin(t * 1.6);
-    jelly.position.y = Math.sin(t * 0.8) * 0.18 * live;
-    tentacles.forEach(tc => tentaclePose(tc, t, explode));
-    gears.forEach(g => { g.rotation.y += g.userData.spin * 0.01; });
-    core.rotation.y = t * 0.6; core.rotation.x = t * 0.3; coreCage.rotation.y = -t * 0.25;
-    gyros.forEach((g, i) => { const [ax, ay, az] = g.userData.axis, sp = 0.006 * (i + 1); g.userData.base.r.set(g.userData.base.r.x + ax * sp, g.userData.base.r.y + ay * sp, g.userData.base.r.z + az * sp); });
-    { const a = bubbles.geometry.attributes.position; for (let i = 0; i < a.count; i++) { a.array[i * 3 + 1] += BS[i]; a.array[i * 3] += Math.sin(t + i) * 0.0015; if (a.array[i * 3 + 1] > 5) a.array[i * 3 + 1] = -6; } a.needsUpdate = true; }
-    M.glow.emissiveIntensity = 1.0 + Math.sin(t * 2.2) * 0.35;
-
+    const live = 1 - explode, pulse = reduced ? 0 : Math.sin(t * 1.5);
+    jelly.position.y = Math.sin(t * 0.7) * 0.15 * live;
+    arms.forEach(a => armPose(a, t, explode));
     parts.forEach(p => {
-      const { base, ex, delay } = p.userData;
-      const k = ease(Math.min(1, Math.max(0, (explode * 1.5 - delay) / 0.95)));
+      const { base, ex, delay } = p.userData, k = stage(explode, delay);
       p.position.set(base.p.x + ex.p.x * k, base.p.y + ex.p.y * k, base.p.z + ex.p.z * k);
-      tmpE.set(base.r.x + ex.r.x * k, base.r.y + ex.r.y * k, base.r.z + ex.r.z * k); p.rotation.copy(tmpE);
+      p.rotation.set(base.r.x + ex.r.x * k, base.r.y + ex.r.y * k, base.r.z + ex.r.z * k);
     });
-    // bell breathing (applied after the pose so it scales the assembled bell)
-    const sy = 1 - pulse * 0.05 * live, sxz = 1 + pulse * 0.04 * live;
-    parts.slice(0, PET * 3 + PET).forEach(p => { p.scale.set(sxz, sy, sxz); });
-
-    dust.rotation.y = t * 0.01;
+    // the bell breathes: lobes and ribs (the first 16 parts) contract together
+    const sy = 1 - pulse * 0.045 * live, sxz = 1 + pulse * 0.035 * live;
+    for (let i = 0; i < LOBES * 2; i++) parts[i].scale.set(sxz, sy, sxz);
+    ribbons.forEach(rb => ribbonPose(rb, t));
+    filamentPose(t, explode);
+    coreGlow.rotation.y = t * 0.5; M.cyan.emissiveIntensity = 1.7 + Math.sin(t * 2.2) * 0.3;
     controls.update();
     renderer.render(scene, cam);
     if (!STILL && frames < 30) { const f = document.querySelector('#load .ld-fill'), c = document.querySelector('#load .ld-pct'); const pc = Math.round((frames + 1) / 30 * 100); if (f) f.style.width = pc + '%'; if (c) c.textContent = String(pc).padStart(3, '0'); }
-    if (++frames === 30 && !STILL) { document.getElementById('load').classList.add('out'); setTimeout(() => document.getElementById('load')?.remove(), 900); window.__ready = true; }
+    if (++frames === 30 && !STILL) { const l = document.getElementById('load'); if (l) { l.classList.add('out'); setTimeout(() => l.remove(), 900); } window.__ready = true; }
     requestAnimationFrame(frame);
   }
-  if (STILL) cam.position.set(8.4, 2.6, 11.6);
-  if (CUT) { cam.position.set(6.9, 2.0, 9.7); dust.visible = shaft.visible = bubbles.visible = false; }
+  if (CUT) { cam.position.set(8.6, -0.6, 16.4); controls.target.set(0, -2.7, 0); }
   setTimeout(() => { const l = document.getElementById('load'); if (l) { l.classList.add('out'); setTimeout(() => l.remove(), 900); } }, 6000);
   frame();
 })();
