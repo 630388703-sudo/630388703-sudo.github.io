@@ -1,0 +1,55 @@
+/* Design polish layer: one paper-and-ink identity across every view, a larger display scale, and quieter details. */
+:root{--ink:#252823;--cobalt:#274bd4;--paper:#f4f0e5;--note:#ede786}
+
+/* Home: display type at the scale of the page, set tight, rising line by line */
+.home-copy h1{font-size:clamp(96px,11vw,176px);letter-spacing:-.045em;line-height:.82;margin:26px 0 30px}
+.home-copy h1 em{padding-left:.28em}
+.home-copy h1::after{height:.09em;width:70%;left:.3em}
+.home-copy h1 .mask{display:block;overflow:hidden;padding:.06em .04em .1em;margin:-.06em -.04em -.1em}
+.home-copy h1 .ch{display:inline-block;will-change:transform}
+.home-copy p{font-size:16px;max-width:430px;color:#46453e}
+.home-copy h2{font-size:clamp(26px,2.3vw,34px)}
+.home-name{font-size:13px}
+.studio-button{transition:transform .2s,box-shadow .2s,background .2s}
+.studio-button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* Archive: calmer small print, clearer hierarchy */
+.archive-heading h1{font-size:clamp(56px,6.4vw,96px);letter-spacing:-.04em}
+.archive-heading p{font-size:15px;color:#4d4b43}
+.archive-side .side-note{font-size:13px;color:#55534a}
+.preview-bottom h2{font-size:clamp(25px,2.2vw,32px)}
+.preview-bottom p{font-size:13px}
+.file-item{transition:padding .2s,background .2s}.file-item:hover:not([aria-pressed=true]){padding-left:14px}
+.archive-cover p{font-size:13.5px}
+
+/* Thinking: cards respond to the pointer */
+.thinking-card{transition:box-shadow .3s;transform-style:preserve-3d;will-change:transform}
+.thinking-card p{font-size:14.5px;line-height:1.85}
+
+/* Contact: same paper as the rest of the site (the old dark/lime treatment is retired) */
+#contact2{background:transparent!important}
+#contact2::before{display:none!important}
+#contact2 .ct2-hi{color:var(--ink);font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:64px;letter-spacing:-.03em}
+#contact2 .ct2-callme{color:var(--cobalt);text-shadow:none;font-family:'Caveat',cursive;font-size:38px;letter-spacing:0;font-weight:700}
+#contact2 .ct2-card{background:#fbf8ee url('paper.jpg') center/700px;border:1px solid var(--ink);border-radius:0;box-shadow:6px 6px 0 #25282322}
+#contact2 .ct2-card::before{display:none}
+#contact2 .ct2-card-title{color:var(--ink);font:700 18px 'Noto Serif SC',serif;letter-spacing:0;text-transform:none;background:var(--note);display:inline-block;padding:2px 10px;margin-bottom:14px;transform:rotate(-1.5deg)}
+#contact2 .ct2-item{border-bottom:1px solid #d7d1c1;padding:12px 0;gap:14px}
+#contact2 .ct2-item-icon{width:62px;opacity:1;text-align:left;font:500 13px 'Noto Sans SC',sans-serif;color:#6a675c}
+#contact2 .ct2-item-val{font-size:16px;color:var(--ink)}
+#contact2 .ct2-item-val a{color:var(--cobalt);text-decoration:underline;text-underline-offset:4px}
+#contact2 .ct2-textarea,#contact2 .ct2-input{background:#fffdf6;border:1px solid var(--ink);border-radius:0;color:var(--ink);font:15px 'Noto Sans SC',sans-serif}
+#contact2 .ct2-textarea:focus,#contact2 .ct2-input:focus{border-color:var(--cobalt);outline:2px solid #274bd433}
+#contact2 .ct2-send{background:var(--cobalt);color:#fff;border:1px solid var(--ink);box-shadow:3px 3px 0 var(--ink);font:500 14px 'Noto Sans SC',sans-serif;letter-spacing:.04em;text-transform:none;padding:12px 22px}
+#contact2 .ct2-send:hover{background:var(--cobalt);color:#fff;transform:translate(-1px,-1px)}
+#contact2 .ct2-return a{font:500 14px 'Noto Sans SC',sans-serif;letter-spacing:0;color:var(--ink)}
+#contact2 .ct2-return a:hover{color:var(--cobalt)}
+
+/* About window: ink and cobalt instead of lime */
+#win{box-shadow:14px 14px 0 #274bd4d9!important}
+.w-tab.on{color:var(--cobalt)!important;border-bottom-color:var(--cobalt)!important}
+
+/* Pointer follower (fine pointers only) */
+.dsy-cursor{position:fixed;left:0;top:0;width:30px;height:30px;margin:-15px 0 0 -15px;border:1.5px solid var(--ink);border-radius:50%;pointer-events:none;z-index:9999;opacity:0;transition:opacity .3s,background .25s,border-color .25s;mix-blend-mode:multiply}
+.dsy-cursor.on{opacity:1}.dsy-cursor.hot{background:#274bd433;border-color:var(--cobalt)}
+@media (pointer:coarse),(prefers-reduced-motion:reduce){.dsy-cursor{display:none}}

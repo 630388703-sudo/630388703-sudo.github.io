@@ -6,13 +6,16 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const mm = gsap.matchMedia();
+  // Wait for the loading screen to clear before the first entrance plays
+  const ready = cb => { const sh = $('#shell'), t0 = Date.now(); (function w() { if (!sh || +getComputedStyle(sh).opacity > 0.6 || Date.now() - t0 > 4500) cb(); else requestAnimationFrame(w); })(); };
+  window.dsyReady = ready;
 
   mm.add('(prefers-reduced-motion: no-preference)', () => {
     const ease = 'power3.out';
 
     // Home: copy rises in, collage photos settle onto the page
     const intro = () => {
-      const copy = $$('#hero .home-copy > *');
+      const copy = $$('#hero .home-copy > *:not(h1)');
       if (!copy.length) return;
       const tl = gsap.timeline({ defaults: { ease }, delay: 0.15 });
       tl.from(copy, { y: 34, opacity: 0, duration: 0.9, stagger: 0.08, clearProps: 'transform,opacity' })
@@ -64,7 +67,7 @@
         if (key !== last) { last = key; if (open) requestAnimationFrame(spread); else killTriggers(); }
       }).observe(dlg, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['open'] });
     }
-    intro();
+    ready(intro);
     return () => killTriggers();
   });
 })();

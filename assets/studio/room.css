@@ -1,0 +1,49 @@
+/* DSY / Memory Tunnel — 3D site chrome */
+#room{position:fixed;inset:0;z-index:450;background:#030305;color:#eef0fa;font-family:'Noto Sans SC',sans-serif;overflow:hidden}
+#room[hidden]{display:none}
+#room canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+#room canvas:active{cursor:grabbing}
+#room button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.rm-load{position:absolute;inset:0;display:grid;place-items:center;font-size:15px;letter-spacing:.06em;color:#9aa3cc}
+
+.rm-top{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;justify-content:space-between;padding:26px 40px;z-index:2}
+.rm-brand{font:700 22px 'Space Grotesk','Noto Sans SC',sans-serif;letter-spacing:-.5px}.rm-brand b{color:#8fa8ff}
+.rm-nav{display:flex;gap:30px}
+.rm-nav button,.rm-tools button{font-size:15px;padding:6px 0;position:relative;color:#c9cee6;transition:color .25s}
+.rm-nav button::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:#8fa8ff;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.rm-nav button:hover{color:#fff}.rm-nav button:hover::after{transform:scaleX(1)}
+.rm-tools{display:flex;gap:16px}.rm-tools button:hover{color:#fff}
+
+.rm-cap{position:absolute;left:40px;bottom:96px;width:min(560px,42vw);z-index:2;pointer-events:none}
+.rm-cap>*{pointer-events:auto}
+.rm-kicker{font-size:14px;color:#9aa3cc;margin-bottom:14px}
+.rm-cap h1{font:700 clamp(40px,4.6vw,76px)/1.08 'Noto Serif SC',serif;letter-spacing:-.02em;color:#fff;margin:0 0 18px}
+.rm-cap h1.rm-hero{font:400 clamp(84px,10vw,168px)/.84 'DM Serif Display',Georgia,serif;letter-spacing:-.045em}
+.rm-cap h1.rm-hero em{color:#8fa8ff;display:block;padding-left:.3em}
+.rm-sub{font-size:17px;line-height:1.75;color:#d6daf0;max-width:520px}
+.rm-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.rm-btn{padding:13px 22px!important;background:#eef0fa!important;color:#05060a!important;font-weight:600!important;transition:background .25s,color .25s}
+.rm-btn:hover{background:#8fa8ff!important}
+.rm-btn.ghost{background:transparent!important;color:#eef0fa!important;box-shadow:inset 0 0 0 1px #eef0fa}
+.rm-btn.ghost:hover{background:#eef0fa!important;color:#05060a!important}
+
+.rm-rail{position:absolute;right:40px;bottom:40px;display:flex;gap:6px;z-index:2}
+.rm-rail button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;width:46px;color:#7c84aa;font-size:12px}
+.rm-rail i{display:block;height:2px;width:100%;background:#3a4060;transition:background .3s}
+.rm-rail button.on{color:#fff}.rm-rail button.on i{background:#8fa8ff}
+.rm-hint{position:absolute;left:40px;bottom:40px;font-size:13px;color:#8a92b8;z-index:2}
+.rm-tip{position:fixed;left:0;top:0;pointer-events:none;background:#eef0fa;color:#05060a;padding:7px 12px;font:600 14px 'Noto Sans SC',sans-serif;white-space:nowrap;z-index:3}
+.rm-tip[hidden]{display:none}
+.room-enter{margin-left:6px;font-weight:700}
+@media (max-width:760px),(pointer:coarse){.room-enter{display:none}}
+/* pointer: ring + dot + live field coordinates, as in the TD film */
+#room canvas{cursor:none!important}
+.rm-cursor{position:fixed;left:0;top:0;pointer-events:none;z-index:4;mix-blend-mode:difference;transition:opacity .3s}
+.rm-cursor i{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border:1.5px solid #fff;border-radius:50%;transition:transform .35s cubic-bezier(.2,.8,.2,1),background .3s}
+.rm-cursor b{position:absolute;left:-3px;top:-3px;width:6px;height:6px;background:#fff}
+.rm-cursor span{position:absolute;left:24px;top:14px;font:500 11px 'JetBrains Mono',monospace;color:#fff;white-space:nowrap;letter-spacing:.04em}
+.rm-cursor.hot i{transform:scale(1.9);background:#ffffff22}
+.rm-cursor.pulse i{animation:rm-pulse .7s ease-out}
+@keyframes rm-pulse{0%{transform:scale(1)}40%{transform:scale(2.6);opacity:.2}100%{transform:scale(1);opacity:1}}
+/* framing: vignette and fine grain over the field */
+#room::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(120% 90% at 55% 45%,transparent 55%,#000a 100%),url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E")}
