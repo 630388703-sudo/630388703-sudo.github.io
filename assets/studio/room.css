@@ -60,3 +60,94 @@
 .rm-sound{position:relative;padding-left:18px!important}
 .rm-sound::before{content:'';position:absolute;left:0;top:50%;width:10px;height:10px;margin-top:-5px;border:1.5px solid currentColor;border-radius:50%}
 .rm-sound.on{color:#fff!important}.rm-sound.on::before{background:#7ea6ff;border-color:#7ea6ff;box-shadow:0 0 10px #7ea6ff}
+
+/* ── panels inside the tunnel ── */
+.rm-panel{position:absolute;top:0;right:0;bottom:0;width:min(680px,100%);z-index:5;background:#06070bf0;border-left:1px solid #1d2030;overflow-y:auto;overscroll-behavior:contain;padding:96px 52px 64px}
+#room.panel-open .rm-cap,#room.panel-open .rm-rail{opacity:.15;pointer-events:none;transition:opacity .4s}
+.rm-close{position:absolute;top:28px;right:36px;font-size:15px!important;color:#c9cee6!important}.rm-close:hover{color:#fff!important}
+.rm-panel h2{font:700 clamp(36px,4vw,60px)/1.1 'Noto Serif SC',serif;letter-spacing:-.02em;color:#fff;margin-bottom:16px}
+html[lang=en] .rm-panel h2{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+.rm-lead{font-size:17px;line-height:1.75;color:#c9cde0;margin-bottom:34px}
+.rm-panel-body>p{font-size:16px;line-height:1.85;color:#d9dcea;margin-bottom:16px}
+.rm-panel-body>p strong{color:#fff}
+.rm-sec{font:700 20px/1.4 'Noto Serif SC',serif;color:#fff;margin:40px 0 16px}
+.rm-panel ol,.rm-panel ul{list-style:none}
+.rm-works li{display:flex;align-items:center;gap:16px;padding:14px 0;border-top:1px solid #1d2030}
+.rm-work{flex:1;display:flex;align-items:center;gap:18px;text-align:left;min-width:0}
+.rm-work img{width:120px;height:76px;object-fit:cover;flex:none;background:#111}
+.rm-work b{display:block;font:700 22px/1.3 'Noto Serif SC',serif;color:#fff;transition:color .25s}
+.rm-work small{display:block;font-size:13px;color:#8a90a8;margin-top:4px}
+.rm-work:hover b{color:#7ea6ff}
+.rm-works .rm-btn{padding:9px 14px!important;font-size:14px!important;flex:none}
+.rm-caps li{padding:22px 0;border-top:1px solid #1d2030}
+.rm-caps h3,.rm-skills h3{font:700 21px/1.4 'Noto Serif SC',serif;color:#fff;margin-bottom:6px}
+.rm-caps p,.rm-skills p{font-size:15px;line-height:1.8;color:#c3c7da}
+.rm-link{margin-top:10px;font-size:14px!important;color:#7ea6ff!important}.rm-link:hover{color:#fff!important}
+.rm-about-head{display:flex;align-items:flex-end;gap:24px;margin-bottom:28px}
+.rm-about-head img{width:132px;height:176px;object-fit:cover;flex:none}
+.rm-about-head .rm-lead{margin-bottom:0}
+.rm-skills{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px}
+.rm-creds li{display:flex;gap:16px;padding:16px 0;border-top:1px solid #1d2030}
+.rm-creds img{width:96px;height:68px;object-fit:cover;flex:none}
+.rm-creds small{font-size:12px;color:#8a90a8}.rm-creds b{display:block;color:#fff;font-size:16px;margin:2px 0 4px}.rm-creds p{font-size:14px;line-height:1.7;color:#c3c7da}
+.rm-contact div{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:14px 0;border-top:1px solid #1d2030;font-size:17px}
+.rm-contact dt{color:#8a90a8;font-size:14px;padding-top:3px}.rm-contact dd{color:#fff}
+.rm-panel a{color:#7ea6ff;text-underline-offset:4px}.rm-panel a:hover{color:#fff}
+.rm-field{display:block;width:100%;background:#0d0f17;border:1px solid #2a2e42;color:#eef0fa;font:16px 'Noto Sans SC',sans-serif;padding:12px 14px;margin-bottom:10px;resize:vertical}
+.rm-field:focus{outline:2px solid #7ea6ff;border-color:#7ea6ff}
+
+/* ── project notebooks in the tunnel's colours ── */
+html.dsy-3d .book-dialog{background:#07080d;color:#eef0fa;box-shadow:0 30px 120px #000;border:1px solid #1d2030}
+html.dsy-3d .book-dialog::backdrop{background:#000c;backdrop-filter:none}
+html.dsy-3d .book-bar{border-color:#1d2030}
+html.dsy-3d .book-title{color:#9aa0b8}
+html.dsy-3d .book-close{background:none;border-color:#3a3f56;color:#eef0fa}html.dsy-3d .book-close:hover{background:#eef0fa;color:#05060a}
+html.dsy-3d .book-tabs{background:#0b0c12}
+html.dsy-3d .book-tabs button{background:#0b0c12;border-color:#1d2030;color:#9aa0b8}
+html.dsy-3d .book-tabs button[aria-current=true]{background:#11131c;color:#7ea6ff}
+html.dsy-3d .book-spread{background:#11131c}
+html.dsy-3d .book-spread::after{display:none}
+html.dsy-3d .leaf+.leaf{border-color:#1d2030}
+html.dsy-3d .leaf .folio,html.dsy-3d .book-caption{color:#8a90a8}
+html.dsy-3d .leaf h2,html.dsy-3d .leaf h3{color:#fff}
+html.dsy-3d .leaf p{color:#c9cde0}
+html.dsy-3d .leaf .hand{color:#7ea6ff}
+html.dsy-3d .book-art{border-color:#1d2030;box-shadow:none}
+html.dsy-3d .book-tags span{border-color:#3a3f56;color:#c9cde0}
+html.dsy-3d .thought-note{background:#171a26;box-shadow:none;transform:none;border-left:3px solid #7ea6ff}
+html.dsy-3d .thought-note p,html.dsy-3d .thought-note h3{color:#e6e8f2}
+html.dsy-3d .process-step{border-color:#262a3a}
+html.dsy-3d .process-step small{color:#7ea6ff}
+html.dsy-3d .studio-button{background:#eef0fa;color:#05060a;border-color:#eef0fa;box-shadow:none}
+html.dsy-3d .studio-button:hover{background:#7ea6ff}
+html.dsy-3d .ink-link,html.dsy-3d .source-link{color:#7ea6ff}
+html.dsy-3d .book-footer{background:#0b0c12;border-color:#1d2030}
+html.dsy-3d .book-footer button{background:none;border-color:#3a3f56;color:#eef0fa}
+html.dsy-3d .book-progress{color:#9aa0b8}
+html.dsy-3d .md-stats div{border-color:#7ea6ff}html.dsy-3d .md-stats b{color:#7ea6ff}html.dsy-3d .md-stats span{color:#c3c7da}
+html.dsy-3d .book-gallery img{border-color:#1d2030}
+html.dsy-3d .participation-proof img{border-color:#1d2030}
+
+/* ── phones: same tunnel, stacked layout ── */
+@media (max-width:760px),(orientation:portrait){
+  .rm-top{padding:16px 18px;flex-wrap:wrap;gap:10px}
+  .rm-nav{order:3;width:100%;gap:18px;overflow-x:auto;scrollbar-width:none}.rm-nav::-webkit-scrollbar{display:none}
+  .rm-nav button,.rm-tools button{font-size:14px;white-space:nowrap}
+  .rm-tools{gap:12px}
+  .rm-cap{left:18px;right:18px;bottom:64px;width:auto}
+  .rm-cap h1{font-size:clamp(36px,10vw,56px)}
+  .rm-cap h1.rm-hero{font-size:clamp(76px,22vw,120px)}
+  .rm-sub{font-size:15px}
+  .rm-rail{right:auto;left:18px;bottom:26px}.rm-rail button{width:26px}
+  .rm-credit{display:none}
+  .rm-cursor{display:none}
+  .rm-panel{padding:76px 20px 48px;border-left:0}
+  .rm-close{top:20px;right:20px}
+  .rm-skills{grid-template-columns:1fr}
+  .rm-work img{width:84px;height:56px}
+  .rm-work b{font-size:18px}
+  html.dsy-3d .book-spread{grid-template-columns:1fr}
+}
+.rm-panel{top:78px;padding-top:56px;border-top:1px solid #1d2030}
+.rm-close{top:18px}
+@media (max-width:760px),(orientation:portrait){.rm-panel{top:104px;padding-top:56px}.rm-close{top:16px}}

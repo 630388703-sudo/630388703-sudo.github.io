@@ -1,7 +1,8 @@
 /* DSY / Memory Tunnel — the portfolio as one horizontal 3D journey (three.js, loaded on demand).
    The look comes from the Memory Tunnel TD film: points, lines and drifting numbers in the dark.
-   Content is the site's own: every project opens its existing notebook, and Thinking / About / Contact
-   open the existing views. Phones, low-power devices and reduced motion keep the 2D site. */
+   Content is the site's own: every project opens its notebook, and Work / Thinking / About / Contact
+   open as panels inside the tunnel. Every device gets the 3D site; the paper site only remains as the
+   fallback when WebGL is missing or the scripts cannot load. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -14,8 +15,9 @@
   if (!webgl) return;
   const store = { get: k => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
   const q = new URLSearchParams(location.search);
-  const capable = () => innerWidth >= 900 && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches && (navigator.deviceMemory || 8) >= 4 && (navigator.hardwareConcurrency || 8) >= 4;
-  const wantRoom = () => q.has('room') || (capable() && !q.has('static') && store.get('dsy.view') !== 'static' && !q.has('project') && !q.has('view'));
+  const small = () => innerWidth < 760 || innerHeight > innerWidth;
+  const wantRoom = () => !q.has('static');
+  store.set('dsy.view', 'room');
 
   // ── the journey: one station per section, same content as the 2D site ──
   const GAP = 14;
@@ -58,16 +60,56 @@
 
   const loadAll = async () => { for (const src of SCRIPTS) { if (src.includes('three.min') && window.THREE) continue; await new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); } };
 
-  // 2D hero keeps a way back in
-  const addButton = () => { const box = $('#hero .home-actions'); if (!box || box.querySelector('.room-enter')) return; const b = document.createElement('button'); b.type = 'button'; b.className = 'ink-link room-enter'; b.textContent = tr('进入 3D 版 ↗', 'Enter the 3D version ↗'); b.onclick = () => { store.set('dsy.view', 'room'); showRoom(); }; box.append(b); };
-  addButton(); new MutationObserver(addButton).observe($('#hero'), { childList: true });
   const origHero = window.goHero;
-  window.goHero = function () { if (wantRoom() || store.get('dsy.view') === 'room') showRoom(); else origHero.apply(this, arguments); };
+  window.goHero = function () { if (wantRoom()) showRoom(); else origHero.apply(this, arguments); };
+  if (wantRoom()) document.documentElement.classList.add('dsy-3d');
 
-  const go2D = fn => { hideRoom(); fn(); };
+  // ── panels: work archive, thinking, about and contact open inside the tunnel, not in another site ──
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const CAPS = [['创意与游戏策划', 'Game & narrative', '从主题出发，组织核心规则、叙事分支与玩家选择。', 'Turn a theme into rules, narrative branches and player choices.', 'afterimage', '残像 / 生长痛', 'Afterimage / Growth Pain'], ['用户与产品思考', 'Product thinking', '整理使用场景、信息结构与内容路径，让界面服务于清楚的目标。', 'Organise scenarios, information and paths around a clear purpose.', 'zhixu', '知序 · AIGC 知识库', 'Zhixu · AIGC Fieldnotes'], ['AI 应用与工作流', 'AI workflow', '把素材生成、筛选与后期整合连接起来，关注最终表达。', 'Connect generation, selection and post-production around the intended expression.', 'aiwork', '残像 / 机械水母', 'Afterimage / Mechanical Medusa'], ['交互与技术实现', 'Interaction & making', '通过 Unity、TouchDesigner 与 Web，将叙事和视觉想法变成运行中的体验。', 'Turn narrative and visual ideas into running experiences with Unity, TouchDesigner and the web.', 'memory', '记忆漂移 / 残像', 'Memory Drift / Afterimage'], ['视觉与信息表达', 'Visual communication', '以构图、字体、层级与媒介选择，把复杂内容组织为可读的信息。', 'Use composition, type, hierarchy and media to make information readable.', 'archive', '马家大院档案', 'Courtyard Archive'], ['反思与创作记录', 'Reflection & process', '把作品放回问题与选择之中，说明设计意图、实现方式和可以继续探索的地方。', 'Connect the outcome to its questions, choices and directions for further exploration.', 'growingpains', '生长痛 / 创作手记', 'Growth Pain / Notebook']];
+  const CONTACT = [['实习', 'Dates', ['2027 年 1 月 5 日至 3 月中旬', '5 January to mid-March 2027']], ['邮箱', 'Email', ['<a href="mailto:630388703@qq.com">630388703@qq.com</a>', '<a href="mailto:630388703@qq.com">630388703@qq.com</a>']], ['电话', 'Phone', ['138-8899-7566', '138-8899-7566']], ['视频', 'Video', ['<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank" rel="noopener">B 站项目视频 ↗</a>', '<a href="https://www.bilibili.com/video/BV1D6dLBiExR" target="_blank" rel="noopener">Project video on Bilibili ↗</a>']], ['简历', 'CV', ['<a href="刁思予_简历.pdf?v=20260930-internship" target="_blank" rel="noopener">下载简历 PDF ↗</a>', '<a href="刁思予_简历.pdf?v=20260930-internship" target="_blank" rel="noopener">Download CV (PDF) ↗</a>']]];
+  const aboutData = () => { try { return (typeof T !== 'undefined' && T[zh() ? 'zh' : 'en'] && T[zh() ? 'zh' : 'en'].about) || null; } catch { return null; } };
+  const stationOf = key => STATIONS.findIndex(s => s.key === key);
+  let panelKind = null;
+  const PANELS = {
+    work: () => `<h2>${tr('全部作品', 'All work')}</h2><p class="rm-lead">${tr('每件作品都在隧道里有一站。点作品名飞过去，点“打开”直接看项目手记。', 'Every project has a stop in the tunnel. Click a title to fly there, or Open to read its notebook.')}</p>
+      <ol class="rm-works">${STATIONS.filter(s => s.key).map(s => `<li><button class="rm-work" data-fly="${s.key}"><img src="${s.video ? 'assets/studio/memory-tunnel.jpg' : s.image}" alt="" loading="lazy"><span><b>${esc(L(s.title))}</b><small>${esc(L(s.kicker))}</small></span></button><button class="rm-btn ghost" data-open="${s.key}">${tr('打开', 'Open')} ↗</button></li>`).join('')}</ol>`,
+    thinking: () => `<h2>${tr('作品背后，还有这些思考。', 'Behind the work, a way of thinking.')}</h2><p class="rm-lead">${tr('从发现问题、组织想法，到做出原型与视觉表达。通过具体项目，了解我的创作方法和正在发展的能力。', 'From questions and ideas to prototypes and visual expression. Explore my approach through the work itself.')}</p>
+      <ol class="rm-caps">${CAPS.map(c => `<li><h3>${esc(L([c[0], c[1]]))}</h3><p>${esc(L([c[2], c[3]]))}</p><button class="rm-link" data-fly="${c[4]}">${esc(L([c[5], c[6]]))} →</button></li>`).join('')}</ol>`,
+    about: () => {
+      const a = aboutData();
+      const skills = a ? a.skills.map(s => `<li><h3>${esc(s.lbl)}</h3><p>${s.items.map(esc).join(' · ')}</p></li>`).join('') : '';
+      const creds = a ? a.credentials.map(c => `<li><a href="${c.img}" target="_blank" rel="noopener"><img src="${c.img}" alt="" loading="lazy"></a><div><small>${esc(c.type)}</small><b>${esc(c.title)}</b><p>${esc(c.desc)}</p></div></li>`).join('') : '';
+      return `<div class="rm-about-head"><img src="assets/studio/siyu-portrait.jpg" alt="${tr('刁思予', 'Siyu Diao')}"><div><h2>${tr('刁思予', 'Siyu Diao')}</h2><p class="rm-lead">${tr('昆明理工大学 · 数字媒体艺术 · 大三', 'KMUST · Digital Media Art · Third year')}</p></div></div>
+        ${a ? `<p>${a.desc1}</p><p>${a.desc2}</p><h3 class="rm-sec">${esc(a.skill_label)}</h3><ul class="rm-skills">${skills}</ul><h3 class="rm-sec">${esc(a.cred_label)}</h3><ul class="rm-creds">${creds}</ul>` : ''}
+        <div class="rm-acts"><button class="rm-btn" data-panel="contact">${tr('联系我', 'Contact me')}</button></div>`;
+    },
+    contact: () => `<h2>${tr('联系我', 'Contact')}</h2><p class="rm-lead">${tr('欢迎交流项目合作、展览与作品反馈。', 'Open to collaborations, exhibitions and portfolio feedback.')}</p>
+      <dl class="rm-contact">${CONTACT.map(c => `<div><dt>${zh() ? c[0] : c[1]}</dt><dd>${L(c[2])}</dd></div>`).join('')}</dl>
+      <h3 class="rm-sec">${tr('留言', 'Message')}</h3><textarea class="rm-field" rows="4" aria-label="${tr('留言内容', 'Message')}" placeholder="${tr('写下你的留言…', 'Write your message…')}"></textarea><input class="rm-field" aria-label="${tr('你的联系方式', 'Your contact')}" placeholder="${tr('你的联系方式', 'How to reach you')}">
+      <div class="rm-acts"><button class="rm-btn" data-mail>${tr('通过邮件发送', 'Send by email')}</button></div>`,
+  };
+  function openPanel(kind) {
+    if (!root) return;
+    let p = $('.rm-panel', root);
+    if (!p) { p = document.createElement('aside'); p.className = 'rm-panel'; p.setAttribute('role', 'dialog'); p.setAttribute('aria-modal', 'false'); root.append(p); }
+    panelKind = kind;
+    p.innerHTML = `<button class="rm-close" aria-label="${tr('关闭', 'Close')}">${tr('关闭', 'Close')} ×</button><div class="rm-panel-body">${PANELS[kind]()}</div>`;
+    root.classList.add('panel-open');
+    $('.rm-close', p).onclick = closePanel;
+    $$('[data-fly]', p).forEach(b => b.onclick = () => { const i = stationOf(b.dataset.fly); closePanel(); if (i >= 0) goTo(i); });
+    $$('[data-open]', p).forEach(b => b.onclick = () => openW(b.dataset.open));
+    $$('[data-panel]', p).forEach(b => b.onclick = () => openPanel(b.dataset.panel));
+    const mail = $('[data-mail]', p);
+    if (mail) mail.onclick = () => { const f = $$('.rm-field', p), text = f[0].value.trim(); if (!text) { f[0].focus(); return; } location.href = 'mailto:630388703@qq.com?subject=' + encodeURIComponent(tr('来自作品网站的联系', 'Portfolio enquiry')) + '&body=' + encodeURIComponent(text + '\n\n' + f[1].value.trim()); };
+    if (window.gsap) gsap.fromTo(p, { xPercent: 8, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' });
+    $('.rm-close', p).focus();
+  }
+  function closePanel() { const p = root && $('.rm-panel', root); if (!p) return; root.classList.remove('panel-open'); panelKind = null; p.remove(); }
+
   const doAction = a => ({
-    work: () => go2D(goDesk), thinking: () => go2D(goSkills), contact: () => go2D(goContact2),
-    about: () => openW('about'), ai: () => { location.href = 'ai/jellyfish.html'; }, cv: () => window.open('刁思予_简历.pdf?v=20260930-internship', '_blank'),
+    work: () => openPanel('work'), thinking: () => openPanel('thinking'), contact: () => openPanel('contact'), about: () => openPanel('about'),
+    ai: () => { location.href = 'ai/jellyfish.html'; }, cv: () => window.open('刁思予_简历.pdf?v=20260930-internship', '_blank'),
   })[a]?.();
 
   async function showRoom() {
@@ -78,7 +120,7 @@
       root.innerHTML = `<canvas></canvas><div class="rm-load">${tr('正在进入记忆隧道…', 'Entering the memory tunnel…')}</div>
         <header class="rm-top"><button class="rm-brand" data-go="home">D<b>.</b>S<b>.</b>Y</button>
           <nav class="rm-nav">${[['home', ['首页', 'Home']], ['work', ['作品', 'Work']], ['thinking', ['能力与思考', 'Thinking']], ['about', ['关于', 'About']], ['contact', ['联系', 'Contact']]].map(([k, l]) => `<button data-go="${k}" data-l='${JSON.stringify(l)}'>${L(l)}</button>`).join('')}</nav>
-          <div class="rm-tools"><button class="rm-sound" aria-pressed="false" data-l='["声音","Sound"]'>${tr('声音', 'Sound')}</button><button data-lang="zh">CN</button><button data-lang="en">EN</button><button data-go="static" data-l='["2D 版","2D"]'>${tr('2D 版', '2D')}</button></div></header>
+          <div class="rm-tools"><button class="rm-sound" aria-pressed="false" data-l='["声音","Sound"]'>${tr('声音', 'Sound')}</button><button data-lang="zh">CN</button><button data-lang="en">EN</button></div></header>
         <section class="rm-cap" aria-live="polite"></section>
         <div class="rm-rail">${STATIONS.map((s, i) => `<button data-i="${i}" aria-label="${L(s.title)}" title="${L(s.title)}"><i></i></button>`).join('')}</div>
         <div class="rm-credit">${tr('音乐', 'Music')} · PYNCHON — James Gargette (CC0)</div>
@@ -89,7 +131,7 @@
       $$('.rm-rail button', root).forEach(b => b.onclick = () => goTo(+b.dataset.i));
       $('.rm-sound', root).onclick = () => Sound.toggle();
       root.addEventListener('pointerdown', () => Sound.unlock(), { once: true });
-      try { await loadAll(); build(); } catch (e) { console.error(e); root.remove(); root = null; store.set('dsy.view', 'static'); building = null; origHero(); return; }
+      try { await loadAll(); build(); } catch (e) { console.error(e); root.remove(); root = null; building = null; document.documentElement.classList.remove('dsy-3d'); origHero(); return; }
       $('.rm-load', root).remove(); start();
     })();
     await building; building = null;
@@ -98,14 +140,14 @@
   function pause() { running = false; cancelAnimationFrame(rafId); S && S.videos.forEach(v => v.pause()); }
   function resume() { if (S && !running) start(); }
   function nav(where) {
-    if (where === 'static') { store.set('dsy.view', 'static'); hideRoom(); origHero(); return; }
-    if (where === 'about') { goTo(STATIONS.length - 1); return; }
-    const i = STATIONS.findIndex(s => s.nav === where); if (i >= 0) goTo(i);
+    if (where === 'home') { closePanel(); goTo(0); return; }
+    openPanel(where);
   }
   function goTo(i) { S.target = STATIONS[i].x; }
   function relabel() {
     $$('[data-l]', root).forEach(b => { b.textContent = L(JSON.parse(b.dataset.l)); });
     if (S) S.cur = -1;
+    if (panelKind) openPanel(panelKind);
   }
 
   function caption(i) {
@@ -131,7 +173,7 @@
     const END = STATIONS[STATIONS.length - 1].x;
 
     // point field + constellation lines, the Memory Tunnel look
-    const N = 2600, P = new Float32Array(N * 3);
+    const N = small() ? 1100 : 2600, P = new Float32Array(N * 3);
     for (let i = 0; i < N; i++) { const a = Math.random() * Math.PI * 2, r = 4 + Math.pow(Math.random(), 0.6) * 9; P[i * 3] = -14 + Math.random() * (END + 28); P[i * 3 + 1] = Math.sin(a) * r * 0.55; P[i * 3 + 2] = -6 - Math.abs(Math.cos(a)) * r * 1.4 + (Math.random() < 0.12 ? 9 : 0); }
     const pg = new T.BufferGeometry(); pg.setAttribute('position', new T.BufferAttribute(P, 3));
     const dot = canvasTex(32, 32, g => { const r = g.createRadialGradient(16, 16, 0, 16, 16, 16); r.addColorStop(0, '#fff'); r.addColorStop(0.3, '#fff'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(0, 0, 32, 32); });
@@ -217,7 +259,7 @@
       const g = new T.Group(); g.position.set(x, y, z); g.rotation.y = ry; scene.add(g);
       const res = [0, 0, 0, 0, 0];
       const u = { uTex: { value: tex }, uA: { value: 0 }, uTime: { value: 0 }, uOp: { value: 0 }, uW: { value: w }, uH: { value: h }, uPx: { value: renderer.getPixelRatio() }, uRes: { value: res } };
-      const nx = Math.max(24, Math.round(w * 24)), ny = Math.max(16, Math.round(h * 24)), n = nx * ny;
+      const dens = small() ? 15 : 24, nx = Math.max(16, Math.round(w * dens)), ny = Math.max(12, Math.round(h * dens)), n = nx * ny;
       const uvA = new Float32Array(n * 2), rndA = new Float32Array(n * 3), posA = new Float32Array(n * 3);
       for (let j = 0, q = 0; j < ny; j++) for (let i = 0; i < nx; i++, q++) { uvA[q * 2] = (i + 0.5) / nx; uvA[q * 2 + 1] = (j + 0.5) / ny; rndA[q * 3] = Math.random(); rndA[q * 3 + 1] = Math.random(); rndA[q * 3 + 2] = Math.random(); }
       const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(posA, 3)); geo.setAttribute('aUv', new T.BufferAttribute(uvA, 2)); geo.setAttribute('aRnd', new T.BufferAttribute(rndA, 3));
@@ -264,12 +306,12 @@
     cv.addEventListener('pointerup', e => { const d = drag; drag = null; if (d && !d.moved) { const f = pick(e); if (f) openFrame(f); else { S.uniforms.uRip.value.set(S.world.x, S.world.y, 0, 0); S.ripAt = S.clockT; cursorPulse(); } } });
     cv.addEventListener('pointermove', e => {
       S.mouse.x = (e.clientX / innerWidth - 0.5) * 2; S.mouse.y = (e.clientY / innerHeight - 0.5) * 2; S.px = e.clientX; S.py = e.clientY; moveCursor(e);
-      if (drag) { const dx = e.clientX - drag.x; if (Math.abs(dx) > 4) drag.moved = true; S.target = Math.max(0, Math.min(END, drag.t - dx * 0.02)); return; }
+      if (drag) { const dx = e.clientX - drag.x; if (Math.abs(dx) > 6) drag.moved = true; S.target = Math.max(0, Math.min(END, drag.t - dx * (S.narrow ? 0.045 : 0.02))); return; }
       setHover(pick(e), e);
     });
     cv.addEventListener('pointerleave', () => { setHover(null); S.px = null; S.halo.material.opacity = 0; if (S.cursor) S.cursor.style.opacity = 0; });
     cv.addEventListener('pointerenter', () => { if (S.cursor) S.cursor.style.opacity = 1; });
-    addEventListener('keydown', e => { if (!root || root.hidden || document.querySelector('dialog[open]')) return; const i = nearest(); if (e.key === 'ArrowRight' || e.key === 'PageDown') goTo(Math.min(STATIONS.length - 1, i + 1)); if (e.key === 'ArrowLeft' || e.key === 'PageUp') goTo(Math.max(0, i - 1)); });
+    addEventListener('keydown', e => { if (!root || root.hidden || document.querySelector('dialog[open]')) return; if (e.key === 'Escape' && panelKind) { closePanel(); return; } if (panelKind) return; const i = nearest(); if (e.key === 'ArrowRight' || e.key === 'PageDown') goTo(Math.min(STATIONS.length - 1, i + 1)); if (e.key === 'ArrowLeft' || e.key === 'PageUp') goTo(Math.max(0, i - 1)); });
   }
   const nearest = () => Math.round(S.pos / GAP);
   function moveCursor(e) {
@@ -277,7 +319,7 @@
     S.cursor.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
   }
   function cursorPulse() { if (!S.cursor) return; S.cursor.classList.remove('pulse'); void S.cursor.offsetWidth; S.cursor.classList.add('pulse'); }
-  function onResize() { if (!S) return; const w = innerWidth, h = innerHeight; S.renderer.setSize(w, h, false); S.composer.setSize(w, h); S.cam.aspect = w / h; S.cam.updateProjectionMatrix(); }
+  function onResize() { if (!S) return; const w = innerWidth, h = innerHeight; S.narrow = small(); S.renderer.setSize(w, h, false); S.composer.setSize(w, h); S.cam.aspect = w / h; S.cam.fov = S.narrow ? 62 : 50; S.cam.position.z = S.narrow ? 15 : 9; S.cam.updateProjectionMatrix(); }
   function pick(e) { S.ray.setFromCamera({ x: (e.clientX / innerWidth) * 2 - 1, y: -(e.clientY / innerHeight) * 2 + 1 }, S.cam); const h = S.ray.intersectObjects(S.frames.filter(f => f.visible).map(f => f.userData.plane))[0]; if (!h) return null; let o = h.object; while (o && !S.frames.includes(o)) o = o.parent; return o; }
   function setHover(f, e) {
     S.hover = f; S.cursor && S.cursor.classList.toggle('hot', !!f);
@@ -288,7 +330,7 @@
     if (f.userData.goto != null) { goTo(f.userData.goto); return; }
     const st = STATIONS[f.userData.st];
     if (Math.abs(S.target - st.x) > 0.5) { S.target = st.x; return; }
-    if (st.key) openW(st.key); else if (st.cards) doAction('thinking'); else if (st.portrait) doAction('about');
+    if (st.key) openW(st.key); else if (st.cards) openPanel('thinking'); else if (st.portrait) openPanel('about');
   }
 
   function start() {
@@ -300,7 +342,7 @@
       S.pos += (S.target - S.pos) * 0.075;
       cam.position.x += (S.pos + mouse.x * 0.6 - cam.position.x) * 0.08;
       cam.position.y += (0.4 - mouse.y * 0.35 - cam.position.y) * 0.08;
-      cam.lookAt(S.pos + 1.6 + mouse.x * 0.4, 0.1, -3);
+      if (S.narrow) cam.lookAt(S.pos + 5 + mouse.x * 0.3, -2.2, -3); else cam.lookAt(S.pos + 1.6 + mouse.x * 0.4, 0.1, -3);
       S.rings.position.x = S.pos * 0.92;
       S.clockT = t; S.uniforms.uTime.value = t;
       if (S.px != null) {
@@ -315,7 +357,7 @@
         f.position.y = f.userData.base + Math.sin(t * 0.6 + f.userData.phase) * 0.06;
         f.rotation.y += (f.userData.ry + mouse.x * 0.14 - f.rotation.y) * 0.06; f.rotation.x += (mouse.y * 0.08 - f.rotation.x) * 0.06;
         // keep the caption side clear: prints fade in from the right and out before they pass under the text
-        const d = f.position.x - S.pos, op = Math.max(0, Math.min(1, (d - 0.5) / 2.2, (16 - d) / 3)), U = f.userData;
+        const d = f.position.x - S.pos, op = S.narrow ? Math.max(0, Math.min(1, (d + 1) / 2.5, (12 - d) / 2.5)) : Math.max(0, Math.min(1, (d - 0.5) / 2.2, (16 - d) / 3)), U = f.userData;
         // looked at → whole; nearby → mostly there, edges loose; passed by → scattered
         const here = Math.abs(f.position.x - (S.pos + 5)) < 7.5;
         const want = !here ? 0 : S.hover === f ? 1 : U.main ? 0.92 : 0.88;
@@ -332,5 +374,6 @@
     loop();
   }
 
-  if (wantRoom()) showRoom();
+  // old deep links (?view=work / ?view=contact) land on the matching panel
+  if (wantRoom()) showRoom().then(() => { const v = q.get('view'); if (v === 'contact') openPanel('contact'); else if (v === 'work' && !q.has('project')) openPanel('work'); });
 })();
