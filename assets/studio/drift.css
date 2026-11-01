@@ -10,3 +10,10 @@
 @keyframes dr-a{0%,100%{transform:translateX(-14%) skewX(-6deg)}50%{transform:translateX(14%) skewX(6deg)}}
 @keyframes dr-b{0%,100%{transform:translateX(16%) skewX(5deg)}50%{transform:translateX(-16%) skewX(-5deg)}}
 @media (prefers-reduced-motion:reduce){.drift-bg *{animation:none!important}}
+.md-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 8px}
+.md-stats div{border-top:2px solid #274bd4;padding:10px 6px 0 0}
+.md-stats b{display:block;font:400 38px/1 'DM Serif Display',serif;color:#274bd4}
+.md-stats b small{font-size:18px;color:#625f56}
+.md-stats span{display:block;font-size:12px;line-height:1.6;color:#57564b;margin-top:6px}
+@media(max-width:700px){.md-stats{grid-template-columns:1fr}}
+.preview-video{object-fit:contain!important;background:#000!important}
