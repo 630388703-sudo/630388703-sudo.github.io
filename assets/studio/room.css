@@ -47,3 +47,16 @@
 @keyframes rm-pulse{0%{transform:scale(1)}40%{transform:scale(2.6);opacity:.2}100%{transform:scale(1);opacity:1}}
 /* framing: vignette and fine grain over the field */
 #room::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(120% 90% at 55% 45%,transparent 55%,#000a 100%),url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E")}
+/* restraint: one face for titles, set large; white, black and the game's sky blue */
+.rm-cap{bottom:84px;width:min(620px,44vw)}
+.rm-cap h1{font:700 clamp(54px,6.2vw,108px)/1.02 'Noto Serif SC',serif;letter-spacing:-.03em;margin-bottom:22px}
+.rm-cap h1.rm-hero{font:400 clamp(96px,11.5vw,190px)/.82 'DM Serif Display',Georgia,serif}
+.rm-cap h1.rm-hero em,.rm-brand b{color:#7ea6ff}
+.rm-sub{font-size:18px;color:#e6e8ef;max-width:500px}
+.rm-btn:hover{background:#7ea6ff!important}
+.rm-nav button::after{background:#7ea6ff}
+.rm-rail{gap:8px}.rm-rail button{width:38px;padding:10px 0}.rm-rail button.on i{background:#7ea6ff}
+.rm-credit{position:absolute;left:40px;bottom:30px;font-size:12px;color:#6d7181;z-index:2}
+.rm-sound{position:relative;padding-left:18px!important}
+.rm-sound::before{content:'';position:absolute;left:0;top:50%;width:10px;height:10px;margin-top:-5px;border:1.5px solid currentColor;border-radius:50%}
+.rm-sound.on{color:#fff!important}.rm-sound.on::before{background:#7ea6ff;border-color:#7ea6ff;box-shadow:0 0 10px #7ea6ff}

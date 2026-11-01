@@ -25,13 +25,36 @@
     { id: 'zhixu', key: 'zhixu', image: 'assets/zhixu/cover.svg', ratio: 1.5, kicker: ['007 · UI / UX · 手机 App', '007 · UI / UX · Mobile app'], title: ['知序 · AIGC 知识库', 'Zhixu · AIGC Fieldnotes'], sub: ['让灵感先于生成。七页界面串联知识、工具、Prompt 和个人内容。', 'Understanding before generation. Seven screens connect knowledge, tools, prompts and personal content.'] },
     { id: 'afterimage', key: 'afterimage', image: '残像预览图.png', ratio: 1834 / 1037, kicker: ['001 · 莉莉丝 Game Jam · Unity 2D · 2026', '001 · Lilith Game Jam · Unity 2D · 2026'], title: ['残像', 'Afterimage'], sub: ['「我的 AI 队友」：你塑造了它，它也在重构你。', 'My AI Teammate: you shape it, and it reshapes you.'] },
     { id: 'growingpains', key: 'growingpains', image: 'assets/growingpains/page-1.jpg', ratio: 1684 / 618, kicker: ['002 · 叙事探索游戏 · 个人项目', '002 · Narrative exploration · Personal project'], title: ['生长痛', 'Growth Pain'], sub: ['压力，如何悄悄改变我们对自己的认识？', 'How does pressure quietly reshape the way we see ourselves?'] },
-    { id: 'archive', key: 'archive', type: ['一颗印', 'ARCHIVE'], ratio: 1.5, kicker: ['005 · 云南传统建筑 · 信息可视化 · 2025', '005 · Vernacular architecture · Information design · 2025'], title: ['马家大院档案', 'Courtyard Archive'], sub: ['让建筑结构成为可以阅读的信息。', 'Make architectural structure readable.'] },
+    { id: 'archive', key: 'archive', image: 'assets/archive/cover.jpg', ratio: 2200 / 3112, kicker: ['005 · 云南传统建筑 · 信息可视化 · 2025', '005 · Vernacular architecture · Information design · 2025'], title: ['马家大院档案', 'Courtyard Archive'], sub: ['让建筑结构成为可以阅读的信息。', 'Make architectural structure readable.'] },
     { id: 'thinking', nav: 'thinking', cards: true, kicker: ['能力与思考', 'How I think, how I make'], title: ['作品背后，还有这些思考。', 'Behind the work, a way of thinking.'], sub: ['创意与游戏策划 · 用户与产品思考 · AI 工作流 · 交互与技术实现 · 视觉与信息表达 · 反思与创作记录', 'Game & narrative · Product thinking · AI workflow · Interaction & making · Visual communication · Reflection'], actions: [['thinking', ['展开能力与思考', 'Read the full map']]] },
     { id: 'contact', nav: 'contact', portrait: 'assets/studio/siyu-portrait.jpg', ratio: 0.75, kicker: ['关于 · 联系', 'About · Contact'], title: ['Hi, 我是刁思予。', "Hi, I'm Siyu."], sub: ['可实习：2027 年 1 月 5 日至 3 月中旬 · 630388703@qq.com · 138-8899-7566', 'Internship: 5 Jan to mid-March 2027 · 630388703@qq.com · 138-8899-7566'], actions: [['about', ['关于我', 'About me']], ['contact', ['联系与留言', 'Contact & message']], ['cv', ['下载简历 PDF', 'Download CV']]] },
   ];
   STATIONS.forEach((s, i) => (s.x = i * GAP));
 
   let root, S = null, running = false, rafId = 0, building = null;
+  const Sound = (() => {
+    let ctx, master, music, src, buf, staticBuf, on = store.get('dsy.sound') === 'on', unlocked = false, ducked = false;
+    const btn = () => root && root.querySelector('.rm-sound');
+    const show = () => { const b = btn(); if (b) { b.setAttribute('aria-pressed', String(on)); b.classList.toggle('on', on); } };
+    async function init() {
+      if (ctx) return;
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+      music = ctx.createGain(); music.gain.value = 0.55; const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; music.connect(lp).connect(master);
+      const load = async u => ctx.decodeAudioData(await (await fetch(u)).arrayBuffer());
+      try { [buf, staticBuf] = await Promise.all([load('assets/room/audio/pynchon-loop.mp3'), load('assets/room/audio/memory-static.mp3')]); } catch (e) { console.warn('audio', e); }
+      if (buf) { src = ctx.createBufferSource(); src.buffer = buf; src.loop = true; src.connect(music); src.start(); }
+    }
+    const level = () => (on && !ducked ? 0.8 : 0);
+    const ramp = () => { if (master) master.gain.setTargetAtTime(level(), ctx.currentTime, 0.6); };
+    return {
+      async toggle() { on = !on; store.set('dsy.sound', on ? 'on' : 'off'); show(); if (on) { await init(); await ctx.resume(); } ramp(); },
+      async unlock() { show(); if (unlocked || !on) return; unlocked = true; await init(); await ctx.resume(); ramp(); },
+      duck(d) { ducked = d; ramp(); },
+      forget() { if (!ctx || !on || ducked || !staticBuf) return; const s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = staticBuf; s.playbackRate.value = 0.7 + Math.random() * 0.3; g.gain.value = 0.18; s.connect(g).connect(master); s.start(); },
+    };
+  })();
+
   const loadAll = async () => { for (const src of SCRIPTS) { if (src.includes('three.min') && window.THREE) continue; await new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); } };
 
   // 2D hero keeps a way back in
@@ -47,28 +70,30 @@
   })[a]?.();
 
   async function showRoom() {
-    if (root && S) { root.hidden = false; resume(); return; }
+    if (root && S) { root.hidden = false; resume(); Sound.duck(false); return; }
     if (building) return building;
     building = (async () => {
       root = document.createElement('div'); root.id = 'room';
       root.innerHTML = `<canvas></canvas><div class="rm-load">${tr('正在进入记忆隧道…', 'Entering the memory tunnel…')}</div>
         <header class="rm-top"><button class="rm-brand" data-go="home">D<b>.</b>S<b>.</b>Y</button>
           <nav class="rm-nav">${[['home', ['首页', 'Home']], ['work', ['作品', 'Work']], ['thinking', ['能力与思考', 'Thinking']], ['about', ['关于', 'About']], ['contact', ['联系', 'Contact']]].map(([k, l]) => `<button data-go="${k}" data-l='${JSON.stringify(l)}'>${L(l)}</button>`).join('')}</nav>
-          <div class="rm-tools"><button data-lang="zh">CN</button><button data-lang="en">EN</button><button data-go="static" data-l='["2D 版","2D"]'>${tr('2D 版', '2D')}</button></div></header>
+          <div class="rm-tools"><button class="rm-sound" aria-pressed="false" data-l='["声音","Sound"]'>${tr('声音', 'Sound')}</button><button data-lang="zh">CN</button><button data-lang="en">EN</button><button data-go="static" data-l='["2D 版","2D"]'>${tr('2D 版', '2D')}</button></div></header>
         <section class="rm-cap" aria-live="polite"></section>
-        <div class="rm-rail">${STATIONS.map((s, i) => `<button data-i="${i}" aria-label="${L(s.title)}"><i></i><span>${String(i).padStart(2, '0')}</span></button>`).join('')}</div>
-        <div class="rm-hint">${tr('滚动或拖动，横向穿过隧道 · 点击画面打开作品', 'Scroll or drag to travel · click a frame to open it')}</div>
+        <div class="rm-rail">${STATIONS.map((s, i) => `<button data-i="${i}" aria-label="${L(s.title)}" title="${L(s.title)}"><i></i></button>`).join('')}</div>
+        <div class="rm-credit">${tr('音乐', 'Music')} · PYNCHON — James Gargette (CC0)</div>
         <div class="rm-tip" hidden></div>`;
       document.body.append(root);
       $$('[data-lang]', root).forEach(b => b.onclick = () => { if (typeof setLang === 'function') setLang(b.dataset.lang); relabel(); });
       $$('[data-go]', root).forEach(b => b.onclick = () => nav(b.dataset.go));
       $$('.rm-rail button', root).forEach(b => b.onclick = () => goTo(+b.dataset.i));
+      $('.rm-sound', root).onclick = () => Sound.toggle();
+      root.addEventListener('pointerdown', () => Sound.unlock(), { once: true });
       try { await loadAll(); build(); } catch (e) { console.error(e); root.remove(); root = null; store.set('dsy.view', 'static'); building = null; origHero(); return; }
       $('.rm-load', root).remove(); start();
     })();
     await building; building = null;
   }
-  function hideRoom() { if (!root) return; root.hidden = true; pause(); }
+  function hideRoom() { if (!root) return; root.hidden = true; pause(); Sound.duck(true); }
   function pause() { running = false; cancelAnimationFrame(rafId); S && S.videos.forEach(v => v.pause()); }
   function resume() { if (S && !running) start(); }
   function nav(where) {
@@ -79,7 +104,6 @@
   function goTo(i) { S.target = STATIONS[i].x; }
   function relabel() {
     $$('[data-l]', root).forEach(b => { b.textContent = L(JSON.parse(b.dataset.l)); });
-    $('.rm-hint', root).textContent = tr('滚动或拖动，横向穿过隧道 · 点击画面打开作品', 'Scroll or drag to travel · click a frame to open it');
     if (S) S.cur = -1;
   }
 
@@ -87,7 +111,7 @@
     const s = STATIONS[i], cap = $('.rm-cap', root);
     const acts = (s.actions || []).map(([a, l]) => `<button class="rm-btn${a === 'work' || a === 'thinking' || a === 'contact' ? '' : ' ghost'}" data-a="${a}">${L(l)}</button>`).join('');
     const open = s.key ? `<button class="rm-btn" data-open="${s.key}">${tr('打开作品 ↗', 'Open project ↗')}</button>` : '';
-    cap.innerHTML = `<p class="rm-kicker">${L(s.kicker)}</p><h1 class="${s.id === 'home' ? 'rm-hero' : ''}">${s.id === 'home' ? 'Field<br><em>notes.</em>' : L(s.title)}</h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${open}${acts}</div>`;
+    cap.innerHTML = `<h1 class="${s.id === 'home' ? 'rm-hero' : ''}">${s.id === 'home' ? 'Field<br><em>notes.</em>' : L(s.title)}</h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${open}${acts}</div>`;
     $$('[data-a]', cap).forEach(b => b.onclick = () => doAction(b.dataset.a));
     $$('[data-open]', cap).forEach(b => b.onclick = () => openW(b.dataset.open));
     if (window.gsap) gsap.fromTo(cap.children, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.06 });
@@ -133,15 +157,15 @@
         void main() { float g; vec3 p = field(position, g); vGlow = g; vec4 mv = modelViewMatrix * vec4(p, 1.0);
           vFade = smoothstep(-36.0, -7.0, mv.z); gl_PointSize = (1.5 + g * 4.5 + hash(position.xz) * 1.4) * uPx * (11.0 / -mv.z); gl_Position = projectionMatrix * mv; }`,
       fragmentShader: `uniform sampler2D uDot; varying float vGlow; varying float vFade;
-        void main() { vec4 t = texture2D(uDot, gl_PointCoord); vec3 c = mix(vec3(0.86, 0.9, 1.0), vec3(0.55, 0.66, 1.0), clamp(vGlow, 0.0, 1.0));
+        void main() { vec4 t = texture2D(uDot, gl_PointCoord); vec3 c = mix(vec3(0.9, 0.91, 0.94), vec3(0.49, 0.65, 1.0), clamp(vGlow, 0.0, 1.0));
           gl_FragColor = vec4(c * (0.9 + vGlow * 1.2), t.a * vFade * (0.7 + vGlow * 0.3)); }` });
     const lineMat = new T.ShaderMaterial({ uniforms, transparent: true, depthWrite: false, blending: T.AdditiveBlending,
       vertexShader: FIELD + `varying float vGlow; varying float vFade;
         void main() { float g; vec3 p = field(position, g); vGlow = g; vec4 mv = modelViewMatrix * vec4(p, 1.0); vFade = smoothstep(-36.0, -7.0, mv.z); gl_Position = projectionMatrix * mv; }`,
       fragmentShader: `varying float vGlow; varying float vFade;
-        void main() { vec3 c = mix(vec3(0.5, 0.54, 0.75), vec3(0.6, 0.7, 1.0), clamp(vGlow, 0.0, 1.0)); gl_FragColor = vec4(c, (0.12 + vGlow * 0.85) * vFade); }` });
+        void main() { vec3 c = mix(vec3(0.5, 0.52, 0.58), vec3(0.49, 0.65, 1.0), clamp(vGlow, 0.0, 1.0)); gl_FragColor = vec4(c, (0.12 + vGlow * 0.85) * vFade); }` });
     const points = new T.Points(pg, pointMat); scene.add(points);
-    const haloTex = canvasTex(256, 256, g => { const r = g.createRadialGradient(128, 128, 0, 128, 128, 128); r.addColorStop(0, 'rgba(120,150,255,.55)'); r.addColorStop(0.35, 'rgba(90,110,230,.18)'); r.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = r; g.fillRect(0, 0, 256, 256); });
+    const haloTex = canvasTex(256, 256, g => { const r = g.createRadialGradient(128, 128, 0, 128, 128, 128); r.addColorStop(0, 'rgba(126,166,255,.5)'); r.addColorStop(0.35, 'rgba(126,166,255,.14)'); r.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = r; g.fillRect(0, 0, 256, 256); });
     const halo = new T.Sprite(new T.SpriteMaterial({ map: haloTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending, opacity: 0 })); halo.scale.set(9, 9, 1); scene.add(halo);
     const seg = [];
     for (let i = 0; i < 1100; i++) { const a = (Math.random() * N) | 0; let best = -1, bd = 1e9; for (let k = 0; k < 24; k++) { const b = (Math.random() * N) | 0; if (b === a) continue; const dx = P[a * 3] - P[b * 3], dy = P[a * 3 + 1] - P[b * 3 + 1], dz = P[a * 3 + 2] - P[b * 3 + 2], d = dx * dx + dy * dy + dz * dz; if (d < bd) { bd = d; best = b; } } if (best >= 0 && bd < 9) seg.push(P[a * 3], P[a * 3 + 1], P[a * 3 + 2], P[best * 3], P[best * 3 + 1], P[best * 3 + 2]); }
@@ -149,17 +173,58 @@
     scene.add(new T.LineSegments(lg, lineMat));
     // receding rectangles: the tunnel itself
     const rings = new T.Group(); scene.add(rings);
-    for (let i = 0; i < 12; i++) { const w = 22 - i * 1.4, h = 12 - i * 0.76; const m = new T.LineSegments(new T.EdgesGeometry(new T.PlaneGeometry(w, h)), new T.LineBasicMaterial({ color: 0x5b6290, transparent: true, opacity: 0.09 })); m.position.set(0, 0, -4 - i * 2.4); rings.add(m); }
+    for (let i = 0; i < 12; i++) { const w = 22 - i * 1.4, h = 12 - i * 0.76; const m = new T.LineSegments(new T.EdgesGeometry(new T.PlaneGeometry(w, h)), new T.LineBasicMaterial({ color: 0x6b6f7c, transparent: true, opacity: 0.07 })); m.position.set(0, 0, -4 - i * 2.4); rings.add(m); }
     // drifting numbers
     const nums = [];
     for (let i = 0; i < 46; i++) { const txt = '0.' + String(Math.random()).slice(2, 10); const tex = canvasTex(256, 48, g => { g.fillStyle = '#e6e9ff'; g.font = '500 30px "JetBrains Mono",monospace'; g.fillText(txt, 6, 34); g.fillStyle = '#fff'; g.fillRect(0, 22, 4, 4); }); const sp = new T.Sprite(new T.SpriteMaterial({ map: tex, transparent: true, opacity: 0.55, depthWrite: false })); sp.scale.set(1.1, 0.2, 1); sp.position.set(-10 + Math.random() * (END + 20), -3.5 + Math.random() * 7, -3 - Math.random() * 12); scene.add(sp); nums.push(sp); }
 
-    // frames: each project floats as a lit print
+    // ── images that forget ──
+    // Each picture is a cloud of points sampled from its own texture. Looked at, it gathers into the image;
+    // left behind, it loosens from the edges, splits into five strips and drifts back into the field.
+    // Each time it is put back together the strips land a little off, the way a recalled memory does.
+    const MEM_PTS = `
+      uniform sampler2D uTex; uniform float uA, uTime, uOp, uW, uH, uPx; uniform float uRes[5];
+      attribute vec2 aUv; attribute vec3 aRnd;
+      varying vec3 vCol; varying float vAlpha;
+      void main() {
+        float band = clamp(floor(aUv.x * 5.0), 0.0, 4.0); int bi = int(band);
+        vec3 p = vec3((aUv.x - 0.5) * uW, (aUv.y - 0.5) * uH + uRes[bi], 0.0);
+        float edge = max(abs(aUv.x - 0.5), abs(aUv.y - 0.5)) * 2.0;
+        float k = smoothstep(0.0, 1.0, clamp((uA - 0.42 - edge * 0.26 - aRnd.z * 0.16) * 3.6, 0.0, 1.0));
+        vec3 drift = vec3(sin(uTime * 0.21 + aRnd.x * 6.28), cos(uTime * 0.17 + aRnd.y * 6.28), sin(uTime * 0.13 + aRnd.z * 6.28)) * 0.5;
+        vec3 scatter = (aRnd - 0.5) * vec3(uW * 1.5, uH * 1.7, 7.0) + drift + vec3(0.0, (band - 2.0) * 0.45, -1.2 - band * 0.35);
+        p += (1.0 - k) * scatter;
+        vCol = texture2D(uTex, aUv).rgb;
+        vAlpha = uOp * (0.25 + 0.75 * k) * (1.0 - smoothstep(0.9, 1.0, uA) * 0.85);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_PointSize = uPx * (4.2 + (1.0 - k) * 0.8) * (10.0 / -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }`;
+    const MEM_PTS_F = `varying vec3 vCol; varying float vAlpha;
+      void main() { float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; gl_FragColor = vec4(vCol * 0.92, vAlpha * smoothstep(0.5, 0.25, d)); }`;
+    const MEM_PLANE_V = `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+    const MEM_PLANE_F = `uniform sampler2D uTex; uniform float uA, uOp, uH; uniform float uRes[5]; varying vec2 vUv;
+      void main() {
+        float b = floor(vUv.x * 5.0); float r = uRes[0];
+        if (b > 0.5) r = uRes[1]; if (b > 1.5) r = uRes[2]; if (b > 2.5) r = uRes[3]; if (b > 3.5) r = uRes[4];
+        vec2 uv = vec2(vUv.x, vUv.y - r / uH);
+        if (uv.y < 0.0 || uv.y > 1.0) discard;
+        float seam = (abs(r) > 0.001 && fract(vUv.x * 5.0) < 0.006) ? 0.0 : 1.0;
+        gl_FragColor = vec4(texture2D(uTex, uv).rgb * 0.92, smoothstep(0.72, 1.0, uA) * uOp * seam);
+      }`;
     const frame = (st, tex, w, h, x, y, z, ry, main, goto) => {
       const g = new T.Group(); g.position.set(x, y, z); g.rotation.y = ry; scene.add(g);
-      g.add(new T.Mesh(new T.PlaneGeometry(w + 0.12, h + 0.12), new T.MeshBasicMaterial({ color: 0xbdbab2, transparent: true })));
-      const pic = new T.Mesh(new T.PlaneGeometry(w, h), new T.MeshBasicMaterial({ map: tex, color: 0xd9d9d9, transparent: true })); pic.position.z = 0.005; g.add(pic);
-      g.userData = { st, main, goto, base: y, ry, phase: Math.random() * 6 }; frames.push(g); return g;
+      const res = [0, 0, 0, 0, 0];
+      const u = { uTex: { value: tex }, uA: { value: 0 }, uTime: { value: 0 }, uOp: { value: 0 }, uW: { value: w }, uH: { value: h }, uPx: { value: renderer.getPixelRatio() }, uRes: { value: res } };
+      const nx = Math.max(24, Math.round(w * 24)), ny = Math.max(16, Math.round(h * 24)), n = nx * ny;
+      const uvA = new Float32Array(n * 2), rndA = new Float32Array(n * 3), posA = new Float32Array(n * 3);
+      for (let j = 0, q = 0; j < ny; j++) for (let i = 0; i < nx; i++, q++) { uvA[q * 2] = (i + 0.5) / nx; uvA[q * 2 + 1] = (j + 0.5) / ny; rndA[q * 3] = Math.random(); rndA[q * 3 + 1] = Math.random(); rndA[q * 3 + 2] = Math.random(); }
+      const geo = new T.BufferGeometry(); geo.setAttribute('position', new T.BufferAttribute(posA, 3)); geo.setAttribute('aUv', new T.BufferAttribute(uvA, 2)); geo.setAttribute('aRnd', new T.BufferAttribute(rndA, 3));
+      geo.boundingSphere = new T.Sphere(new T.Vector3(), Math.max(w, h) * 2 + 6);
+      const cloud = new T.Points(geo, new T.ShaderMaterial({ uniforms: u, vertexShader: MEM_PTS, fragmentShader: MEM_PTS_F, transparent: true, depthWrite: false })); g.add(cloud);
+      const plane = new T.Mesh(new T.PlaneGeometry(w, h), new T.ShaderMaterial({ uniforms: u, vertexShader: MEM_PLANE_V, fragmentShader: MEM_PLANE_F, transparent: true, depthWrite: false })); plane.position.z = 0.002; g.add(plane);
+      g.userData = { st, main, goto, base: y, ry, phase: Math.random() * 6, u, res, plane, a: 0, seen: false };
+      frames.push(g); return g;
     };
     const video = src => { const v = document.createElement('video'); v.src = src; v.loop = true; v.muted = true; v.playsInline = true; v.preload = 'auto'; videos.push(v); const t = srgb(new T.VideoTexture(v)); t.minFilter = T.LinearFilter; return t; };
     const typeTex = s => canvasTex(1200, 800, (g, w, h) => { g.fillStyle = '#33463d'; g.fillRect(0, 0, w, h); g.fillStyle = '#faf1df'; g.font = '700 220px "Noto Serif SC",serif'; g.textAlign = 'center'; g.fillText(s.type[0], w / 2, h / 2 + 40); g.font = '500 40px "JetBrains Mono",monospace'; g.fillText('MA COURTYARD · YUNNAN · 2025', w / 2, h / 2 + 140); });
@@ -181,7 +246,8 @@
       } else if (s.portrait) {
         frame(i, srgb(loader.load(s.portrait)), 2.4, 3.2, x + 0.6, 0.1, -1.2, -0.15, true);
       } else {
-        frame(i, texFor(s), W, W / s.ratio, x, 0.3, -1.2, -0.12, true);
+        const fw = s.ratio < 1 ? 4.6 * s.ratio : W, fh = s.ratio < 1 ? 4.6 : W / s.ratio;
+        frame(i, texFor(s), fw, fh, x, 0.2, -1.2, -0.12, true);
       }
     });
 
@@ -211,11 +277,9 @@
   }
   function cursorPulse() { if (!S.cursor) return; S.cursor.classList.remove('pulse'); void S.cursor.offsetWidth; S.cursor.classList.add('pulse'); }
   function onResize() { if (!S) return; const w = innerWidth, h = innerHeight; S.renderer.setSize(w, h, false); S.composer.setSize(w, h); S.cam.aspect = w / h; S.cam.updateProjectionMatrix(); }
-  function pick(e) { S.ray.setFromCamera({ x: (e.clientX / innerWidth) * 2 - 1, y: -(e.clientY / innerHeight) * 2 + 1 }, S.cam); const h = S.ray.intersectObjects(S.frames, true)[0]; if (!h) return null; let o = h.object; while (o && !S.frames.includes(o)) o = o.parent; return o; }
+  function pick(e) { S.ray.setFromCamera({ x: (e.clientX / innerWidth) * 2 - 1, y: -(e.clientY / innerHeight) * 2 + 1 }, S.cam); const h = S.ray.intersectObjects(S.frames.filter(f => f.visible).map(f => f.userData.plane))[0]; if (!h) return null; let o = h.object; while (o && !S.frames.includes(o)) o = o.parent; return o; }
   function setHover(f, e) {
-    if (S.hover && S.hover !== f && window.gsap) gsap.to(S.hover.scale, { x: 1, y: 1, duration: 0.4 });
     S.hover = f; S.cursor && S.cursor.classList.toggle('hot', !!f);
-    if (f && window.gsap) gsap.to(f.scale, { x: 1.04, y: 1.04, duration: 0.4 });
     const st = f && STATIONS[f.userData.goto != null ? f.userData.goto : f.userData.st];
     if (st && e) { S.tip.hidden = false; S.tip.textContent = st.key ? `${L(st.title)} · ${tr('打开', 'open')} ↗` : L(st.title); S.tip.style.transform = `translate(${e.clientX + 16}px,${e.clientY + 14}px)`; } else S.tip.hidden = true;
   }
@@ -250,8 +314,15 @@
         f.position.y = f.userData.base + Math.sin(t * 0.6 + f.userData.phase) * 0.06;
         f.rotation.y += (f.userData.ry + mouse.x * 0.14 - f.rotation.y) * 0.06; f.rotation.x += (mouse.y * 0.08 - f.rotation.x) * 0.06;
         // keep the caption side clear: prints fade in from the right and out before they pass under the text
-        const d = f.position.x - S.pos, a = Math.max(0, Math.min(1, (d - 0.5) / 2.2, (16 - d) / 3));
-        f.visible = a > 0.01; f.children.forEach(m => { m.material.opacity = a; });
+        const d = f.position.x - S.pos, op = Math.max(0, Math.min(1, (d - 0.5) / 2.2, (16 - d) / 3)), U = f.userData;
+        // looked at → whole; nearby → mostly there, edges loose; passed by → scattered
+        const here = Math.abs(f.position.x - (S.pos + 5)) < 7.5;
+        const want = !here ? 0 : S.hover === f ? 1 : U.main ? 0.92 : 0.88;
+        U.a += (want - U.a) * (want > U.a ? 0.035 : 0.02);
+        if (U.a > 0.6) U.seen = true;
+        if (U.seen && U.a < 0.05) { U.seen = false; for (let k = 0; k < 5; k++) U.res[k] = (Math.random() - 0.5) * 0.07 * U.u.uH.value; if (U.main) Sound.forget(); }
+        U.u.uA.value = U.a; U.u.uOp.value = op; U.u.uTime.value = t;
+        f.visible = op > 0.01;
       });
       const mu = S.uniforms.uMouse.value; S.nums.forEach((n, i) => { const near = Math.max(0, 1 - Math.hypot(n.position.x - mu.x, n.position.y - mu.y) / 4); n.material.opacity = 0.2 + 0.3 * Math.abs(Math.sin(t * 0.7 + i)) + near * 0.6; });
       const i = nearest(); if (i !== S.cur) { S.cur = i; caption(i); }
