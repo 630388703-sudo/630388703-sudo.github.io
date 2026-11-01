@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>忘了自己是什么 · Memory Drift · 刁思予</title>
+<meta name="description" content="Memory Drift / 忘了自己是什么：关于遗忘与共同记忆的互动装置、像素游戏与 TouchDesigner 影像。">
+<meta property="og:image" content="https://630388703-sudo.github.io/assets/memorydrift/gameplay.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/vertical/vertical.css?v=20261101">
+</head>
+<body data-mood="drift">
+<a class="skip" href="#start"><span class="zh">跳到正文</span><span class="en">Skip to content</span></a>
+<div class="drift-bg" aria-hidden="true">
+  <div class="paper"></div><div class="mesh"></div>
+  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
+  <canvas></canvas><div class="grain"></div>
+</div>
+
+<aside class="rail">
+  <a class="brand" href="index.html" aria-label="返回首页 / Home"><span class="brand-name">刁思予</span><span class="brand-sub">FILE <b>008</b> — MEMORY DRIFT</span></a>
+  <ol class="toc" aria-label="页面目录 / Sections">
+    <li><a href="#start"><small>00</small><span class="zh">项目</span><span class="en">Project</span></a></li>
+    <li><a href="#question"><small>01</small><span class="zh">命题</span><span class="en">Question</span></a></li>
+    <li><a href="#play"><small>02</small><span class="zh">玩法</span><span class="en">Play</span></a></li>
+    <li><a href="#voices"><small>03</small><span class="zh">共同记忆</span><span class="en">Shared recall</span></a></li>
+    <li><a href="#ending"><small>04</small><span class="zh">结尾</span><span class="en">Ending</span></a></li>
+    <li><a href="#install"><small>05</small><span class="zh">装置</span><span class="en">Installation</span></a></li>
+    <li><a href="#film"><small>06</small><span class="zh">TD 影像</span><span class="en">TD film</span></a></li>
+  </ol>
+  <div class="rail-foot">
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="zh" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+    <a class="link" href="index.html#work">← <span class="zh">全部作品</span><span class="en">All work</span></a>
+    <div class="progress" aria-hidden="true"><i></i></div>
+  </div>
+</aside>
+
+<main>
+  <section class="case-hero" id="start" data-mood="drift">
+    <div class="col">
+      <figure class="screen rv" style="margin-bottom:46px"><span class="tape" aria-hidden="true"></span><img src="assets/memorydrift/world.jpg" width="1672" height="941" alt="Memory Drift 的像素世界：蓝色海面、码头、摩天轮与漂浮的建筑 / The pixel world of Memory Drift"></figure>
+      <div class="kicker rv">008 / Interactive installation / 2026</div>
+      <h1 class="rv"><span class="zh">忘了自己是什么</span><span class="en">What Was I Again?</span></h1>
+      <p class="en-title rv">Memory Drift — <span class="zh">记忆漂移</span><span class="en">a game about forgetting</span></p>
+      <dl class="meta rv">
+        <div><dt>ROLE</dt><dd><span class="zh">独立策划 · 设计 · 开发</span><span class="en">Concept · design · development</span></dd></div>
+        <div><dt>FORMAT</dt><dd><span class="zh">展陈装置 + 网页版</span><span class="en">Installation + web edition</span></dd></div>
+        <div><dt>STACK</dt><dd>TypeScript · Vite · Canvas · TouchDesigner</dd></div>
+        <div><dt>LANG</dt><dd>English / 中文</dd></div>
+      </dl>
+      <div class="actions rv">
+        <a class="btn" href="https://630388703-sudo.github.io/memory-drift-game/" target="_blank" rel="noopener"><span class="zh">在线试玩</span><span class="en">Play online</span> ↗</a>
+        <a class="btn ghost" href="https://github.com/630388703-sudo/memory-drift-game" target="_blank" rel="noopener"><span class="zh">源代码与文档</span><span class="en">Source & docs</span> ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="question" data-mood="drift">
+    <div class="col">
+      <div class="kicker rv">01 / The question</div>
+      <p class="md-question rv"><span class="zh">遗忘是缺陷，<br>还是<b>自我保护</b>？</span><span class="en">Is forgetting a defect,<br>or a form of <b>self-protection</b>?</span></p>
+      <p class="lede rv"><span class="zh">项目从“害怕遗忘、反复查看数字记录”的习惯出发：我们存下越来越多的照片，却越来越依赖反复确认。当别人都说出同一个答案时，我们记得的究竟是过去本身，还是一个让人感到确定的版本？</span><span class="en">It starts from the habit of fearing forgetting and checking digital records again and again. We keep more and more photos, yet rely more on confirmation. When everyone around us gives the same answer, are we keeping the past itself — or a version that feels certain?</span></p>
+      <div class="note rv"><p class="hand">design rule</p><p><span class="zh">不打分、不判定对错、不诊断“虚假记忆”。只把差异摆在观众面前。</span><span class="en">No score, no right or wrong, no diagnosis of “false memory”. Just put the differences in front of the visitor.</span></p></div>
+    </div>
+  </section>
+
+  <section id="play" data-mood="drift">
+    <div class="col">
+      <div class="kicker rv">02 / How it plays</div>
+      <h2 class="title rv">Five <em>strips.</em></h2>
+      <p class="lede rv"><span class="zh">开场照片被切成五条互补的竖向碎片，固定在 1–5 号位置。整条路上会出现三组碎片：拾取能填补空位或修复模糊的那一片，但永远不会凭空生成第五个人。</span><span class="en">The opening photo is cut into five complementary vertical strips, fixed in positions 1–5. Three sets appear along the route: a pickup fills its empty slot or repairs a blurred one — but never invents a fifth person.</span></p>
+      <div class="strips rv" aria-hidden="true"><div></div><div></div><div></div><div></div><div></div></div>
+      <ol class="steps">
+        <li class="rv"><div><h3><span class="zh">收集</span><span class="en">Collect</span></h3><p><span class="zh">保留下来的碎片，就是结尾时你能看到的照片。</span><span class="en">The pieces you keep are the photo you get to see at the end.</span></p></div></li>
+        <li class="rv"><div><h3><span class="zh">撞击 → 遗失</span><span class="en">Collision → lose</span></h3><p><span class="zh">撞到障碍会移除最新的一片。</span><span class="en">A collision removes the newest retained piece.</span></p></div></li>
+        <li class="rv"><div><h3><span class="zh">干扰 → 模糊</span><span class="en">Interference → blur</span></h3><p><span class="zh">粉色干扰让最旧的、仍清晰的一片变得模糊。</span><span class="en">Pink interference obscures the oldest piece that is still clear.</span></p></div></li>
+        <li class="rv"><div><h3><span class="zh">按住保护</span><span class="en">Hold to protect</span></h3><p><span class="zh">按住 0.7 秒，挡下一次冲击或信号。新手练习只教这一件事，不带入正式游戏。</span><span class="en">Hold for 0.7 s to block one hit or signal. An optional practice teaches just this, and does not carry over.</span></p></div></li>
+      </ol>
+      <figure class="screen rv wide"><img src="assets/memorydrift/gameplay.jpg" loading="lazy" width="667" height="423" alt="游戏画面：练习关卡 / Gameplay: the practice stage"></figure>
+      <p class="cap rv"><span class="zh">琥珀色相框、珊瑚色障碍、粉色干扰、薄荷色保护——画面提示与暂停指南共用同一套剪影。</span><span class="en">Amber frames, coral hazards, pink interference, mint protection — the same silhouettes as the pause guide.</span></p>
+      <figure class="rv" style="margin-top:46px"><img src="assets/memorydrift/flow.jpg" loading="lazy" width="1920" height="1080" alt="完整体验流程图：看照片、三次提问、行走收集、两人说五个、揭晓原图 / Full experience flow" style="border:8px solid #fffaf1;background:#fff;width:100%"></figure>
+      <p class="cap rv"><span class="zh">完整流程：看照片 → 第 1 问 → 行走收集 → 两人说“五个” → 第 2 问 → 第 3 问 → 回看碎片 → 揭晓原图。</span><span class="en">Flow: look → Q1 → walk and collect → two people say “five” → Q2 → Q3 → review pieces → reveal the original.</span></p>
+    </div>
+  </section>
+
+  <section id="voices" data-mood="drift">
+    <div class="col">
+      <div class="kicker rv">03 / Shared recall</div>
+      <h2 class="title rv">Two people <em>say five.</em></h2>
+      <p class="lede rv"><span class="zh">路途尽头有两个虚构角色 Lin 和 Rowan，他们彼此回应，并准确引用观众的第二次回答：答“五”会加强共识，答“四”会被挑战，答“三”会引入怀疑，“不确定”不被算作同意。</span><span class="en">At the end of the road two fictional characters, Lin and Rowan, reply to each other and quote the visitor's second answer exactly: five strengthens agreement, four challenges it, three introduces doubt, and “Not sure” is never counted as agreement.</span></p>
+      <div class="voices rv" aria-label="示意对话 / Illustrative exchange">
+        <p><b>LIN</b><span class="zh">我记得是五个人，站在蓝天下。</span><span class="en">I remember five people, under a blue sky.</span></p>
+        <p><b>ROWAN</b><span class="zh">你刚才也说了五个吧？</span><span class="en">You said five too, didn't you?</span></p>
+      </div>
+      <p class="cap rv"><span class="zh">↑ 示意，并非游戏原文。</span><span class="en">↑ Illustrative, not the in-game script.</span></p>
+      <p class="lede rv" style="margin-top:30px"><span class="zh">另一边的“记录墙”是真实数据：这台装置上最近 30 位完成体验的观众的回答，只显示人数统计；超过 30 次后旧的记录会被遗忘，至少 5 次才会显示——记录本身也在遗忘。</span><span class="en">The record wall is real: counts only, from the last 30 finished visits on this machine, shown once at least five exist and forgotten after that — the record itself forgets.</span></p>
+    </div>
+  </section>
+
+  <section id="ending" data-mood="drift">
+    <div class="col">
+      <div class="kicker rv">04 / An open ending</div>
+      <h2 class="title rv">Reveal, <em>don't judge.</em></h2>
+      <ol class="steps">
+        <li class="rv"><div><h3><span class="zh">回看你留下的碎片</span><span class="en">Review what you kept</span></h3><p><span class="zh">丢失和模糊的部分保持不可见，这一步没有“原图”标签可以偷看。</span><span class="en">Missing and blurred strips stay unavailable; there is no original-image tab to peek at.</span></p></div></li>
+        <li class="rv"><div><h3><span class="zh">确认后揭晓原图</span><span class="en">Confirm to reveal</span></h3><p><span class="zh">此后才可在原图、碎片与“你的人数”之间切换；按住对比键临时查看原图。</span><span class="en">Only then can you switch between Original, Fragments and Your count, or hold Compare to see the original.</span></p></div></li>
+        <li class="rv"><div><h3><span class="zh">一张结束卡</span><span class="en">One closing card</span></h3><p><span class="zh">“五”从哪里来、什么是曼德拉效应、此前有多少观众说了五、你忘记了几片——最后留下一个问题：遗忘，会不会也有价值？</span><span class="en">Where “five” came from, what the Mandela effect is, how many earlier visitors said five, how many pieces you forgot — and one open question: might forgetting have value?</span></p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="install" data-mood="drift">
+    <div class="col">
+      <div class="kicker rv">05 / Installation</div>
+      <h2 class="title rv">One stick, <em>six buttons.</em></h2>
+      <p class="lede rv"><span class="zh">展陈机台为一根摇杆加两排三个按钮，CRT 电视以 kiosk 模式全屏运行：黑色边框、隐藏光标、预留安全边距以防过扫描裁切。按钮可在游戏内重新映射。</span><span class="en">The cabinet has one joystick and two rows of three buttons. A CRT TV runs the game in kiosk mode: black surround, hidden cursor and a safe margin against overscan. Buttons can be remapped in-game.</span></p>
+      <div class="buttons rv" aria-label="按钮布局 / Button layout">
+        <span><span class="zh">跳跃</span><span class="en">Jump</span></span><span><span class="zh">保护</span><span class="en">Protect</span></span><span><span class="zh">确认</span><span class="en">Confirm</span></span>
+        <span><span class="zh">暂停</span><span class="en">Pause</span></span><span><span class="zh">对比</span><span class="en">Compare</span></span><span><span class="zh">帮助</span><span class="en">Help</span></span>
+      </div>
+      <p class="cap rv"><span class="zh">建议的功能布局；实体按钮仍需逐一校准，硬件兼容性尚未在真机上验证。</span><span class="en">Suggested layout; each physical button still needs calibration, and hardware compatibility is not yet verified on the device.</span></p>
+    </div>
+  </section>
+
+  <section id="film" data-mood="drift">
+    <div class="col">
+      <div class="kicker rv">06 / Memory Tunnel — TD film</div>
+      <h2 class="title rv">Memory <em>Tunnel.</em></h2>
+      <p class="lede rv"><span class="zh">同一项目的 TouchDesigner 影像部分：照片、点线与数字构成持续变化的纵深空间，把记忆碎片转译为流动的隧道。</span><span class="en">The TouchDesigner film of the same project: photographs, points, lines and numbers form a shifting depth, translating memory fragments into a moving tunnel.</span></p>
+      <video class="film rv" controls playsinline preload="none" poster="assets/studio/memory-tunnel.jpg"><source src="assets/studio/memory-tunnel.webm" type="video/webm"></video>
+      <p class="cap rv">03:30 / TOUCHDESIGNER / <a class="link" href="assets/studio/memory-tunnel.webm" target="_blank" rel="noopener"><span class="zh">单独打开视频</span><span class="en">Open video</span> ↗</a></p>
+
+      <div class="kicker rv" style="margin-top:80px">Credits & sources</div>
+      <ul class="credits rv">
+        <li><span class="zh">音乐：PYNCHON — James Gargette (cinameng)，CC0</span><span class="en">Music: PYNCHON — James Gargette (cinameng), CC0</span></li>
+        <li><span class="zh">音效：Kenney — Impact Sounds、Digital Audio，CC0</span><span class="en">Sound effects: Kenney — Impact Sounds, Digital Audio, CC0</span></li>
+        <li><span class="zh">像素美术为本项目生成与制作的原创素材</span><span class="en">Pixel artwork generated and prepared for this project</span></li>
+      </ul>
+      <div class="actions rv">
+        <a class="btn" href="https://630388703-sudo.github.io/memory-drift-game/" target="_blank" rel="noopener"><span class="zh">现在试玩</span><span class="en">Play it now</span> ↗</a>
+        <a class="btn ghost" href="index.html#work">← <span class="zh">返回全部作品</span><span class="en">Back to all work</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><span>© 2026 刁思予 / SIYU DIAO</span><span>FILE 008 · MEMORY DRIFT</span></footer>
+<script src="assets/vertical/vertical.js?v=20261101"></script>
+</body>
+</html>
