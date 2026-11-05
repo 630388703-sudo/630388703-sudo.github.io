@@ -83,8 +83,8 @@
   const stationOf = key => STATIONS.findIndex(s => s.key === key);
   let panelKind = null;
   const PANELS = {
-    work: () => `${marquee(Array(6).fill(tr('精选作品 ✳', 'FEATURED WORKS ✳')), 'big')}
-      ${STATIONS.filter(st => st.key).map(st => `<article class="rm-case">${pills(st.tags)}<div class="rm-case-head"><button class="rm-case-title" data-fly="${st.key}">${esc(L(st.title))}</button><button class="rm-pill solid" data-open="${st.key}">${tr('查看完整案例 ↗', 'See full case ↗')}</button></div><p class="rm-meta">${esc(L(st.meta || st.kicker))}</p><p class="rm-case-sub">${L(st.sub)}</p><div class="rm-gallery">${(st.gallery || []).map(g => `<img src="${g}" alt="" loading="lazy">`).join('')}</div></article>`).join('')}`,
+    work: () => `<h2>${tr('全部作品', 'All work')}</h2><p class="rm-lead">${tr('每件作品都在隧道里有一站。点作品名飞过去，点“打开”直接看项目手记。', 'Every project has a stop in the tunnel. Click a title to fly there, or Open to read its notebook.')}</p>
+      ${STATIONS.filter(st => st.key).map(st => `<article class="rm-case">${pills(st.tags)}<div class="rm-case-head"><button class="rm-case-title" data-fly="${st.key}">${esc(L(st.title))}</button><button class="rm-pill solid" data-open="${st.key}">${tr('打开', 'Open')} ↗</button></div><p class="rm-meta">${esc(L(st.kicker))}</p><p class="rm-case-sub">${L(st.sub)}</p><div class="rm-gallery">${(st.gallery || []).map(g => `<img src="${g}" alt="" loading="lazy">`).join('')}</div></article>`).join('')}`,
     thinking: () => `<h2>${tr('作品背后，还有这些思考。', 'Behind the work, a way of thinking.')}</h2><p class="rm-lead">${tr('从发现问题、组织想法，到做出原型与视觉表达。通过具体项目，了解我的创作方法和正在发展的能力。', 'From questions and ideas to prototypes and visual expression. Explore my approach through the work itself.')}</p>
       <ol class="rm-caps">${CAPS.map(c => `<li><h3>${esc(L([c[0], c[1]]))}</h3><p>${esc(L([c[2], c[3]]))}</p><button class="rm-link" data-fly="${c[4]}">${esc(L([c[5], c[6]]))} →</button></li>`).join('')}</ol>`,
     about: () => {
@@ -94,11 +94,11 @@
       const bio = zh()
         ? `<p class="rm-bio"><span class="k1">✳</span> 我是刁思予，昆明理工大学<span class="k2">数字媒体艺术</span>专业大三学生，在<span class="k1">游戏场景</span>、<span class="k2">AIGC</span>、<em>UI/UX</em> 和<span class="k1">互动装置</span>之间来回切换——总是被“把它做出来”吸引。做过<span class="k2">莉莉丝 Game Jam</span>的《残像》，也做了关于遗忘的装置<span class="k1">《忘了自己是什么》</span>。欢迎<button class="rm-chip" data-panel="work">随便逛逛</button>！</p>`
         : `<p class="rm-bio"><span class="k1">✳</span> I'm Siyu Diao, a third-year <span class="k2">Digital Media Art</span> student at KMUST, moving between <span class="k1">game environments</span>, <span class="k2">AIGC</span>, <em>UI/UX</em> and <span class="k1">installations</span> — always pulled towards making the thing. I made <span class="k2">Afterimage</span> for the Lilith Game Jam and an installation about forgetting, <span class="k1">What Was I Again?</span> Make yourself at <button class="rm-chip" data-panel="work">home</button>!</p>`;
-      return bio + `<div class="rm-about-head"><img src="assets/studio/siyu-portrait.jpg" alt="${tr('刁思予', 'Siyu Diao')}"><div><h2>${tr('刁思予', 'Siyu Diao')}</h2><p class="rm-lead">${tr('昆明理工大学 · 数字媒体艺术 · 大三', 'KMUST · Digital Media Art · Third year')}</p></div></div>
+      return `<div class="rm-about-head"><img src="assets/studio/siyu-portrait.jpg" alt="${tr('刁思予', 'Siyu Diao')}"><div><h2>${tr('刁思予', 'Siyu Diao')}</h2><p class="rm-lead">${tr('昆明理工大学 · 数字媒体艺术 · 大三', 'KMUST · Digital Media Art · Third year')}</p></div></div>
         ${a ? `<p>${a.desc1}</p><p>${a.desc2}</p><h3 class="rm-sec">${esc(a.skill_label)}</h3><ul class="rm-skills">${skills}</ul><h3 class="rm-sec">${esc(a.cred_label)}</h3><ul class="rm-creds">${creds}</ul>` : ''}
         <div class="rm-acts"><button class="rm-pill solid" data-panel="contact">${tr('联系我', 'Contact me')}</button></div><p class="rm-credit-note">${tr('网站背景音乐', 'Site music')}: PYNCHON — James Gargette (CC0)</p>`;
     },
-    contact: () => `${marquee(Array(5).fill('630388703@QQ.COM ✳'), 'big mail')}<div class="rm-acts" style="margin:6px 0 34px"><a class="rm-pill solid" href="mailto:630388703@qq.com">${tr('聊聊吧 ↗', "Let's talk ↗")}</a></div><h2>${tr('联系我', 'Contact')}</h2><p class="rm-lead">${tr('欢迎交流项目合作、展览与作品反馈。', 'Open to collaborations, exhibitions and portfolio feedback.')}</p>
+    contact: () => `<h2>${tr('联系我', 'Contact')}</h2><p class="rm-lead">${tr('欢迎交流项目合作、展览与作品反馈。', 'Open to collaborations, exhibitions and portfolio feedback.')}</p>
       <dl class="rm-contact">${CONTACT.map(c => `<div><dt>${zh() ? c[0] : c[1]}</dt><dd>${L(c[2])}</dd></div>`).join('')}</dl>
       <h3 class="rm-sec">${tr('留言', 'Message')}</h3><textarea class="rm-field" rows="4" aria-label="${tr('留言内容', 'Message')}" placeholder="${tr('写下你的留言…', 'Write your message…')}"></textarea><input class="rm-field" aria-label="${tr('你的联系方式', 'Your contact')}" placeholder="${tr('你的联系方式', 'How to reach you')}">
       <div class="rm-acts"><button class="rm-btn" data-mail>${tr('通过邮件发送', 'Send by email')}</button></div>`,
@@ -177,9 +177,9 @@
   function caption(i) {
     const s = STATIONS[i], cap = $('.rm-cap', root);
     const acts = (s.actions || []).map(([a, l]) => `<button class="rm-pill${a === 'work' || a === 'thinking' || a === 'contact' ? ' solid' : ''}" data-a="${a}">${L(l)}</button>`).join('');
-    const open = s.key ? `<button class="rm-pill solid" data-open="${s.key}">${tr('查看完整案例 ↗', 'See full case ↗')}</button>` : '';
-    if (s.id === 'home') cap.innerHTML = `<h1 class="rm-state">${STATEMENT()}</h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${acts}</div>${marquee(TOOLS, 'tools')}`;
-    else if (s.key) cap.innerHTML = `${pills(s.tags)}<h1 class="rm-ptitle">${esc(L(s.title))}</h1><p class="rm-meta">${esc(L(s.meta || s.kicker))}</p><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${open}${acts}</div>`;
+    const open = s.key ? `<button class="rm-pill solid" data-open="${s.key}">${tr('打开作品 ↗', 'Open project ↗')}</button>` : '';
+    if (s.id === 'home') cap.innerHTML = `<h1 class="rm-hero">Field<br><em>notes.</em></h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${acts}</div>`;
+    else if (s.key) cap.innerHTML = `${pills(s.tags)}<h1 class="rm-ptitle">${esc(L(s.title))}</h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${open}${acts}</div>`;
     else cap.innerHTML = `<h1 class="rm-ptitle">${esc(L(s.title))}</h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${acts}</div>`;
     cap.classList.toggle('home', s.id === 'home');
     $$('[data-a]', cap).forEach(b => b.onclick = () => doAction(b.dataset.a));
