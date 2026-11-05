@@ -9,8 +9,9 @@
   const zh = () => document.documentElement.lang !== 'en';
   const tr = (a, b) => (zh() ? a : b);
   const L = p => (zh() ? p[0] : p[1]);
-  const V = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/';
-  const SCRIPTS = ['https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', V + 'shaders/CopyShader.js', V + 'shaders/LuminosityHighPassShader.js', V + 'postprocessing/EffectComposer.js', V + 'postprocessing/RenderPass.js', V + 'postprocessing/ShaderPass.js', V + 'postprocessing/UnrealBloomPass.js'];
+  // served from the site itself (assets/vendor): no third-party CDN to wait for
+  const V = 'assets/vendor/';
+  const SCRIPTS = [V + 'three.min.js', V + 'CopyShader.js', V + 'LuminosityHighPassShader.js', V + 'EffectComposer.js', V + 'RenderPass.js', V + 'ShaderPass.js', V + 'UnrealBloomPass.js'];
   const webgl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
   if (!webgl) return;
   const store = { get: k => { try { return localStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch {} } };
@@ -63,7 +64,12 @@
   const loaderHTML = () => `<div class="rm-load dsy-ld"><div class="ld-sys">刁思予 <i>✳</i> DSY</div><div class="ld-msg">${tr('正在进入记忆隧道', 'Entering the memory tunnel')}</div><div class="ld-track"><div class="ld-fill"></div></div><div class="ld-pct">000</div></div>`;
   const progress = (p, msg) => { const el = LD(); if (!el) return; const f = el.querySelector('.ld-fill'), c = el.querySelector('.ld-pct'), m = el.querySelector('.ld-msg'); if (f) f.style.width = p + '%'; if (c) c.textContent = String(Math.round(p)).padStart(3, '0'); if (msg && m) m.textContent = msg; };
   const finishLoader = () => { const el = LD(); if (!el) return; progress(100); setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 900); }, 250); };
-  const loadAll = async () => { let i = 0; for (const src of SCRIPTS) { i++; if (src.includes('three.min') && window.THREE) continue; await new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.append(s); }); progress(i / SCRIPTS.length * 80); } };
+  const loadAll = () => new Promise((res, rej) => {
+    let done = 0;
+    const list = SCRIPTS.filter(src => !(src.includes('three.min') && window.THREE));
+    if (!list.length) return res();
+    list.forEach(src => { const s = document.createElement('script'); s.src = src; s.async = false; s.onload = () => { done++; progress(8 + done / list.length * 80); if (done === list.length) res(); }; s.onerror = rej; document.head.append(s); });
+  });
 
   const origHero = window.goHero;
   window.goHero = function () { if (wantRoom()) showRoom(); else origHero.apply(this, arguments); };
@@ -143,6 +149,7 @@
       progress(6, tr('正在进入记忆隧道', 'Entering the memory tunnel'));
       try { await loadAll(); build(); } catch (e) { console.error(e); LD()?.remove(); root.remove(); root = null; building = null; document.documentElement.classList.remove('dsy-3d'); origHero(); return; }
       progress(92); start(); requestAnimationFrame(() => requestAnimationFrame(finishLoader));
+      setTimeout(finishLoader, 1500); // in case animation frames are held back (background tab, slow device)
     })();
     await building; building = null;
   }
