@@ -30,6 +30,7 @@
     { id: 'growingpains', tags: [['叙事设计', 'Narrative design'], ['Unreal Engine', 'Unreal Engine'], ['Blender', 'Blender']], meta: ['个人项目 · 叙事探索游戏', 'Personal · Narrative exploration'], gallery: ['assets/growingpains/page-1.jpg', 'assets/growingpains/page-2.jpg', 'assets/growingpains/page-3.jpg', 'assets/growingpains/page-4.jpg', 'assets/growingpains/page-5.jpg', 'assets/growingpains/page-6.jpg'],  key: 'growingpains', image: 'assets/growingpains/page-1.jpg', ratio: 1684 / 618, kicker: ['002 · 叙事探索游戏 · 个人项目', '002 · Narrative exploration · Personal project'], title: ['生长痛', 'Growth Pain'], sub: ['压力，如何悄悄改变我们对自己的认识？', 'How does pressure quietly reshape the way we see ourselves?'] },
     { id: 'archive', tags: [['信息设计', 'Information design'], ['建筑可视化', 'Architecture'], ['Figma', 'Figma']], meta: ['2025 · 云南一颗印', '2025 · Yunnan courtyard'], gallery: ['assets/archive/cover.jpg', 'assets/archive/page-2.jpg', 'assets/archive/page-3.jpg'],  key: 'archive', image: 'assets/archive/cover.jpg', ratio: 2200 / 3112, kicker: ['005 · 云南传统建筑 · 信息可视化 · 2025', '005 · Vernacular architecture · Information design · 2025'], title: ['马家大院档案', 'Courtyard Archive'], sub: ['让建筑结构成为可以阅读的信息。', 'Make architectural structure readable.'] },
     { id: 'aiwork', tags: [['AI 协作', 'AI collaboration'], ['Three.js', 'Three.js'], ['生成式 3D', 'Generative 3D']], meta: ['2026 · 刁思予 × Claude', '2026 · Siyu Diao × Claude'], gallery: ['assets/ai/jellyfish-cover.jpg', 'assets/ai/jellyfish-cut.webp'],  key: 'aiwork', image: 'assets/ai/jellyfish-cut.webp', ratio: 791 / 1400, h: 5.6, kicker: ['009 · AI 协作 · Three.js · 2026', '009 · AI collaboration · Three.js · 2026'], title: ['机械水母', 'Mechanical Medusa'], sub: ['一只没有模型文件的水母：全部由代码生成，可以旋转、拆开再复原。', 'A jellyfish without a model file: all generated in code, to turn, take apart and reassemble.'], actions: [['ai', ['打开 3D 作品 ↗', 'Open the 3D piece ↗']]] },
+    { id: 'lightsout', tags: [['动作游戏', 'Action game'], ['Unreal Engine 5.8', 'Unreal Engine 5.8'], ['蓝图', 'Blueprint']], meta: ['2026 · 个人 Demo', '2026 · Personal demo'], gallery: ['assets/lightsout/altar.webp', 'assets/lightsout/village.webp', 'assets/lightsout/forest.webp'], key: 'lightsout', image: 'assets/lightsout/cover.jpg', ratio: 1.5, kicker: ['010 · UE5 动作游戏 · 个人 Demo · 2026', '010 · UE5 action game · Personal demo · 2026'], title: ['熄灯巷', 'Lights Out Alley'], sub: ['长夜里，点燃熄灭的篝火，在暴雨浇灭它们之前守住回家的路。', 'In an endless night, relight the bonfires and hold them before the storm puts them out.'], actions: [['lightsout', ['打开项目页面 ↗', 'Open the project page ↗']]] },
     { id: 'thinking', nav: 'thinking', cards: true, kicker: ['能力与思考', 'How I think, how I make'], title: ['作品背后，还有这些思考。', 'Behind the work, a way of thinking.'], sub: ['创意与游戏策划 · 用户与产品思考 · AI 工作流 · 交互与技术实现 · 视觉与信息表达 · 反思与创作记录', 'Game & narrative · Product thinking · AI workflow · Interaction & making · Visual communication · Reflection'], actions: [['thinking', ['展开能力与思考', 'Read the full map']]] },
     { id: 'contact', nav: 'contact', portrait: 'assets/studio/siyu-portrait.jpg', ratio: 0.75, kicker: ['关于 · 联系', 'About · Contact'], title: ['Hi, 我是刁思予。', "Hi, I'm Siyu."], sub: ['可实习：2027 年 1 月 5 日至 3 月中旬 · 630388703@qq.com · 138-8899-7566', 'Internship: 5 Jan to mid-March 2027 · 630388703@qq.com · 138-8899-7566'], actions: [['about', ['关于我', 'About me']], ['contact', ['联系与留言', 'Contact & message']], ['cv', ['下载简历 PDF', 'Download CV']]] },
   ];
@@ -123,7 +124,7 @@
 
   const doAction = a => ({
     work: () => openPanel('work'), thinking: () => openPanel('thinking'), contact: () => openPanel('contact'), about: () => openPanel('about'),
-    ai: () => { location.href = 'ai/jellyfish.html'; }, cv: () => window.open('刁思予_简历.pdf?v=20260930-internship', '_blank'),
+    ai: () => { location.href = 'ai/jellyfish.html'; }, lightsout: () => { location.href = 'project-lightsout.html'; }, cv: () => window.open('刁思予_简历.pdf?v=20260930-internship', '_blank'),
   })[a]?.();
 
   async function showRoom() {
@@ -303,7 +304,7 @@
       const x = s.x + 5, W = 5.6;
       if (s.id === 'home') {
         // a loose collage of what lies ahead; each print takes you to its stop
-        const picks = [[1, 'assets/studio/memory-tunnel.jpg', 3.0, 1.69, 0, 1.3, -1.6, -0.08], [3, '残像预览图.png', 2.4, 1.36, 2.9, -0.4, -2.6, -0.16], [2, 'assets/zhixu/cover.svg', 2.1, 1.4, -0.4, -1.5, -0.8, -0.04], [4, 'assets/growingpains/page-1.jpg', 2.8, 1.03, 3.4, 2.1, -3.6, -0.2], [7, 'assets/studio/siyu-portrait.jpg', 1.1, 1.47, 5.8, 0.4, -4.2, -0.25]];
+        const picks = [[1, 'assets/studio/memory-tunnel.jpg', 3.0, 1.69, 0, 1.3, -1.6, -0.08], [3, '残像预览图.png', 2.4, 1.36, 2.9, -0.4, -2.6, -0.16], [2, 'assets/zhixu/cover.svg', 2.1, 1.4, -0.4, -1.5, -0.8, -0.04], [4, 'assets/growingpains/page-1.jpg', 2.8, 1.03, 3.4, 2.1, -3.6, -0.2], [8, 'assets/studio/siyu-portrait.jpg', 1.1, 1.47, 5.8, 0.4, -4.2, -0.25]];
         picks.forEach(([to, src, w, h, dx, y, z, ry]) => frame(i, srgb(loader.load(src)), w, h, x + dx, y, z, ry, false, to));
       } else if (s.video) {
         frame(i, video(s.video), W, W / s.ratio, x, 0.3, -1.2, -0.12, true);
