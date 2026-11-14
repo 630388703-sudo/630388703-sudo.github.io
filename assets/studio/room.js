@@ -24,9 +24,9 @@
   const GAP = 14;
   const STATIONS = [
     { id: 'home', nav: 'home', kicker: ['刁思予 · 数字媒体艺术 · 昆明理工大学', 'Siyu Diao · Digital Media Art · KMUST'], title: ['Field notes.', 'Field notes.'], sub: ['想法，正在发生。在游戏、影像与交互之间，把好奇心变成可以感知的体验。', 'Ideas, in the making. Across games, moving images and interaction, I turn curiosity into experiences.'], actions: [['work', ['看全部作品档案', 'Open the work archive']]] },
-    { id: 'memory', tags: [['互动装置', 'Installation'], ['像素游戏', 'Pixel game'], ['TouchDesigner', 'TouchDesigner']], meta: ['2026 · 个人项目 · 记忆漂移', '2026 · Personal · Memory Drift'], gallery: ['assets/memorydrift/boards/board-1.jpg', 'assets/memorydrift/boards/board-2.jpg', 'assets/memorydrift/boards/board-3.jpg', 'assets/memorydrift/boards/board-4.jpg', 'assets/memorydrift/boards/board-5.jpg', 'assets/studio/memory-tunnel.jpg'],  nav: 'work', key: 'memory', video: 'assets/memorydrift/MemoryDrift_2min15.mp4', ratio: 16 / 9, kicker: ['008 · 互动装置 + 像素游戏 + TD 影像 · 2026', '008 · Installation, pixel game, TD film · 2026'], title: ['忘了自己是什么', 'What Was I Again?'], sub: ['遗忘是缺陷，还是自我保护？看一张照片，收集它的碎片，再被反复问同一个问题。', 'Is forgetting a defect, or self-protection? Study one photograph, collect its fragments, answer the same question three times.'] },
+    { id: 'memory', tags: [['互动装置', 'Installation'], ['像素游戏', 'Pixel game'], ['TouchDesigner', 'TouchDesigner']], meta: ['2026 · 个人项目 · 记忆漂移', '2026 · Personal · Memory Drift'], gallery: ['assets/memorydrift/boards/board-1.jpg', 'assets/memorydrift/boards/board-2.jpg', 'assets/memorydrift/boards/board-3.jpg', 'assets/memorydrift/boards/board-4.jpg', 'assets/memorydrift/boards/board-5.jpg', 'assets/studio/memory-tunnel.jpg'],  nav: 'work', key: 'memory', video: 'assets/memorydrift/MemoryDrift_loop.mp4', ratio: 16 / 9, kicker: ['008 · 互动装置 + 像素游戏 + TD 影像 · 2026', '008 · Installation, pixel game, TD film · 2026'], title: ['忘了自己是什么', 'What Was I Again?'], sub: ['遗忘是缺陷，还是自我保护？看一张照片，收集它的碎片，再被反复问同一个问题。', 'Is forgetting a defect, or self-protection? Study one photograph, collect its fragments, answer the same question three times.'] },
     { id: 'zhixu', tags: [['UI / UX', 'UI / UX'], ['信息架构', 'Information architecture'], ['Figma', 'Figma']], meta: ['2026 · 手机 App', '2026 · Mobile app'], gallery: ['assets/zhixu/cover.svg', 'assets/zhixu/home.svg', 'assets/zhixu/knowledge.svg', 'assets/zhixu/prompts.svg', 'assets/zhixu/tools.svg', 'assets/zhixu/profile.svg'],  key: 'zhixu', image: 'assets/zhixu/cover.svg', ratio: 1.5, kicker: ['007 · UI / UX · 手机 App', '007 · UI / UX · Mobile app'], title: ['知序 · AIGC 知识库', 'Zhixu · AIGC Fieldnotes'], sub: ['让灵感先于生成。七页界面串联知识、工具、Prompt 和个人内容。', 'Understanding before generation. Seven screens connect knowledge, tools, prompts and personal content.'] },
-    { id: 'afterimage', tags: [['叙事解谜', 'Narrative puzzle'], ['Unity 2D', 'Unity 2D'], ['AI 辅助', 'AI-assisted']], meta: ['2026 · 莉莉丝 Game Jam', '2026 · Lilith Game Jam'], gallery: ['残像预览图.png', 'assets/studio/afterimage-lilith-certificate.jpg'],  key: 'afterimage', image: '残像预览图.png', ratio: 1834 / 1037, kicker: ['001 · 莉莉丝 Game Jam · Unity 2D · 2026', '001 · Lilith Game Jam · Unity 2D · 2026'], title: ['残像', 'Afterimage'], sub: ['「我的 AI 队友」：你塑造了它，它也在重构你。', 'My AI Teammate: you shape it, and it reshapes you.'] },
+    { id: 'afterimage', tags: [['叙事解谜', 'Narrative puzzle'], ['Unity 2D', 'Unity 2D'], ['AI 辅助', 'AI-assisted']], meta: ['2026 · 莉莉丝 Game Jam', '2026 · Lilith Game Jam'], gallery: ['残像预览图.webp', 'assets/studio/afterimage-lilith-certificate.jpg'],  key: 'afterimage', image: '残像预览图.webp', ratio: 1834 / 1037, kicker: ['001 · 莉莉丝 Game Jam · Unity 2D · 2026', '001 · Lilith Game Jam · Unity 2D · 2026'], title: ['残像', 'Afterimage'], sub: ['「我的 AI 队友」：你塑造了它，它也在重构你。', 'My AI Teammate: you shape it, and it reshapes you.'] },
     { id: 'growingpains', tags: [['叙事设计', 'Narrative design'], ['Unreal Engine', 'Unreal Engine'], ['Blender', 'Blender']], meta: ['个人项目 · 叙事探索游戏', 'Personal · Narrative exploration'], gallery: ['assets/growingpains/page-1.jpg', 'assets/growingpains/page-2.jpg', 'assets/growingpains/page-3.jpg', 'assets/growingpains/page-4.jpg', 'assets/growingpains/page-5.jpg', 'assets/growingpains/page-6.jpg'],  key: 'growingpains', image: 'assets/growingpains/page-1.jpg', ratio: 1684 / 618, kicker: ['002 · 叙事探索游戏 · 个人项目', '002 · Narrative exploration · Personal project'], title: ['生长痛', 'Growth Pain'], sub: ['压力，如何悄悄改变我们对自己的认识？', 'How does pressure quietly reshape the way we see ourselves?'] },
     { id: 'archive', tags: [['信息设计', 'Information design'], ['建筑可视化', 'Architecture'], ['Figma', 'Figma']], meta: ['2025 · 云南一颗印', '2025 · Yunnan courtyard'], gallery: ['assets/archive/cover.jpg', 'assets/archive/page-2.jpg', 'assets/archive/page-3.jpg'],  key: 'archive', image: 'assets/archive/cover.jpg', ratio: 2200 / 3112, kicker: ['005 · 云南传统建筑 · 信息可视化 · 2025', '005 · Vernacular architecture · Information design · 2025'], title: ['马家大院档案', 'Courtyard Archive'], sub: ['让建筑结构成为可以阅读的信息。', 'Make architectural structure readable.'] },
     { id: 'aiwork', tags: [['AI 协作', 'AI collaboration'], ['Three.js', 'Three.js'], ['生成式 3D', 'Generative 3D']], meta: ['2026 · 刁思予 × Claude', '2026 · Siyu Diao × Claude'], gallery: ['assets/ai/jellyfish-cover.jpg', 'assets/ai/jellyfish-cut.webp'],  key: 'aiwork', image: 'assets/ai/jellyfish-cut.webp', ratio: 791 / 1400, h: 5.6, kicker: ['009 · AI 协作 · Three.js · 2026', '009 · AI collaboration · Three.js · 2026'], title: ['机械水母', 'Mechanical Medusa'], sub: ['一只没有模型文件的水母：全部由代码生成，可以旋转、拆开再复原。', 'A jellyfish without a model file: all generated in code, to turn, take apart and reassemble.'], actions: [['ai', ['打开 3D 作品 ↗', 'Open the 3D piece ↗']]] },
@@ -113,7 +113,7 @@
     root.classList.add('panel-open');
     $('.rm-close', p).onclick = closePanel;
     $$('[data-fly]', p).forEach(b => b.onclick = () => { const i = stationOf(b.dataset.fly); closePanel(); if (i >= 0) goTo(i); });
-    $$('[data-open]', p).forEach(b => b.onclick = () => openW(b.dataset.open));
+    $$('[data-open]', p).forEach(b => b.onclick = () => flyOpen(b.dataset.open));
     $$('[data-panel]', p).forEach(b => b.onclick = () => openPanel(b.dataset.panel));
     const mail = $('[data-mail]', p);
     if (mail) mail.onclick = () => { const f = $$('.rm-field', p), text = f[0].value.trim(); if (!text) { f[0].focus(); return; } location.href = 'mailto:630388703@qq.com?subject=' + encodeURIComponent(tr('来自作品网站的联系', 'Portfolio enquiry')) + '&body=' + encodeURIComponent(text + '\n\n' + f[1].value.trim()); };
@@ -155,8 +155,18 @@
     await building; building = null;
   }
   function hideRoom() { if (!root) return; root.hidden = true; pause(); Sound.duck(true); }
+  // Videos load and play only while the camera is within range of their station (the 19 MB film no longer loads on the home view).
+  function syncVideos() {
+    if (!S) return;
+    S.videos.forEach(v => {
+      const near = running && Math.abs(S.pos - v._x) < 14;
+      if (near) { if (!v.src) v.src = v.dataset.src; if (v.paused) v.play().catch(() => {}); }
+      else if (!v.paused) v.pause();
+    });
+  }
   function pause() { running = false; cancelAnimationFrame(rafId); S && S.videos.forEach(v => v.pause()); }
   function resume() { if (S && !running) start(); }
+  document.addEventListener('visibilitychange', () => { if (!S || !root || root.hidden) return; if (document.hidden) pause(); else resume(); });
   function nav(where) {
     if (where === 'home') { closePanel(); goTo(0); return; }
     openPanel(where);
@@ -184,13 +194,15 @@
     else cap.innerHTML = `<h1 class="rm-ptitle">${esc(L(s.title))}</h1><p class="rm-sub">${L(s.sub)}</p><div class="rm-acts">${acts}</div>`;
     cap.classList.toggle('home', s.id === 'home');
     $$('[data-a]', cap).forEach(b => b.onclick = () => doAction(b.dataset.a));
-    $$('[data-open]', cap).forEach(b => b.onclick = () => openW(b.dataset.open));
+    $$('[data-open]', cap).forEach(b => b.onclick = () => flyOpen(b.dataset.open));
     if (window.gsap) gsap.fromTo(cap.children, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.06 });
+    if (window.gsap && !matchMedia('(prefers-reduced-motion: reduce)').matches) { const h = $('h1', cap); if (h) gsap.fromTo(h, { clipPath: 'inset(-8% -8% 105% -8%)' }, { clipPath: 'inset(-8% -8% -8% -8%)', duration: 0.9, ease: 'power4.out', clearProps: 'clipPath' }); }
     $$('.rm-rail button', root).forEach((b, k) => b.classList.toggle('on', k === i));
   }
 
   function build() {
     const T = THREE, cv = $('canvas', root);
+    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', tr('作品集 3D 空间：滚轮、拖拽或左右方向键浏览，点击作品打开', 'Portfolio 3D space: scroll, drag or arrow keys to browse; click a project to open'));
     const renderer = new T.WebGLRenderer({ canvas: cv, antialias: true, powerPreference: 'high-performance' });
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5)); renderer.outputEncoding = T.sRGBEncoding;
     const scene = new T.Scene(); scene.background = new T.Color(0x030305); scene.fog = new T.Fog(0x030305, 9, 34);
@@ -297,17 +309,17 @@
       g.userData = { st, main, goto, base: y, ry, phase: Math.random() * 6, u, res, plane, a: 0, seen: false };
       frames.push(g); return g;
     };
-    const video = src => { const v = document.createElement('video'); v.src = src; v.loop = true; v.muted = true; v.playsInline = true; v.preload = 'auto'; videos.push(v); const t = srgb(new T.VideoTexture(v)); t.minFilter = T.LinearFilter; return t; };
+    const video = (src, x) => { const v = document.createElement('video'); v.dataset.src = src; v._x = x; v.loop = true; v.muted = true; v.playsInline = true; v.preload = 'none'; videos.push(v); const t = srgb(new T.VideoTexture(v)); t.minFilter = T.LinearFilter; return t; };
     const typeTex = s => canvasTex(1200, 800, (g, w, h) => { g.fillStyle = '#33463d'; g.fillRect(0, 0, w, h); g.fillStyle = '#faf1df'; g.font = '700 220px "Noto Serif SC",serif'; g.textAlign = 'center'; g.fillText(s.type[0], w / 2, h / 2 + 40); g.font = '500 40px "JetBrains Mono",monospace'; g.fillText('MA COURTYARD · YUNNAN · 2025', w / 2, h / 2 + 140); });
     const texFor = s => s.video ? null : s.image ? srgb(loader.load(s.image)) : s.type ? typeTex(s) : null;
     STATIONS.forEach((s, i) => {
       const x = s.x + 5, W = 5.6;
       if (s.id === 'home') {
         // a loose collage of what lies ahead; each print takes you to its stop
-        const picks = [[1, 'assets/studio/memory-tunnel.jpg', 3.0, 1.69, 0, 1.3, -1.6, -0.08], [3, '残像预览图.png', 2.4, 1.36, 2.9, -0.4, -2.6, -0.16], [2, 'assets/zhixu/cover.svg', 2.1, 1.4, -0.4, -1.5, -0.8, -0.04], [4, 'assets/growingpains/page-1.jpg', 2.8, 1.03, 3.4, 2.1, -3.6, -0.2], [8, 'assets/studio/siyu-portrait.jpg', 1.1, 1.47, 5.8, 0.4, -4.2, -0.25]];
+        const picks = [[1, 'assets/studio/memory-tunnel.jpg', 3.0, 1.69, 0, 1.3, -1.6, -0.08], [3, '残像预览图.webp', 2.4, 1.36, 2.9, -0.4, -2.6, -0.16], [2, 'assets/zhixu/cover.svg', 2.1, 1.4, -0.4, -1.5, -0.8, -0.04], [4, 'assets/growingpains/page-1.jpg', 2.8, 1.03, 3.4, 2.1, -3.6, -0.2], [8, 'assets/studio/siyu-portrait.jpg', 1.1, 1.47, 5.8, 0.4, -4.2, -0.25]];
         picks.forEach(([to, src, w, h, dx, y, z, ry]) => frame(i, srgb(loader.load(src)), w, h, x + dx, y, z, ry, false, to));
       } else if (s.video) {
-        frame(i, video(s.video), W, W / s.ratio, x, 0.3, -1.2, -0.12, true);
+        frame(i, video(s.video, x), W, W / s.ratio, x, 0.3, -1.2, -0.12, true);
         frame(i, srgb(loader.load('assets/studio/memory-tunnel.jpg')), 2.8, 1.58, x + 5.2, 1.9, -4.2, -0.3);
         for (let k = 1; k <= 5; k++) frame(i, srgb(loader.load(`assets/memorydrift/boards/board-${k}.jpg`)), 1.05, 1.49, x + 3.6 + k * 0.85, -1.4 + (k % 2) * 0.25, -3.2 - k * 0.7, -0.35);
         for (let k = 1; k <= 6; k++) frame(i, srgb(loader.load(`assets/room/photos/p${String(k).padStart(2, '0')}.jpg`)), 0.8, 0.6, x - 1.6 + k * 1.3, 2.9 + (k % 2) * 0.35, -6 - (k % 3) * 0.8, -0.1);
@@ -328,10 +340,17 @@
 
     S = { T, renderer, composer, scene, cam, frames, nums, videos, points, rings, uniforms, halo, ripAt: -99, world: new T.Vector3(), ray: new T.Raycaster(), mouse: { x: 0, y: 0 }, pos: 0, target: 0, cur: -1, hover: null, tip: $('.rm-tip', root), END };
     onResize(); addEventListener('resize', onResize);
-    cv.addEventListener('wheel', e => { e.preventDefault(); S.target = Math.max(0, Math.min(END, S.target + (e.deltaY + e.deltaX) * 0.012)); }, { passive: false });
+    { const h = document.createElement('div'); h.className = 'rm-hint'; h.setAttribute('aria-hidden', 'true');
+      h.innerHTML = tr('<b>滚轮</b> / <b>拖拽</b> / <b>← →</b> 浏览', '<b>Scroll</b> / <b>drag</b> / <b>← →</b> to explore'); root.appendChild(h);
+      setTimeout(() => h.classList.add('in'), 2200);
+      const gone = () => { h.classList.remove('in'); setTimeout(() => h.remove(), 600); ['wheel', 'pointerdown', 'keydown'].forEach(t => removeEventListener(t, gone, true)); };
+      ['wheel', 'pointerdown', 'keydown'].forEach(t => addEventListener(t, gone, true)); setTimeout(gone, 12000); }
+    let snapT = 0;
+    const snap = () => { clearTimeout(snapT); snapT = setTimeout(() => { if (drag || !S) return; let b = STATIONS[0].x; for (const st of STATIONS) if (Math.abs(st.x - S.target) < Math.abs(b - S.target)) b = st.x; S.target = b; }, 160); };
+    cv.addEventListener('wheel', e => { e.preventDefault(); S.target = Math.max(0, Math.min(END, S.target + (e.deltaY + e.deltaX) * 0.012)); snap(); }, { passive: false });
     let drag = null;
     cv.addEventListener('pointerdown', e => { drag = { x: e.clientX, t: S.target, moved: false }; cv.setPointerCapture(e.pointerId); });
-    cv.addEventListener('pointerup', e => { const d = drag; drag = null; if (d && !d.moved) { const f = pick(e); if (f) openFrame(f); else { S.uniforms.uRip.value.set(S.world.x, S.world.y, 0, 0); S.ripAt = S.clockT; cursorPulse(); } } });
+    cv.addEventListener('pointerup', e => { const d = drag; drag = null; if (d && d.moved) snap(); if (d && !d.moved) { const f = pick(e); if (f) openFrame(f); else { S.uniforms.uRip.value.set(S.world.x, S.world.y, 0, 0); S.ripAt = S.clockT; cursorPulse(); } } });
     cv.addEventListener('pointermove', e => {
       S.mouse.x = (e.clientX / innerWidth - 0.5) * 2; S.mouse.y = (e.clientY / innerHeight - 0.5) * 2; S.px = e.clientX; S.py = e.clientY; moveCursor(e);
       if (drag) { const dx = e.clientX - drag.x; if (Math.abs(dx) > 6) drag.moved = true; S.target = Math.max(0, Math.min(END, drag.t - dx * (S.narrow ? 0.045 : 0.02))); return; }
@@ -354,20 +373,26 @@
     const st = f && STATIONS[f.userData.goto != null ? f.userData.goto : f.userData.st];
     if (st && e) { S.tip.hidden = false; S.tip.textContent = st.key ? `${L(st.title)} · ${tr('打开', 'open')} ↗` : L(st.title); S.tip.style.transform = `translate(${e.clientX + 16}px,${e.clientY + 14}px)`; } else S.tip.hidden = true;
   }
+  // push the camera view in before a project opens, so the card feels like it is being entered
+  function flyOpen(key) {
+    const cv = root && $('canvas', root);
+    if (!window.gsap || !cv || matchMedia('(prefers-reduced-motion: reduce)').matches) { openW(key); return; }
+    gsap.to(cv, { scale: 1.07, duration: 0.32, ease: 'power2.in', onComplete: () => { openW(key); gsap.to(cv, { scale: 1, duration: 0.6, delay: 0.25, ease: 'power2.out', clearProps: 'transform' }); } });
+  }
   function openFrame(f) {
     if (f.userData.goto != null) { goTo(f.userData.goto); return; }
     const st = STATIONS[f.userData.st];
     if (Math.abs(S.target - st.x) > 0.5) { S.target = st.x; return; }
-    if (st.key) openW(st.key); else if (st.cards) openPanel('thinking'); else if (st.portrait) openPanel('about');
+    if (st.key) flyOpen(st.key); else if (st.cards) openPanel('thinking'); else if (st.portrait) openPanel('about');
   }
 
   function start() {
-    running = true; S.videos.forEach(v => v.play().catch(() => {}));
+    running = true; syncVideos();
     const clock = new S.T.Clock();
     const loop = () => {
       if (!running || !S) return; rafId = requestAnimationFrame(loop);
       const t = clock.getElapsedTime(), { cam, mouse } = S;
-      S.pos += (S.target - S.pos) * 0.075;
+      S.pos += (S.target - S.pos) * 0.075; if ((S.vt = (S.vt || 0) + 1) % 20 === 0) syncVideos();
       cam.position.x += (S.pos + mouse.x * 0.6 - cam.position.x) * 0.08;
       cam.position.y += (0.4 - mouse.y * 0.35 - cam.position.y) * 0.08;
       if (S.narrow) cam.lookAt(S.pos + 5 + mouse.x * 0.3, -2.2, -3); else cam.lookAt(S.pos + 1.6 + mouse.x * 0.4, 0.1, -3);
@@ -388,8 +413,8 @@
         const d = f.position.x - S.pos, op = S.narrow ? Math.max(0, Math.min(1, (d + 1) / 2.5, (12 - d) / 2.5)) : Math.max(0, Math.min(1, (d - 0.5) / 2.2, (16 - d) / 3)), U = f.userData;
         // looked at → whole; nearby → mostly there, edges loose; passed by → scattered
         const here = Math.abs(f.position.x - (S.pos + 5)) < 7.5;
-        const want = !here ? 0 : S.hover === f ? 1 : U.main ? 0.92 : 0.88;
-        U.a += (want - U.a) * (want > U.a ? 0.035 : 0.02);
+        const settled = Math.abs(S.target - S.pos) < 0.35, want = !here ? 0 : S.hover === f ? 1 : U.main ? (settled ? 1 : 0.92) : 0.88;
+        U.a += (want - U.a) * (want > U.a ? (S.hover === f ? 0.12 : 0.045) : 0.02);
         if (U.a > 0.6) U.seen = true;
         if (U.seen && U.a < 0.05) { U.seen = false; for (let k = 0; k < 5; k++) U.res[k] = (Math.random() - 0.5) * 0.07 * U.u.uH.value; if (U.main) Sound.forget(); }
         U.u.uA.value = U.a; U.u.uOp.value = op; U.u.uTime.value = t;

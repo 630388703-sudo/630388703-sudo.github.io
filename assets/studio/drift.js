@@ -31,7 +31,7 @@
       ctx.restore();
     }
   }
-  const loop = t => { draw(t); raf = requestAnimationFrame(loop); };
+  const loop = t => { if (!document.documentElement.classList.contains('dsy-3d')) draw(t); raf = requestAnimationFrame(loop); };
   const start = () => { cancelAnimationFrame(raf); reduced.matches ? draw(0) : (raf = requestAnimationFrame(loop)); };
   resize(); start();
   addEventListener('resize', () => { resize(); if (reduced.matches) draw(0); });

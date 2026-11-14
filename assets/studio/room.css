@@ -225,3 +225,19 @@ html:not([lang=en]) .rm-state{font-weight:900!important;font-family:'Noto Sans S
   .rm-gallery img{height:150px}
   .rm-marquee.big{margin:0 -20px 24px}.rm-gallery{margin:0 -20px;padding:0 20px 6px}
 }
+
+/* ── polish pass: hierarchy, toolbar, sound wave, onboarding hint ── */
+.rm-tools{gap:20px;align-items:center;font-size:13px;letter-spacing:.08em}
+.rm-tools button{color:#a3a9c4;font-size:13px!important;transition:color .25s}
+.rm-tools .rm-sep{width:1px;height:12px;background:#3a4060}
+.rm-corner{opacity:.86}.rm-corner:hover{opacity:1}
+.rm-sub{color:#aeb3c8}
+.rm-cap .rm-pill.solid{box-shadow:0 8px 30px -12px #7ea6ff99}
+.rm-sound.on::before{width:3px;height:12px;margin-top:-6px;border:0;border-radius:2px;background:#7ea6ff;box-shadow:0 0 10px #7ea6ff;animation:rm-wave .8s ease-in-out infinite alternate}
+.rm-sound.on::after{content:'';position:absolute;left:6px;top:50%;width:3px;height:12px;margin-top:-6px;border-radius:2px;background:#7ea6ff;animation:rm-wave .8s .25s ease-in-out infinite alternate}
+.rm-sound{padding-left:14px!important}
+@keyframes rm-wave{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+.rm-hint{position:absolute;left:50%;bottom:34px;transform:translate(-50%,10px);z-index:3;opacity:0;pointer-events:none;font:400 12px 'JetBrains Mono','Noto Sans SC',monospace;letter-spacing:.12em;color:#aeb3c8;padding:9px 16px;border:1px solid #2a3050;border-radius:99px;background:#06070bcc;backdrop-filter:blur(6px);transition:opacity .6s,transform .6s}
+.rm-hint.in{opacity:1;transform:translate(-50%,0)}.rm-hint b{color:#fff;font-weight:500}
+@media (prefers-reduced-motion:reduce){.rm-sound.on::before,.rm-sound.on::after{animation:none}}
+@media (max-width:760px),(orientation:portrait){.rm-hint{bottom:20px;font-size:11px}}
