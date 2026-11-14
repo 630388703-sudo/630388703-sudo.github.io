@@ -241,3 +241,15 @@ html:not([lang=en]) .rm-state{font-weight:900!important;font-family:'Noto Sans S
 .rm-hint.in{opacity:1;transform:translate(-50%,0)}.rm-hint b{color:#fff;font-weight:500}
 @media (prefers-reduced-motion:reduce){.rm-sound.on::before,.rm-sound.on::after{animation:none}}
 @media (max-width:760px),(orientation:portrait){.rm-hint{bottom:20px;font-size:11px}}
+
+/* ── atmosphere: soft colour glows, vignette and film grain over the canvas ── */
+#room::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;
+  background:radial-gradient(55% 50% at 80% 42%,rgba(126,166,255,.16),transparent 72%),radial-gradient(40% 38% at 10% 92%,rgba(240,138,115,.11),transparent 72%),radial-gradient(34% 30% at 55% 8%,rgba(242,167,207,.07),transparent 75%);
+  animation:rm-glow 18s ease-in-out infinite alternate}
+#room::after{content:'';position:absolute;inset:-50%;z-index:1;pointer-events:none;opacity:.09;mix-blend-mode:overlay;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:rm-grain .9s steps(6) infinite}
+#room .rm-vig{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 95% at 50% 50%,transparent 58%,rgba(0,0,0,.5) 100%)}
+@keyframes rm-glow{from{transform:translate3d(-1.5%,0,0) scale(1)}to{transform:translate3d(1.5%,-1%,0) scale(1.06)}}
+@keyframes rm-grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+@media (prefers-reduced-motion:reduce){#room::before,#room::after{animation:none}}

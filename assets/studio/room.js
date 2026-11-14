@@ -132,7 +132,7 @@
     if (building) return building;
     building = (async () => {
       root = document.createElement('div'); root.id = 'room';
-      root.innerHTML = `<canvas></canvas>${document.getElementById('ld') ? '' : loaderHTML()}
+      root.innerHTML = `<canvas></canvas><div class="rm-vig" aria-hidden="true"></div>${document.getElementById('ld') ? '' : loaderHTML()}
         <header class="rm-top"><button class="rm-corner tl rm-brand" data-go="home" aria-label="${tr('首页', 'Home')}">D<b>.</b>S<b>.</b>Y</button>
           <div class="rm-tools"><button data-go="thinking" data-l='["思考","Thinking"]'>${tr('思考', 'Thinking')}</button><span class="rm-sep"></span><button class="rm-sound" aria-pressed="false" title="PYNCHON — James Gargette (CC0)" data-l='["声音","Sound"]'>${tr('声音', 'Sound')}</button><span class="rm-sep"></span><button data-lang="zh">CN</button><b>/</b><button data-lang="en">EN</button></div>
           <button class="rm-corner tr" data-go="work" data-l='["作品","work"]'>${tr('作品', 'work')}</button></header>
